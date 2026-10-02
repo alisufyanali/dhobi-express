@@ -113,7 +113,7 @@ export function CheckoutForm({ demo, areas, slots, today, settings }: Props) {
             <E k="pickupSlot" />
           </div>
           {f.pickupDate && isSunday(f.pickupDate) && !(f.deliveryDate && isSunday(f.deliveryDate)) && settings.sundayFreeDelivery && (
-            <p className="rounded-xl bg-sun-400/20 p-3 text-sm text-slate-800">Sunday pickup! Choose a Sunday delivery too to get free delivery on any order size.</p>
+            <p className="rounded-xl bg-amber-50 p-3 text-sm text-slate-800">Sunday pickup! Choose a Sunday delivery too to get free delivery on any order size.</p>
           )}
         </fieldset>
 
@@ -169,7 +169,7 @@ export function CheckoutForm({ demo, areas, slots, today, settings }: Props) {
             <div className="flex justify-between pt-1 text-lg font-bold"><span>Total</span><span>{rs(total)}</span></div>
           </div>
           {serverError && <p className="err mt-3">{serverError}</p>}
-          <button disabled={submitting} className="btn-sun mt-4 w-full text-base">{submitting ? "Placing order…" : "Place order"}</button>
+          <button disabled={submitting} className="btn-primary mt-4 w-full text-base">{submitting ? "Placing order…" : "Place order"}</button>
           <p className="mt-2 text-center text-xs text-slate-500">No payment needed now for Cash on Delivery.</p>
         </div>
       </aside>

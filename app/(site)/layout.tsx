@@ -11,7 +11,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
   return (
     <CartProvider>
       {IS_DEMO && (
-        <div className="bg-sun-400 px-4 py-2 text-center text-xs font-semibold text-brand-900">
+        <div className="bg-brand-100 px-4 py-2 text-center text-xs font-medium text-brand-900">
           Demo preview — orders are not saved yet. Book on WhatsApp.
         </div>
       )}

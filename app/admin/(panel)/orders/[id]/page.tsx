@@ -30,7 +30,7 @@ export default async function OrderDetail({ params }: { params: Promise<{ id: st
           <div><p className="text-xs uppercase text-slate-500">Customer</p><p className="font-medium">{o.name}</p><p>{o.phone}</p><p>{o.address}</p><p>{o.area.name}</p></div>
           <div><p className="text-xs uppercase text-slate-500">Schedule</p><p>Pickup: {d(o.pickupDate)}, {o.pickupSlot}</p><p>Delivery: {d(o.deliveryDate)}</p><p>Payment: {PAYMENT_LABEL[o.paymentMethod]}</p></div>
         </div>
-        {o.notes && <p className="mt-4 rounded-lg bg-sun-400/15 p-3 text-sm"><b>Customer note:</b> {o.notes}</p>}
+        {o.notes && <p className="mt-4 rounded-lg bg-amber-50 p-3 text-sm"><b>Customer note:</b> {o.notes}</p>}
         <table className="mt-5 w-full text-sm">
           <thead className="border-b text-left text-xs uppercase text-slate-500"><tr><th className="py-2">Item</th><th>Qty</th><th>Rate</th><th className="text-right">Amount</th></tr></thead>
           <tbody>{o.items.map((i) => (<tr key={i.id} className="border-b border-slate-100"><td className="py-2">{i.name}</td><td>{i.quantity}{i.unit === "PER_KG" ? " kg" : ""}</td><td>{rs(i.price)} {UNIT_LABEL[i.unit]}</td><td className="text-right">{rs(i.lineTotal)}</td></tr>))}</tbody>

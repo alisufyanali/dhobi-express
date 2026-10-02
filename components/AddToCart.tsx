@@ -10,7 +10,7 @@ export function AddToCart({ item, label, addedLabel }: { item: Omit<CartItem, "q
       className={done ? "btn bg-emerald-600 text-white" : "btn-primary"}
       onClick={() => { add(item, 1); setDone(true); setTimeout(() => setDone(false), 1200); }}
     >
-      {done ? `✓ ${addedLabel}` : label}
+      {done ? addedLabel : label}
     </button>
   );
 }

@@ -13,7 +13,7 @@ export default async function ServicesAdmin() {
           <ul className="divide-y divide-slate-100">
             {c.services.map((s) => (
               <li key={s.id}><Link href={`/admin/services/${s.id}`} className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-slate-50">
-                <span className="flex-1">{s.name}{s.featured && <span className="ml-2 rounded bg-sun-400/30 px-1.5 text-xs">featured</span>}</span>
+                <span className="flex-1">{s.name}{s.featured && <span className="ml-2 rounded bg-amber-50 px-1.5 text-xs">featured</span>}</span>
                 {!s.active && <span className="rounded bg-slate-200 px-1.5 text-xs">inactive</span>}
                 <span className="w-32 text-right">{rs(s.price)} <span className="text-slate-500">{UNIT_LABEL[s.unit]}</span></span>
               </Link></li>

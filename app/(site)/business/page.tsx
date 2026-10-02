@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { getLogos } from "@/lib/data";
 import { InquiryForm } from "./InquiryForm";
+import { IconCheck } from "@/components/Icons";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
@@ -21,12 +22,12 @@ export default async function BusinessPage() {
   const logos = await getLogos();
   return (
     <>
-      <section className="bg-brand-900 text-white">
+      <section className="border-b border-brand-100 bg-brand-50">
         <div className="container-x py-12 md:py-20">
-          <p className="text-sm font-semibold uppercase tracking-wider text-sun-400">For business</p>
-          <h1 className="mt-3 max-w-2xl text-3xl font-extrabold leading-tight md:text-5xl">Commercial laundry with fixed schedules and monthly invoicing.</h1>
-          <p className="mt-4 max-w-xl text-brand-100">One contact person, tagged batches, agreed turnaround and a clear per-piece rate. Try the first batch at a trial rate.</p>
-          <a href="#inquiry" className="btn-sun mt-6">Request a quote</a>
+          <p className="text-sm font-semibold uppercase tracking-wider text-brand-600">For business</p>
+          <h1 className="mt-3 max-w-2xl text-3xl font-bold leading-tight text-brand-900 md:text-5xl">Commercial laundry with fixed schedules and monthly invoicing.</h1>
+          <p className="mt-4 max-w-xl text-slate-600">One contact person, tagged batches, agreed turnaround and a clear per-piece rate. Try the first batch at a trial rate.</p>
+          <a href="#inquiry" className="btn-primary mt-6">Request a quote</a>
         </div>
       </section>
 
@@ -50,9 +51,9 @@ export default async function BusinessPage() {
           <h2 className="h-section">Get a business quote</h2>
           <p className="mt-3 text-slate-600">Tell us what you need and roughly how much each month. We&apos;ll reply within one working day with a rate and pickup schedule.</p>
           <ul className="mt-6 space-y-2 text-sm text-slate-700">
-            <li>✓ Per-piece pricing, no hidden charges</li>
-            <li>✓ Monthly invoice with order-wise details</li>
-            <li>✓ Separate handling for medical linen</li>
+            <li className="flex gap-2"><IconCheck className="h-5 w-5 flex-none text-brand-600" />Per-piece pricing, no hidden charges</li>
+            <li className="flex gap-2"><IconCheck className="h-5 w-5 flex-none text-brand-600" />Monthly invoice with order-wise details</li>
+            <li className="flex gap-2"><IconCheck className="h-5 w-5 flex-none text-brand-600" />Separate handling for medical linen</li>
           </ul>
         </div>
         <InquiryForm />

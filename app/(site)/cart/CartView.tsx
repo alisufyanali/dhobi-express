@@ -49,7 +49,7 @@ export function CartView({ threshold }: { threshold: number }) {
         <div className="card p-5">
           <div className="flex justify-between text-lg font-bold"><span>Subtotal</span><span>{rs(subtotal)}</span></div>
           <p className="mt-1 text-xs text-slate-500">Delivery calculated at checkout.</p>
-          <Link href="/checkout" className="btn-sun mt-4 w-full text-base">Choose pickup time →</Link>
+          <Link href="/checkout" className="btn-primary mt-4 w-full text-base">Choose pickup time →</Link>
         </div>
       </aside>
     </div>

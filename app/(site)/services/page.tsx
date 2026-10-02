@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getCatalog } from "@/lib/data";
 import { getDict, getLang } from "@/lib/i18n";
-import { ServiceCard } from "@/components/ServiceCard";
+import { ServiceBrowser } from "./ServiceBrowser";
 import { JsonLd } from "@/components/JsonLd";
 import { SITE } from "@/lib/site";
 
@@ -30,29 +30,9 @@ export default async function ServicesPage() {
             offers: { "@type": "Offer", price: s.price, priceCurrency: "PKR" } },
         })),
       }} />
-      <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 md:text-4xl">{t.nav.services} & rates</h1>
-      <p className="mt-2 text-slate-600">Add what you need to the cart. Final weight-based items are confirmed at pickup.</p>
-
-      {/* Category jump bar: horizontal chips on mobile, sticky sidebar on desktop */}
-      <div className="mt-6 md:grid md:grid-cols-[220px_1fr] md:gap-10">
-        <nav className="sticky top-16 z-30 -mx-4 flex gap-2 overflow-x-auto bg-white px-4 py-3 md:top-24 md:mx-0 md:block md:h-fit md:space-y-1 md:p-0">
-          {visible.map((c) => (
-            <a key={c.id} href={`#${c.slug}`} className="flex-none rounded-full border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 md:block md:rounded-lg md:border-0 md:px-3 md:hover:bg-slate-50">
-              {roman && c.nameUr ? c.nameUr : c.name}
-            </a>
-          ))}
-        </nav>
-        <div className="space-y-10">
-          {visible.map((c) => (
-            <section key={c.id} id={c.slug} className="scroll-mt-32">
-              <h2 className="text-xl font-bold text-slate-900">{roman && c.nameUr ? c.nameUr : c.name}</h2>
-              <div className="mt-4 grid gap-3 md:grid-cols-2 md:gap-5 lg:grid-cols-3">
-                {c.services.map((s) => <ServiceCard key={s.id} s={s} roman={roman} label={t.addToCart} addedLabel={t.added} />)}
-              </div>
-            </section>
-          ))}
-        </div>
-      </div>
+      <h1 className="text-2xl font-bold tracking-tight text-brand-900 md:text-4xl">Services & rates</h1>
+      <p className="mt-2 text-slate-600">Add what you need to the cart. Per-kg items are weighed at pickup.</p>
+      <ServiceBrowser cats={visible} roman={roman} label={t.addToCart} addedLabel={t.added} />
     </div>
   );
 }

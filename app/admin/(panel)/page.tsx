@@ -28,7 +28,7 @@ export default async function Dashboard() {
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         {stats.map(([l, v]) => (<div key={String(l)} className="card p-4"><p className="text-xs text-slate-500">{l}</p><p className="mt-1 text-2xl font-bold">{v}</p></div>))}
       </div>
-      {newInquiries > 0 && <Link href="/admin/inquiries" className="block rounded-xl bg-sun-400/20 p-4 text-sm font-medium">{newInquiries} business inquir{newInquiries === 1 ? "y" : "ies"} waiting for a reply →</Link>}
+      {newInquiries > 0 && <Link href="/admin/inquiries" className="block rounded-xl bg-amber-50 p-4 text-sm font-medium">{newInquiries} business inquir{newInquiries === 1 ? "y" : "ies"} waiting for a reply →</Link>}
       <div className="card overflow-hidden">
         <div className="flex items-center justify-between p-4"><h2 className="font-semibold">Latest orders</h2><Link href="/admin/orders" className="text-sm text-brand-700">All orders →</Link></div>
         <ul className="divide-y divide-slate-100">

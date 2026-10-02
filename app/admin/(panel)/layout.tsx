@@ -11,6 +11,7 @@ const NAV = [
   ["/admin/orders", "Orders"],
   ["/admin/services", "Services"],
   ["/admin/inquiries", "Inquiries"],
+  ["/admin/clients", "Client logos"],
   ["/admin/settings", "Settings"],
 ];
 
@@ -20,7 +21,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     <div className="min-h-screen bg-slate-50 md:grid md:grid-cols-[220px_1fr]">
       <aside className="border-b border-slate-200 bg-white md:min-h-screen md:border-b-0 md:border-r print:hidden">
         <div className="flex items-center justify-between p-4 md:block">
-          <Link href="/admin" className="font-extrabold text-brand-700">Dhobi<span className="text-sun-500">Express</span> <span className="text-xs font-medium text-slate-400">admin</span></Link>
+          <Link href="/admin" className="font-extrabold text-brand-700">Dhobi<span className="text-brand-500">Express</span> <span className="text-xs font-medium text-slate-400">admin</span></Link>
           <p className="mt-1 hidden text-xs text-slate-500 md:block">{session.user?.email}</p>
         </div>
         <nav className="flex gap-1 overflow-x-auto px-2 pb-2 md:flex-col md:px-3">
