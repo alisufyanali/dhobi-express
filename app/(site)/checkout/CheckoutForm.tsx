@@ -8,7 +8,7 @@ import { calcDelivery, isSunday, type DeliverySettings } from "@/lib/delivery";
 import { orderSchema } from "@/lib/validators";
 import { PAYMENT_LABEL, rs } from "@/lib/site";
 
-type Props = { areas: { id: string; name: string }[]; slots: string[]; today: string; settings: DeliverySettings };
+type Props = { demo?: boolean; areas: { id: string; name: string }[]; slots: string[]; today: string; settings: DeliverySettings };
 type Errors = Partial<Record<string, string>>;
 
 const PAYMENT_HELP: Record<string, string> = {
@@ -18,7 +18,7 @@ const PAYMENT_HELP: Record<string, string> = {
   BANK_TRANSFER: "Bank: XXXX · Title: Dhobi Express · IBAN: PKXX XXXX XXXX XXXX. Share the receipt on WhatsApp with your order ID.",
 };
 
-export function CheckoutForm({ areas, slots, today, settings }: Props) {
+export function CheckoutForm({ demo, areas, slots, today, settings }: Props) {
   const { items, subtotal, clear, ready } = useCart();
   const router = useRouter();
   const [f, setF] = useState({
@@ -57,6 +57,10 @@ export function CheckoutForm({ areas, slots, today, settings }: Props) {
       return;
     }
     setErrors({});
+    if (demo) {
+      setServerError("This is a demo preview, so orders aren't saved yet. Please book on WhatsApp for now.");
+      return;
+    }
     setSubmitting(true);
     try {
       const res = await fetch("/api/orders", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });

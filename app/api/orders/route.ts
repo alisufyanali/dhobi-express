@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { IS_DEMO } from "@/lib/demo";
 import { orderSchema } from "@/lib/validators";
 import { calcDelivery, karachiToday } from "@/lib/delivery";
 import { getSettings } from "@/lib/settings";
@@ -9,6 +10,7 @@ function newCode() {
 }
 
 export async function POST(req: Request) {
+  if (IS_DEMO) return NextResponse.json({ error: "Demo mode: nothing is saved. Please contact us on WhatsApp." }, { status: 503 });
   let body: unknown;
   try { body = await req.json(); } catch { return NextResponse.json({ error: "Invalid request" }, { status: 400 }); }
 

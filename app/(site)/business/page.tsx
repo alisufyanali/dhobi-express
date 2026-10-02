@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { prisma } from "@/lib/prisma";
+import { getLogos } from "@/lib/data";
 import { InquiryForm } from "./InquiryForm";
 
 export const dynamic = "force-dynamic";
@@ -18,7 +18,7 @@ const SEGMENTS = [
 ];
 
 export default async function BusinessPage() {
-  const logos = await prisma.clientLogo.findMany({ where: { active: true }, orderBy: { sortOrder: "asc" } });
+  const logos = await getLogos();
   return (
     <>
       <section className="bg-brand-900 text-white">

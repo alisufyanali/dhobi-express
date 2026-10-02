@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { prisma } from "@/lib/prisma";
+import { getCatalog } from "@/lib/data";
 import { getDict, getLang } from "@/lib/i18n";
 import { ServiceCard } from "@/components/ServiceCard";
 import { JsonLd } from "@/components/JsonLd";
@@ -15,10 +15,7 @@ export const metadata: Metadata = {
 export default async function ServicesPage() {
   const [t, lang, cats] = await Promise.all([
     getDict(), getLang(),
-    prisma.category.findMany({
-      orderBy: { sortOrder: "asc" },
-      include: { services: { where: { active: true }, orderBy: { sortOrder: "asc" } } },
-    }),
+    getCatalog(),
   ]);
   const roman = lang === "ru";
   const visible = cats.filter((c) => c.services.length);

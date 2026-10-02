@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import { IS_DEMO } from "@/lib/demo";
 import { phoneSchema } from "@/lib/validators";
 import { getSettings } from "@/lib/settings";
 import { PAYMENT_LABEL, rs, STATUS_FLOW, STATUS_LABEL, UNIT_LABEL, waLink } from "@/lib/site";
@@ -13,6 +14,7 @@ export const metadata: Metadata = { title: "Order Status", robots: { index: fals
 const fmt = (d: Date) => d.toLocaleDateString("en-PK", { weekday: "short", day: "numeric", month: "short", timeZone: "UTC" });
 
 export default async function OrderPage({ params, searchParams }: { params: Promise<{ code: string }>; searchParams: Promise<{ phone?: string }> }) {
+  if (IS_DEMO) redirect("/track?demo=1");
   const { code } = await params;
   const { phone } = await searchParams;
   const p = phoneSchema.safeParse(phone ?? "");

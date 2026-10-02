@@ -37,7 +37,7 @@ export function InquiryForm() {
       <div><label className="label" htmlFor="b-phone">Phone</label><input id="b-phone" name="phone" type="tel" className="input" /><E k="phone" /></div>
       <div><label className="label" htmlFor="b-email">Email (optional)</label><input id="b-email" name="email" type="email" className="input" /><E k="email" /></div>
       <div className="sm:col-span-2"><label className="label" htmlFor="b-msg">Message</label><textarea id="b-msg" name="message" rows={3} className="input" /></div>
-      {state === "error" && <p className="err sm:col-span-2">Couldn&apos;t send. Please try again or WhatsApp us.</p>}
+      {state === "error" && <p className="err sm:col-span-2">Couldn&apos;t send (the site may be in demo mode). Please WhatsApp us.</p>}
       <button disabled={state === "sending"} className="btn-primary sm:col-span-2">{state === "sending" ? "Sending…" : "Send inquiry"}</button>
     </form>
   );

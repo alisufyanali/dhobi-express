@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { prisma } from "@/lib/prisma";
+import { getCatalog, getFaqs, getLogos, getRateCard, getReviews } from "@/lib/data";
 import { getDict, getLang } from "@/lib/i18n";
 import { getSettings } from "@/lib/settings";
 import { FaqList } from "@/components/Faq";
@@ -14,14 +14,11 @@ import { rs, SITE, UNIT_LABEL, waLink } from "@/lib/site";
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const [t, lang, s, cats, rateCard, logos, reviews, faqs] = await Promise.all([
-    getDict(), getLang(), getSettings(),
-    prisma.category.findMany({ orderBy: { sortOrder: "asc" }, include: { services: { where: { active: true }, orderBy: { price: "asc" }, take: 1 } } }),
-    prisma.service.findMany({ where: { active: true }, orderBy: [{ featured: "desc" }, { sortOrder: "asc" }], take: 8, include: { category: true } }),
-    prisma.clientLogo.findMany({ where: { active: true }, orderBy: { sortOrder: "asc" } }),
-    prisma.review.findMany({ where: { approved: true }, orderBy: { createdAt: "desc" }, take: 6 }),
-    prisma.faq.findMany({ orderBy: { sortOrder: "asc" } }),
+  const [t, lang, s, catalog, rateCard, logos, reviews, faqs] = await Promise.all([
+    getDict(), getLang(), getSettings(), getCatalog(), getRateCard(), getLogos(), getReviews(), getFaqs(),
   ]);
+  // Each category with its cheapest service, for the "from Rs. X" tiles
+  const cats = catalog.map((c) => ({ ...c, services: [...c.services].sort((a, b) => a.price - b.price).slice(0, 1) }));
   const roman = lang === "ru";
   const stepIcons = [IconTruck, IconDrop, IconIron, IconBox];
   const wa = waLink(s.whatsappNumber, "Assalam o Alaikum, I want to book a laundry pickup.");

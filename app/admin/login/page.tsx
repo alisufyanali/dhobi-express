@@ -1,30 +1,17 @@
-"use client";
-import { signIn } from "next-auth/react";
-import { useState } from "react";
+import { LoginForm } from "./LoginForm";
 
-export default function AdminLogin() {
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+export const dynamic = "force-dynamic";
 
-  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setLoading(true);
-    const fd = new FormData(e.currentTarget);
-    const res = await signIn("credentials", { email: fd.get("email"), password: fd.get("password"), redirect: false });
-    setLoading(false);
-    if (res?.ok) window.location.href = "/admin";
-    else setError("Wrong email or password.");
+export default function AdminLoginPage() {
+  if (!process.env.DATABASE_URL || !process.env.NEXTAUTH_SECRET) {
+    return (
+      <div className="grid min-h-screen place-items-center bg-slate-100 p-4">
+        <div className="card max-w-sm p-6 text-center">
+          <h1 className="text-xl font-bold">Admin is off in demo mode</h1>
+          <p className="mt-2 text-sm text-slate-600">Set DATABASE_URL, DIRECT_URL and NEXTAUTH_SECRET in Vercel, redeploy, and run the seed to create your admin login.</p>
+        </div>
+      </div>
+    );
   }
-
-  return (
-    <div className="grid min-h-screen place-items-center bg-slate-100 p-4">
-      <form onSubmit={onSubmit} className="card w-full max-w-sm space-y-4 p-6">
-        <h1 className="text-xl font-bold">Dhobi Express Admin</h1>
-        <div><label className="label" htmlFor="email">Email</label><input id="email" name="email" type="email" required className="input" /></div>
-        <div><label className="label" htmlFor="password">Password</label><input id="password" name="password" type="password" required className="input" /></div>
-        {error && <p className="err">{error}</p>}
-        <button disabled={loading} className="btn-primary w-full">{loading ? "Signing in…" : "Sign in"}</button>
-      </form>
-    </div>
-  );
+  return <LoginForm />;
 }
