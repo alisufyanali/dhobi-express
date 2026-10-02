@@ -5,25 +5,30 @@ export const CATEGORIES: { name: string; nameUr: string; slug: string; services:
   {
     name: "Packages", nameUr: "Packages", slug: "packages",
     services: [
+      ["Monthly 50 – Wash & Press", "Mahana 50 – Dhulai + Press", 3999, "PER_PIECE", "50 pieces a month · wash + steam press · Rs. 80 per piece · free pickup & delivery", true],
       ["Office Week", "Office Week", 999, "PER_PIECE", "10 shirts · 5 trousers · wash + press", true],
-      ["Family Monthly", "Family Monthly", 4200, "PER_PIECE", "20 kg mixed clothes · wash + fold · 4 pickups", true],
+      ["Monthly 100 – Wash & Press", "Mahana 100 – Dhulai + Press", 7499, "PER_PIECE", "100 pieces a month · wash + steam press · Rs. 75 per piece · free pickup & delivery", true],
+      ["Monthly 50 – Press only", "Mahana 50 – Sirf Press", 2249, "PER_PIECE", "50 pieces a month · steam press · Rs. 45 per piece", true],
       ["Bedding Refresh", "Bedding Refresh", 1050, "PER_PIECE", "2 bedsheet sets · 1 razai or kambal · deep wash", true],
-      ["Press Bundle", "Press Bundle", 999, "PER_PIECE", "30 pieces · steam press only", true],
     ],
   },
   {
     name: "Wash + Press", nameUr: "Dhulai + Press", slug: "wash-press",
     services: [
-      ["Shalwar Kameez", "Shalwar Kameez", 120, "PER_PIECE", "Washed, steam pressed and folded.", true],
+      ["Shalwar Kameez (suit)", "Shalwar Kameez (jora)", 160, "PER_PIECE", "Both pieces washed, steam pressed and folded.", true],
       ["Shirt / Kurta", "Shirt / Kurta", 80, "PER_PIECE", "Collar and cuffs pre-treated."],
       ["Trouser / Jeans", "Pant / Jeans", 80, "PER_PIECE", "Washed and pressed with crease."],
+      ["T-shirt", "T-shirt", 70, "PER_PIECE", "Washed and folded."],
+      ["Dupatta", "Dupatta", 70, "PER_PIECE", "Gentle wash and press."],
+      ["Abaya", "Abaya", 220, "PER_PIECE", "Gentle wash and press."],
+      ["Sweater / Hoodie", "Sweater / Hoodie", 180, "PER_PIECE", "Washed and air dried to keep shape."],
       ["Wash & Fold (mixed)", "Dhulai aur tay (mix)", 250, "PER_KG", "Everyday clothes washed and folded by weight.", true],
     ],
   },
   {
     name: "Press only", nameUr: "Sirf Press", slug: "press-only",
     services: [
-      ["Press – Shalwar Kameez", "Press – Shalwar Kameez", 60, "PER_PIECE", "Steam press only.", true],
+      ["Press – Shalwar Kameez (suit)", "Press – Shalwar Kameez (jora)", 80, "PER_PIECE", "Both pieces, steam press only.", true],
       ["Press – Shirt / Trouser", "Press – Shirt / Pant", 40, "PER_PIECE", "Steam press only."],
     ],
   },
@@ -52,6 +57,7 @@ export const CATEGORIES: { name: string; nameUr: string; slug: string; services:
       ["Blanket", "Kambal", 600, "PER_PIECE", "Single or double blanket.", true],
       ["Comforter / Duvet", "Comforter / Duvet", 800, "PER_PIECE", "Deep wash, fully dried, no musty smell."],
       ["Pillow", "Takiya", 150, "PER_PIECE", "Washed and dried through."],
+      ["Bath towel", "Tauliya", 90, "PER_PIECE", "Washed and folded."],
     ],
   },
   {
