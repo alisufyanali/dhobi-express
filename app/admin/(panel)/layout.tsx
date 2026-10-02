@@ -12,12 +12,14 @@ const NAV = [
   ["/admin/customers", "Customers"],
   ["/admin/reports", "Reports"],
   ["/admin/services", "Services"],
+  ["/admin/categories", "Categories"],
   ["/admin/inquiries", "Inquiries"],
   ["/admin/clients", "Client logos"],
   ["/admin/coupons", "Coupons"],
   ["/admin/reviews", "Reviews"],
   ["/admin/blog", "Blog"],
   ["/admin/subscribers", "Subscribers"],
+  ["/admin/areas", "Areas"],
   ["/admin/settings", "Settings"],
 ];
 
