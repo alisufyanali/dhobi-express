@@ -37,7 +37,7 @@ export default async function BusinessPage() {
         ))}
       </section>
 
-      <ContractClients logos={logos} demo={false} />
+      <ContractClients logos={logos} />
 
       <section id="inquiry" className="container-x scroll-mt-20 py-14 md:grid md:grid-cols-[1fr_1.2fr] md:gap-12">
         <div>

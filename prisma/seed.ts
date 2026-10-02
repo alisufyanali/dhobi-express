@@ -10,6 +10,9 @@ const prisma = new PrismaClient();
 
 async function main() {
   await prisma.setting.upsert({ where: { id: "default" }, update: {}, create: { id: "default" } });
+  // One-time move to the Rs. 1,000 threshold for databases created with the old Rs. 2,000 default.
+  // Only touches the row if both values are still the untouched old defaults.
+  await prisma.setting.updateMany({ where: { id: "default", freeDeliveryThreshold: 2000, deliveryFee: 150 }, data: { freeDeliveryThreshold: 1000 } });
 
   for (const a of AREA_PAGES) {
     await prisma.area.upsert({ where: { slug: a.slug }, update: {}, create: { name: a.name, slug: a.slug } });

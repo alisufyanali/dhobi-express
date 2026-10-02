@@ -3,7 +3,6 @@ import Image from "next/image";
 import { getCatalog, getFaqs, getLogos, getReviews } from "@/lib/data";
 import { getDict, getLang } from "@/lib/i18n";
 import { getSettings } from "@/lib/settings";
-import { IS_DEMO } from "@/lib/demo";
 import { FaqList } from "@/components/Faq";
 import { JsonLd } from "@/components/JsonLd";
 import { HeroSlider, type Slide } from "@/components/HeroSlider";
@@ -98,13 +97,13 @@ export default async function Home() {
       </section>
 
       {/* Categories with photos: swipe on phones, grid on desktop */}
-      <section className="py-12 md:py-16">
+      <section className="py-10 md:py-16">
         <div className="container-x flex items-end justify-between gap-4">
           <div><p className="eyebrow">Services</p><h2 className="h-section mt-1">What we clean</h2></div>
           <Link href="/services" className="text-sm font-semibold text-brand-600">{t.viewAll} →</Link>
         </div>
         <div className="container-x mt-6">
-          <div className="-mx-4 flex snap-x gap-3 overflow-x-auto px-4 pb-2 [scrollbar-width:none] md:mx-0 md:grid md:grid-cols-3 md:gap-5 md:overflow-visible md:px-0 lg:grid-cols-6">
+          <div className="-mx-4 flex snap-x scroll-px-4 gap-3 overflow-x-auto px-4 pb-2 [scrollbar-width:none] md:mx-0 md:grid md:grid-cols-3 md:gap-5 md:overflow-visible md:px-0 lg:grid-cols-6">
             {cats.map((c) => (
               <Link key={c.id} href={`/services#${c.slug}`} className="group w-40 flex-none snap-start md:w-auto">
                 <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-brand-50">
@@ -122,7 +121,7 @@ export default async function Home() {
 
       {/* Winter is coming */}
       {winterItems.length > 0 && (
-        <section className="container-x pb-14 md:pb-20">
+        <section className="container-x pb-10 md:pb-20">
           <div className="grid overflow-hidden rounded-2xl border border-brand-100 bg-brand-50 md:grid-cols-2">
             <div className="relative aspect-[16/10] md:aspect-auto md:min-h-[360px]">
               <Image src={IMAGES.winter} alt="Clean folded blankets ready for winter" fill sizes="(min-width:768px) 560px, 100vw" className="object-cover" />
@@ -152,7 +151,7 @@ export default async function Home() {
 
       {/* Packages */}
       {packages.length > 0 && (
-        <section className="container-x pb-14 md:pb-20">
+        <section className="container-x pb-10 md:pb-20">
           <div className="flex items-end justify-between gap-4">
             <div><p className="eyebrow">Packages</p><h2 className="h-section mt-1">Save with a bundle</h2></div>
             <Link href="/services#packages" className="text-sm font-semibold text-brand-600">All packages →</Link>
@@ -163,13 +162,16 @@ export default async function Home() {
 
       {/* Why choose us */}
       <section className="border-y border-brand-100 bg-brand-50">
-        <div className="container-x py-14 md:py-20">
+        <div className="container-x py-10 md:py-20">
           <div className="max-w-2xl"><p className="eyebrow">Why choose us</p><h2 className="h-section mt-1">Laundry you don&apos;t have to think about</h2></div>
-          <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="mt-6 grid grid-cols-2 gap-3 md:mt-8 md:gap-4 lg:grid-cols-3">
             {why.map(({ I, t: title, d }) => (
-              <li key={title} className="flex gap-4 rounded-2xl bg-white p-5 ring-1 ring-brand-100">
-                <span className="grid h-11 w-11 flex-none place-items-center rounded-xl bg-brand-600 text-white"><I className="h-5 w-5" /></span>
-                <div><h3 className="font-semibold text-brand-900">{title}</h3><p className="mt-1 text-sm text-slate-600">{d}</p></div>
+              <li key={title} className="rounded-2xl bg-white p-4 ring-1 ring-brand-100 md:flex md:gap-4 md:p-5">
+                <span className="grid h-10 w-10 flex-none place-items-center rounded-xl bg-brand-600 text-white md:h-11 md:w-11"><I className="h-5 w-5" /></span>
+                <div className="mt-3 md:mt-0">
+                  <h3 className="text-sm font-semibold leading-snug text-brand-900 md:text-base">{title}</h3>
+                  <p className="mt-1 text-xs leading-relaxed text-slate-600 md:text-sm">{d}</p>
+                </div>
               </li>
             ))}
           </ul>
@@ -177,7 +179,7 @@ export default async function Home() {
       </section>
 
       {/* How it works */}
-      <section className="container-x py-14 md:py-20">
+      <section className="container-x py-10 md:py-20">
         <p className="eyebrow">{t.howItWorks}</p>
         <h2 className="h-section mt-1">Four simple steps</h2>
         <ol className="mt-8 grid gap-6 sm:grid-cols-2 md:grid-cols-4">
@@ -207,7 +209,7 @@ export default async function Home() {
             </div>
             <Link href="/business#inquiry" className="btn-primary mt-5 hidden md:inline-flex">Request a quote <IconArrow className="h-4 w-4" /></Link>
           </div>
-          <div className="-mx-4 mt-6 flex snap-x gap-3 overflow-x-auto px-4 pb-2 md:mx-0 md:grid md:grid-cols-4 md:gap-5 md:overflow-visible md:px-0">
+          <div className="-mx-4 mt-6 flex snap-x scroll-px-4 gap-3 overflow-x-auto px-4 pb-2 md:mx-0 md:grid md:grid-cols-4 md:gap-5 md:overflow-visible md:px-0">
             {segments.map((g) => (
               <Link key={g.t} href="/business#inquiry" className="group card w-[70%] flex-none snap-start overflow-hidden md:w-auto">
                 <div className="relative aspect-[4/3] bg-brand-50">
@@ -234,13 +236,13 @@ export default async function Home() {
         </div>
       </section>
 
-      <ContractClients logos={logos} demo={IS_DEMO} />
+      <ContractClients logos={logos} />
 
       {/* Reviews */}
       {reviews.length > 0 && (
-        <section className="container-x pb-14 md:pb-20">
+        <section className="container-x pb-10 md:pb-20">
           <h2 className="h-section">{t.reviews}</h2>
-          <div className="-mx-4 mt-6 flex snap-x gap-4 overflow-x-auto px-4 pb-2 md:mx-0 md:grid md:grid-cols-3 md:overflow-visible md:px-0">
+          <div className="-mx-4 mt-6 flex snap-x scroll-px-4 gap-4 overflow-x-auto px-4 pb-2 md:mx-0 md:grid md:grid-cols-3 md:overflow-visible md:px-0">
             {reviews.slice(0, 3).map((r) => (
               <figure key={r.id} className="card w-[82%] flex-none snap-center p-5 md:w-auto">
                 <div className="flex text-amber-400" aria-label={`${r.rating} out of 5`}>{Array.from({ length: r.rating }).map((_, i) => <IconStar key={i} className="h-4 w-4" />)}</div>
