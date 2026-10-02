@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+/* Palette from the references: royal blue + deep navy, cyan glow, warm yellow for the main CTA */
+@theme {
+  --color-brand-50: #eef4ff;
+  --color-brand-100: #dbe7ff;
+  --color-brand-200: #b7cffd;
+  --color-brand-500: #2a6ef0;
+  --color-brand-600: #0b5cd5;
+  --color-brand-700: #0947a8;
+  --color-brand-900: #061a3f;
+  --color-navy: #030b1f;
+  --color-glow: #22d3ee;
+  --color-sun-400: #fdc735;
+  --color-sun-500: #f5b301;
+  --color-wa: #25d366;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+body { @apply bg-[#f6f8fc] text-slate-800 antialiased; }
+
+.container-x { @apply mx-auto w-full max-w-6xl px-4 md:px-6; }
+.btn { @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition active:scale-[.98] disabled:opacity-60; }
+.btn-primary { @apply btn bg-brand-600 text-white shadow-lg shadow-brand-600/25 hover:bg-brand-700; }
+.btn-sun { @apply btn bg-sun-400 text-slate-900 shadow-lg shadow-sun-500/30 hover:bg-sun-500; }
+.btn-wa { @apply btn bg-wa text-white hover:brightness-95; }
+.btn-ghost { @apply btn border border-slate-200 bg-white text-slate-700 hover:bg-slate-50; }
+.btn-glass { @apply btn border border-white/25 bg-white/10 text-white backdrop-blur hover:bg-white/20; }
+.input { @apply w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-base outline-none transition focus:border-brand-500 focus:ring-4 focus:ring-brand-100; }
+.label { @apply mb-1.5 block text-sm font-medium text-slate-700; }
+.card { @apply rounded-3xl border border-slate-200/80 bg-white shadow-[0_1px_2px_rgba(6,26,63,.04),0_8px_24px_-12px_rgba(6,26,63,.12)]; }
+.h-section { @apply text-2xl font-extrabold tracking-tight text-brand-900 md:text-4xl; }
+.eyebrow { @apply text-xs font-bold uppercase tracking-[.18em] text-brand-600; }
+.err { @apply mt-1 text-sm text-red-600; }
+
+/* Deep navy gradient used in the app references */
+.bg-navy-glow {
+  background:
+    radial-gradient(120% 80% at 85% 10%, rgba(11, 92, 213, .55), transparent 60%),
+    radial-gradient(90% 70% at 0% 100%, rgba(34, 211, 238, .25), transparent 60%),
+    linear-gradient(160deg, #061a3f 0%, #030b1f 100%);
+}
