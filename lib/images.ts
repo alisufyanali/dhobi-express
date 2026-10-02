@@ -17,3 +17,11 @@ export const CATEGORY_IMAGE: Record<string, string> = {
 };
 
 export const imageFor = (slug: string) => CATEGORY_IMAGE[slug] ?? CATEGORY_IMAGE["wash-press"];
+
+// Contract / B2B segments
+export const B2B_IMAGES = {
+  hospital: u("1611587266737-cc128ffe2946", 900), // hospital bed linen
+  company: u("1741176504565-3fd277808585", 900), // commercial laundry folding
+  banquet: u("1677129663241-5be1f17fe6fe", 900), // banquet tables and chairs
+  masjid: u("1670514862391-df20ad00b330", 900), // masjid interior
+};
