@@ -6,6 +6,7 @@ import { calcDelivery, karachiToday } from "@/lib/delivery";
 import { getSettings } from "@/lib/settings";
 import { getSession } from "@/lib/auth";
 import { checkCoupon } from "@/lib/coupons";
+import { notifyNewOrder } from "@/lib/notify";
 
 function newCode() {
   return "DE-" + Math.floor(10000 + Math.random() * 90000);
@@ -86,6 +87,11 @@ export async function POST(req: Request) {
         },
       });
       if (couponCode) await prisma.coupon.update({ where: { code: couponCode }, data: { used: { increment: 1 } } });
+      await notifyNewOrder({
+        id: order.id, code: order.code, name: order.name, phone: order.phone, address: order.address, area: area.name,
+        pickupDate: d.pickupDate, pickupSlot: d.pickupSlot, total: order.total, notes: order.notes,
+        items: lines.map((l) => ({ name: l.name, quantity: l.quantity })),
+      });
       return NextResponse.json({ code: order.code, phone: order.phone }, { status: 201 });
     } catch (e: unknown) {
       if ((e as { code?: string }).code === "P2002") continue; // order code collision, retry

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { IS_DEMO } from "@/lib/demo";
+import { notifyNewInquiry } from "@/lib/notify";
 import { inquirySchema } from "@/lib/validators";
 
 export async function POST(req: Request) {
@@ -11,5 +12,6 @@ export async function POST(req: Request) {
   await prisma.businessInquiry.create({
     data: { ...d, email: d.email || null, message: d.message || null, monthlyVolume: d.monthlyVolume || null },
   });
+  await notifyNewInquiry(d);
   return NextResponse.json({ ok: true }, { status: 201 });
 }
