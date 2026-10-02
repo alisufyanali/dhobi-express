@@ -6,6 +6,6 @@ import { execSync } from "node:child_process";
 const placeholder = "postgresql://demo:demo@localhost:5432/demo";
 const env = { ...process.env };
 env.DATABASE_URL ||= placeholder;
-env.DIRECT_URL ||= env.DATABASE_URL;
+env.DIRECT_URL ||= env.DATABASE_URL_UNPOOLED || env.DATABASE_URL;
 
 execSync("npx prisma generate", { stdio: "inherit", env });

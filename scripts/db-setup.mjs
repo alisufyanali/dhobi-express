@@ -13,7 +13,8 @@ if (!process.env.DATABASE_URL) {
 
 const run = (cmd) => execSync(cmd, { stdio: "inherit" });
 console.log("[db-setup] Syncing schema…");
-if (!process.env.DIRECT_URL) process.env.DIRECT_URL = process.env.DATABASE_URL;
+// Vercel's Neon integration provides DATABASE_URL_UNPOOLED; Supabase users set DIRECT_URL themselves
+if (!process.env.DIRECT_URL) process.env.DIRECT_URL = process.env.DATABASE_URL_UNPOOLED || process.env.DATABASE_URL;
 run("npx prisma db push --skip-generate");
 console.log("[db-setup] Seeding…");
 run("npx tsx prisma/seed.ts");
