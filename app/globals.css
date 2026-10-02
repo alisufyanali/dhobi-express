@@ -1,31 +1,35 @@
 @import "tailwindcss";
 
-/* Light blue on white, solid colours only. */
+/* Sky blue on white (Laundo-style), solid colours only. */
 @theme {
-  --color-brand-50: #f0f8ff;
-  --color-brand-100: #e0f0fe;
-  --color-brand-200: #bae0fd;
-  --color-brand-500: #0ea5e9;
-  --color-brand-600: #0284c7;
-  --color-brand-700: #0369a1;
-  --color-brand-900: #0c2a43;
+  --color-brand-50: #eef7fe;
+  --color-brand-100: #d9edfd;
+  --color-brand-200: #b4dbfb;
+  --color-brand-500: #3aa5f3;
+  --color-brand-600: #1a8cea;
+  --color-brand-700: #1272c4;
+  --color-brand-900: #10243f;
   --color-wa: #25d366;
   --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
-html { scroll-behavior: smooth; }
-body { @apply bg-white text-slate-700 antialiased; }
+html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
+/* Phones: light grey app background with white cards. Desktop: white. */
+body { @apply bg-[#f3f5f8] text-slate-700 antialiased md:bg-white; }
+/* Hide scrollbars on horizontal swipe rows */
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
 
 @utility container-x { @apply mx-auto w-full max-w-6xl px-4 md:px-6; }
-@utility btn { @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition active:scale-[.98] disabled:opacity-60; }
+@utility btn { @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition active:scale-[.98] disabled:opacity-60; }
 @utility btn-primary { @apply btn bg-brand-600 text-white hover:bg-brand-700; }
 @utility btn-wa { @apply btn bg-wa text-white hover:brightness-95; }
 @utility btn-ghost { @apply btn border border-slate-300 bg-white text-slate-700 hover:border-brand-500 hover:text-brand-700; }
-@utility input { @apply w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base outline-none transition focus:border-brand-500 focus:ring-4 focus:ring-brand-100; }
+@utility input { @apply w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-base outline-none transition focus:border-brand-500 focus:ring-4 focus:ring-brand-100; }
 @utility label { @apply mb-1.5 block text-sm font-medium text-slate-700; }
 @utility card { @apply rounded-2xl border border-slate-200 bg-white; }
-@utility h-section { @apply text-2xl font-bold tracking-tight text-brand-900 md:text-3xl; }
-@utility eyebrow { @apply text-xs font-semibold uppercase tracking-[.14em] text-brand-600; }
+@utility h-section { @apply text-lg font-bold tracking-tight text-brand-900 md:text-3xl; }
+@utility eyebrow { @apply hidden text-xs font-semibold uppercase tracking-[.14em] text-brand-600 md:block; }
 @utility err { @apply mt-1 text-sm text-red-600; }
 
 /* Client logo slider */

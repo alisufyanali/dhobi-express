@@ -84,6 +84,7 @@ export function CheckoutForm({ demo, areas, slots, today, settings }: Props) {
         setServerError(data.error ?? "Could not place the order. Please try again or WhatsApp us.");
         return;
       }
+      try { localStorage.setItem("last-order", JSON.stringify({ code: data.code, phone: data.phone })); } catch {}
       clear();
       router.push(`/order/${data.code}?phone=${encodeURIComponent(data.phone)}`);
     } catch {
@@ -96,11 +97,11 @@ export function CheckoutForm({ demo, areas, slots, today, settings }: Props) {
   const E = ({ k }: { k: string }) => (errors[k] ? <p className="err">{errors[k]}</p> : null);
 
   return (
-    <form onSubmit={submit} noValidate className="container-x py-8 md:grid md:grid-cols-[1fr_380px] md:gap-10 md:py-12">
-      <div className="space-y-8">
-        <h1 className="text-2xl font-extrabold md:text-3xl">Book your pickup</h1>
+    <form onSubmit={submit} noValidate className="container-x pb-32 pt-4 md:grid md:grid-cols-[1fr_380px] md:gap-10 md:py-12">
+      <div className="space-y-3 md:space-y-8">
+        <h1 className="hidden text-3xl font-bold text-brand-900 md:block">Book your pickup</h1>
 
-        <fieldset className="space-y-4">
+        <div className="card p-4 md:rounded-none md:border-0 md:bg-transparent md:p-0"><fieldset className="space-y-4">
           <legend className="mb-2 font-semibold text-slate-900">1. Pickup time</legend>
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
@@ -129,9 +130,9 @@ export function CheckoutForm({ demo, areas, slots, today, settings }: Props) {
           {f.pickupDate && isSunday(f.pickupDate) && !(f.deliveryDate && isSunday(f.deliveryDate)) && settings.sundayFreeDelivery && (
             <p className="rounded-xl bg-amber-50 p-3 text-sm text-slate-800">Sunday pickup! Choose a Sunday delivery too to get free delivery on any order size.</p>
           )}
-        </fieldset>
+        </fieldset></div>
 
-        <fieldset className="space-y-4">
+        <div className="card p-4 md:rounded-none md:border-0 md:bg-transparent md:p-0"><fieldset className="space-y-4">
           <legend className="mb-2 font-semibold text-slate-900">2. Your details</legend>
           <div className="grid gap-4 sm:grid-cols-2">
             <div><label className="label" htmlFor="name">Name</label><input id="name" name="name" className="input" autoComplete="name" value={f.name} onChange={set("name")} /><E k="name" /></div>
@@ -147,9 +148,9 @@ export function CheckoutForm({ demo, areas, slots, today, settings }: Props) {
           </div>
           <div><label className="label" htmlFor="address">Full address</label><textarea id="address" name="address" rows={2} className="input" placeholder="House/flat no., block, street, landmark" autoComplete="street-address" value={f.address} onChange={set("address")} /><E k="address" /></div>
           <div><label className="label" htmlFor="notes">Notes (optional)</label><textarea id="notes" name="notes" rows={2} className="input" placeholder="e.g. stain on white shirt, call before coming" value={f.notes} onChange={set("notes")} /></div>
-        </fieldset>
+        </fieldset></div>
 
-        <fieldset>
+        <div className="card p-4 md:rounded-none md:border-0 md:bg-transparent md:p-0"><fieldset>
           <legend className="mb-2 font-semibold text-slate-900">3. Payment</legend>
           <div className="space-y-2">
             {Object.entries(PAYMENT_LABEL).map(([k, label]) => (
@@ -162,7 +163,7 @@ export function CheckoutForm({ demo, areas, slots, today, settings }: Props) {
               </label>
             ))}
           </div>
-        </fieldset>
+        </fieldset></div>
       </div>
 
       <aside className="mt-8 h-fit space-y-4 md:sticky md:top-24 md:mt-0">
@@ -195,10 +196,17 @@ export function CheckoutForm({ demo, areas, slots, today, settings }: Props) {
             {!coupon && !couponMsg && <p className="mt-1.5 text-xs text-slate-500">First order? Use <b>WELCOME10</b> for 10% off.</p>}
           </div>
           {serverError && <p className="err mt-3">{serverError}</p>}
-          <button disabled={submitting} className="btn-primary mt-4 w-full text-base">{submitting ? "Placing order…" : "Place order"}</button>
+          <div className="hidden md:block"><button disabled={submitting} className="btn-primary mt-4 w-full text-base">{submitting ? "Placing order…" : "Place order"}</button></div>
           <p className="mt-2 text-center text-xs text-slate-500">No payment needed now for Cash on Delivery.</p>
         </div>
       </aside>
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white px-4 pt-3 pb-[max(.75rem,env(safe-area-inset-bottom))] md:hidden">
+        {serverError && <p className="err mb-2">{serverError}</p>}
+        <div className="flex items-center gap-3">
+          <div className="flex-1"><p className="text-xs text-slate-500">Total{delivery.fee === 0 ? " · free delivery" : ""}</p><p className="text-lg font-bold text-brand-900">{rs(total)}</p></div>
+          <button disabled={submitting} className="btn-primary px-6 text-base">{submitting ? "Placing…" : "Place order"}</button>
+        </div>
+      </div>
     </form>
   );
 }

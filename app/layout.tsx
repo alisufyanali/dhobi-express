@@ -7,9 +7,11 @@ export const metadata: Metadata = {
   title: { default: `${SITE.name} — Laundry Pickup & Delivery in Karachi`, template: `%s | ${SITE.name}` },
   description: SITE.description,
   openGraph: { siteName: SITE.name, locale: "en_PK", type: "website" },
+  appleWebApp: { capable: true, title: "Dhobi Express", statusBarStyle: "default" },
+  formatDetection: { telephone: false },
 };
 
-export const viewport: Viewport = { themeColor: "#0e7490", width: "device-width", initialScale: 1 };
+export const viewport: Viewport = { themeColor: "#ffffff", width: "device-width", initialScale: 1, viewportFit: "cover" };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

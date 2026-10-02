@@ -1,5 +1,8 @@
 "use client";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useCart } from "./CartProvider";
+import { FLOW_PATHS, hasCartBar } from "./StickyActions";
 import { useEffect, useRef, useState } from "react";
 import { IconChat, IconSend, IconWhatsApp, IconX } from "./Icons";
 import { rs, waLink } from "@/lib/site";
@@ -86,6 +89,14 @@ export function ChatBot({ info }: { info: Info }) {
   const [msgs, setMsgs] = useState<Msg[]>([{ from: "bot", text: "Assalam o Alaikum! How can we help? Tap a question or type your own." }]);
   const [input, setInput] = useState("");
   const end = useRef<HTMLDivElement>(null);
+  const path = usePathname();
+  const { count } = useCart();
+  // On phones, sit above the tab bar (and the cart bar when it shows); hide in cart/checkout flows
+  // Booking screens have + buttons on the right edge, so the chat button stays out of the way there
+  const inFlow = [...FLOW_PATHS, "/services"].some((p) => path.startsWith(p));
+  const lifted = hasCartBar(path, count);
+  const btnPos = inFlow ? "hidden md:grid" : `grid ${lifted ? "bottom-40" : "bottom-24"}`;
+  const panelPos = lifted ? "bottom-56" : "bottom-40";
 
   useEffect(() => end.current?.scrollIntoView({ behavior: "smooth" }), [msgs, open]);
 
@@ -98,12 +109,12 @@ export function ChatBot({ info }: { info: Info }) {
   return (
     <>
       <button onClick={() => setOpen(!open)} aria-label={open ? "Close chat" : "Open chat"}
-        className="fixed bottom-24 right-4 z-40 grid h-13 w-13 place-items-center rounded-full bg-brand-600 p-3.5 text-white shadow-lg md:bottom-6 md:right-6 md:h-14 md:w-14">
+        className={`fixed right-4 z-40 ${btnPos} h-13 w-13 place-items-center rounded-full bg-brand-600 p-3.5 text-white shadow-lg md:bottom-6 md:right-6 md:h-14 md:w-14`}>
         {open ? <IconX className="h-6 w-6" /> : <IconChat className="h-6 w-6" />}
       </button>
 
       {open && (
-        <div className="fixed inset-x-3 bottom-40 z-40 flex max-h-[65vh] flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl md:inset-x-auto md:bottom-24 md:right-6 md:w-[370px]" role="dialog" aria-label="Chat with Dhobi Express">
+        <div className={`fixed inset-x-3 ${panelPos} z-40 flex max-h-[60vh] flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl md:inset-x-auto md:bottom-24 md:right-6 md:w-[370px]`} role="dialog" aria-label="Chat with Dhobi Express">
           <div className="flex items-center gap-3 bg-brand-600 px-4 py-3 text-white">
             <span className="grid h-9 w-9 place-items-center rounded-full bg-white/20"><IconChat className="h-5 w-5" /></span>
             <div className="flex-1"><p className="text-sm font-semibold">Dhobi Express</p><p className="text-xs text-white/80">Instant answers · team on WhatsApp</p></div>

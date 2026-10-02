@@ -7,8 +7,10 @@ import { FaqList } from "@/components/Faq";
 import { JsonLd } from "@/components/JsonLd";
 import { HeroSlider, type Slide } from "@/components/HeroSlider";
 import { ContractClients } from "@/components/ContractClients";
+import { InstallApp } from "@/components/InstallApp";
+import { ActiveOrder } from "@/components/ActiveOrder";
 import { Packages } from "@/components/Packages";
-import { AddToCart } from "@/components/AddToCart";
+import { Stepper } from "@/components/Stepper";
 import {
   IconArrow, IconBox, IconCheck, IconClock, IconDrop, IconIron, IconPin, IconShield, IconStar, IconTag, IconTruck, IconWhatsApp,
 } from "@/components/Icons";
@@ -32,24 +34,24 @@ export default async function Home() {
 
   const slides: Slide[] = [
     {
-      eyebrow: "Laundry pickup & delivery · Karachi", title: "Pani ka masla? Time nahi?", highlight: "Kapray hum dhoyenge.",
-      text: t.heroSub, image: IMAGES.hero, alt: "Freshly washed and folded shirts",
-      primary: { label: t.orderNow, href: "/services" }, secondary: { label: t.whatsapp, href: wa, external: true },
+      eyebrow: "Special deal", title: "10% off your", highlight: "first order", code: "WELCOME10",
+      text: "Wash, press and dry clean with free pickup and delivery across Karachi.", image: IMAGES.hero, alt: "Freshly washed and folded shirts",
+      primary: { label: "Book now", href: "/services" }, secondary: { label: t.whatsapp, href: wa, external: true },
     },
     {
-      eyebrow: "Winter is coming", title: "Kambal aur razai", highlight: "abhi wash karwayein.",
-      text: "Deep wash, fully dried, no musty smell — ready before the cold sets in.", image: IMAGES.winter, alt: "Stack of clean folded blankets",
-      primary: { label: "Book kambal wash", href: "/services#bedding" }, secondary: { label: "See rates", href: "/services#bedding" },
+      eyebrow: "Winter is coming", title: "Kambal & razai", highlight: "deep wash", tone: "deep",
+      text: "Fully dried, no musty smell — ready before the cold sets in.", image: IMAGES.winter, alt: "Stack of clean folded blankets",
+      primary: { label: "Book kambal wash", href: "/services#bedding" },
     },
     {
-      eyebrow: "For institutions", title: "Laundry contracts for", highlight: "hospitals, factories & banquets.",
+      eyebrow: "Free pickup & delivery", title: `Every day above ${rs(s.freeDeliveryThreshold)}`, highlight: "· any size on Sunday",
+      text: "Pickup slots 10am–1pm and 4pm–7pm.", image: IMAGES.machines, alt: "Row of washing machines",
+      primary: { label: "Schedule pickup", href: "/services" },
+    },
+    {
+      eyebrow: "For institutions", title: "Laundry contracts", highlight: "for hospitals & factories", tone: "deep",
       text: "Fixed pickup days, per-piece rates and one monthly invoice.", image: B2B_IMAGES.company, alt: "Commercial laundry staff folding linen",
-      primary: { label: "Request a quote", href: "/business#inquiry" }, secondary: { label: "Learn more", href: "/business" },
-    },
-    {
-      eyebrow: "Every day", title: `Free pickup & delivery above ${rs(s.freeDeliveryThreshold)}.`,
-      text: "And on Sundays for any order size.", image: IMAGES.machines, alt: "Row of washing machines",
-      primary: { label: t.orderNow, href: "/services" },
+      primary: { label: "Get a quote", href: "/business#inquiry" }, secondary: { label: "Learn more", href: "/business" },
     },
   ];
 
@@ -84,44 +86,56 @@ export default async function Home() {
       }} />
 
       <h1 className="sr-only">Dhobi Express — laundry pickup and delivery in Karachi</h1>
+
+      {/* Phones: greeting + search, like an app home screen */}
+      <section className="container-x pt-4 md:hidden">
+        <p className="text-sm text-slate-500">Assalam o Alaikum</p>
+        <p className="text-xl font-bold text-brand-900">What should we wash today?</p>
+        <Link href="/services?focus=search" className="mt-3 flex items-center gap-3 rounded-2xl bg-white px-4 py-3.5 text-sm text-slate-400 ring-1 ring-slate-200 active:bg-slate-50">
+          <svg viewBox="0 0 24 24" className="h-5 w-5 flex-none text-slate-400" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
+          Search shalwar kameez, razai, suit…
+        </Link>
+      </section>
+      <InstallApp variant="card" />
+
       <HeroSlider slides={slides} />
 
       {/* Trust strip */}
-      <section className="border-b border-slate-200 bg-white">
-        <ul className="container-x grid grid-cols-2 gap-x-4 gap-y-3 py-5 text-sm text-slate-700 md:grid-cols-4">
+      <section className="md:border-b md:border-slate-200 md:bg-white">
+        <ul className="no-scrollbar container-x flex gap-2 overflow-x-auto pt-3 text-xs font-medium text-slate-700 md:grid md:grid-cols-4 md:gap-x-4 md:py-5 md:text-sm">
           {[[IconTruck, "Free pickup & delivery"], [IconClock, "Ready in 24–48 hours"], [IconTag, "Tagged, never mixed"], [IconShield, "Cash on delivery"]].map(([I, l]) => {
             const Ic = I as typeof IconTruck;
-            return <li key={l as string} className="flex items-center gap-2.5"><Ic className="h-5 w-5 flex-none text-brand-600" />{l as string}</li>;
+            return <li key={l as string} className="flex flex-none items-center gap-2 rounded-full bg-white px-3 py-2 ring-1 ring-slate-200 md:gap-2.5 md:rounded-none md:bg-transparent md:p-0 md:ring-0"><Ic className="h-4 w-4 flex-none text-brand-600 md:h-5 md:w-5" />{l as string}</li>;
           })}
         </ul>
       </section>
 
-      {/* Categories with photos: swipe on phones, grid on desktop */}
-      <section className="py-10 md:py-16">
+      {/* Services: Laundo-style tiles */}
+      <section className="pt-6 pb-2 md:py-14">
         <div className="container-x flex items-end justify-between gap-4">
-          <div><p className="eyebrow">Services</p><h2 className="h-section mt-1">What we clean</h2></div>
-          <Link href="/services" className="text-sm font-semibold text-brand-600">{t.viewAll} →</Link>
+          <h2 className="h-section">Services</h2>
+          <Link href="/services" className="text-sm font-semibold text-brand-600">See all</Link>
         </div>
-        <div className="container-x mt-6">
-          <div className="-mx-4 flex snap-x scroll-px-4 gap-3 overflow-x-auto px-4 pb-2 [scrollbar-width:none] md:mx-0 md:grid md:grid-cols-3 md:gap-5 md:overflow-visible md:px-0 lg:grid-cols-6">
+        <div className="container-x mt-3 md:mt-6">
+          <div className="no-scrollbar -mx-4 flex snap-x scroll-px-4 gap-3 overflow-x-auto px-4 pb-1 md:mx-0 md:grid md:grid-cols-6 md:gap-5 md:overflow-visible md:px-0">
             {cats.map((c) => (
-              <Link key={c.id} href={`/services#${c.slug}`} className="group w-40 flex-none snap-start md:w-auto">
-                <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-brand-50">
-                  <Image src={imageFor(c.slug)} alt={`${c.name} service in Karachi`} fill sizes="(min-width:1024px) 180px, (min-width:768px) 33vw, 160px" className="object-cover transition duration-300 group-hover:scale-105" />
-                  <div className="absolute inset-x-0 bottom-0 bg-brand-900/75 p-3 text-white">
-                    <h3 className="text-sm font-semibold leading-tight">{roman && c.nameUr ? c.nameUr : c.name}</h3>
-                    <p className="text-xs text-white/80">From {rs(Math.min(...c.services.map((x) => x.price)))}</p>
-                  </div>
+              <Link key={c.id} href={`/services#${c.slug}`} className="group w-[84px] flex-none snap-start rounded-2xl bg-white p-1.5 ring-1 ring-slate-200 transition active:scale-[.97] md:w-auto md:p-2 md:hover:ring-brand-500">
+                <div className="relative aspect-square overflow-hidden rounded-xl bg-brand-50">
+                  <Image src={imageFor(c.slug)} alt={`${c.name} service in Karachi`} fill sizes="(min-width:768px) 180px, 84px" className="object-cover transition duration-300 group-hover:scale-105" />
                 </div>
+                <p className="mt-1.5 rounded-lg bg-brand-500 px-1 py-1 text-center text-[10px] font-semibold leading-tight text-white md:py-1.5 md:text-sm">{roman && c.nameUr ? c.nameUr : c.name}</p>
+                <p className="mt-1 hidden text-center text-xs text-slate-500 md:block">From {rs(Math.min(...c.services.map((x) => x.price)))}</p>
               </Link>
             ))}
           </div>
         </div>
       </section>
 
+      <ActiveOrder />
+
       {/* Winter is coming */}
       {winterItems.length > 0 && (
-        <section className="container-x pb-10 md:pb-20">
+        <section className="container-x pt-6 pb-10 md:pb-20">
           <div className="grid overflow-hidden rounded-2xl border border-brand-100 bg-brand-50 md:grid-cols-2">
             <div className="relative aspect-[16/10] md:aspect-auto md:min-h-[360px]">
               <Image src={IMAGES.winter} alt="Clean folded blankets ready for winter" fill sizes="(min-width:768px) 560px, 100vw" className="object-cover" />
@@ -137,9 +151,7 @@ export default async function Home() {
                       <p className="text-sm font-semibold text-brand-900">{roman && w.nameUr ? w.nameUr : w.name}</p>
                       <p className="text-xs text-slate-500">{rs(w.price)} {UNIT_LABEL[w.unit]}</p>
                     </div>
-                    <div className="[&>button]:px-3 [&>button]:py-2">
-                      <AddToCart item={{ serviceId: w.id, name: w.name, price: w.price, unit: w.unit }} label="Add" addedLabel={t.added} />
-                    </div>
+                    <Stepper item={{ serviceId: w.id, name: w.name, price: w.price, unit: w.unit }} />
                   </li>
                 ))}
               </ul>
@@ -182,16 +194,16 @@ export default async function Home() {
       <section className="container-x py-10 md:py-20">
         <p className="eyebrow">{t.howItWorks}</p>
         <h2 className="h-section mt-1">Four simple steps</h2>
-        <ol className="mt-8 grid gap-6 sm:grid-cols-2 md:grid-cols-4">
+        <ol className="no-scrollbar -mx-4 mt-4 flex snap-x scroll-px-4 gap-3 overflow-x-auto px-4 pb-1 md:mx-0 md:mt-8 md:grid md:grid-cols-4 md:gap-6 md:overflow-visible md:px-0">
           {t.steps.map((st, i) => {
             const Icon = stepIcons[i];
             return (
-              <li key={st.t} className="flex gap-4 md:block">
-                <span className="relative grid h-12 w-12 flex-none place-items-center rounded-full bg-brand-100 text-brand-700">
+              <li key={st.t} className="w-[46%] flex-none snap-start rounded-2xl bg-brand-50 p-4 ring-1 ring-brand-100 md:w-auto md:bg-transparent md:p-0 md:ring-0">
+                <span className="relative grid h-12 w-12 flex-none place-items-center rounded-full bg-white text-brand-700 ring-1 ring-brand-100 md:bg-brand-100 md:ring-0">
                   <Icon className="h-5 w-5" />
                   <span className="absolute -right-1 -top-1 grid h-5 w-5 place-items-center rounded-full bg-brand-600 text-[11px] font-bold text-white">{i + 1}</span>
                 </span>
-                <div className="md:mt-3"><h3 className="font-semibold text-brand-900">{st.t}</h3><p className="mt-1 text-sm text-slate-600">{st.d}</p></div>
+                <div className="mt-3"><h3 className="font-semibold text-brand-900">{st.t}</h3><p className="mt-1 text-xs leading-relaxed text-slate-600 md:text-sm">{st.d}</p></div>
               </li>
             );
           })}
@@ -199,7 +211,7 @@ export default async function Home() {
       </section>
 
       {/* Contracts */}
-      <section className="bg-white">
+      <section className="md:bg-white">
         <div className="container-x pb-4">
           <div className="md:flex md:items-end md:justify-between md:gap-10">
             <div className="max-w-2xl">
@@ -247,7 +259,10 @@ export default async function Home() {
               <figure key={r.id} className="card w-[82%] flex-none snap-center p-5 md:w-auto">
                 <div className="flex text-amber-400" aria-label={`${r.rating} out of 5`}>{Array.from({ length: r.rating }).map((_, i) => <IconStar key={i} className="h-4 w-4" />)}</div>
                 <blockquote className="mt-3 text-sm leading-relaxed text-slate-700">{r.text}</blockquote>
-                <figcaption className="mt-4 text-sm"><b className="text-brand-900">{r.name}</b>{r.area && <span className="text-slate-500"> · {r.area}</span>}</figcaption>
+                <figcaption className="mt-4 flex items-center gap-3 text-sm">
+                  <span className="grid h-9 w-9 place-items-center rounded-full bg-brand-100 font-semibold text-brand-700">{r.name[0]}</span>
+                  <span><b className="block text-brand-900">{r.name}</b>{r.area && <span className="text-xs text-slate-500">{r.area}</span>}</span>
+                </figcaption>
               </figure>
             ))}
           </div>

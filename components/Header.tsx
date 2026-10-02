@@ -4,6 +4,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useCart } from "./CartProvider";
 import { IconCart, IconClock, IconMenu, IconTag, IconTruck, IconUser, IconWhatsApp, IconX } from "./Icons";
+import { InstallApp } from "./InstallApp";
 import { waLink } from "@/lib/site";
 import type { Dict, Lang } from "@/lib/dict";
 
@@ -18,11 +19,25 @@ function Logo() {
   );
 }
 
+function pageTitle(path: string, t: Dict): string {
+  const exact: Record<string, string> = {
+    "/services": t.nav.services, "/cart": t.cart, "/checkout": t.checkout, "/track": t.nav.track,
+    "/business": t.nav.business, "/contact": t.nav.contact, "/about": "About us", "/login": "Sign in",
+    "/account": "My account", "/blog": "Blog", "/privacy-policy": "Privacy", "/terms": "Terms",
+  };
+  if (exact[path]) return exact[path];
+  if (path.startsWith("/blog/")) return "Blog";
+  if (path.startsWith("/order/")) return "Order status";
+  if (path.startsWith("/laundry-service-")) return "Service area";
+  return "Dhobi Express";
+}
+
 export function Header({ t, lang, phone, whatsapp }: { t: Dict; lang: Lang; phone: string; whatsapp: string }) {
   const [open, setOpen] = useState(false);
   const { count } = useCart();
   const path = usePathname();
   const router = useRouter();
+  const isHome = path === "/";
 
   useEffect(() => setOpen(false), [path]);
   useEffect(() => {
@@ -44,6 +59,12 @@ export function Header({ t, lang, phone, whatsapp }: { t: Dict; lang: Lang; phon
     document.cookie = `lang=${lang === "en" ? "ru" : "en"}; path=/; max-age=31536000; samesite=lax`;
     router.refresh();
   }
+  function back() {
+    if (window.history.length > 1) router.back();
+    else router.push("/");
+  }
+
+  const iconBtn = "grid h-11 w-11 place-items-center rounded-full text-brand-900 active:bg-slate-100";
 
   return (
     <>
@@ -56,16 +77,31 @@ export function Header({ t, lang, phone, whatsapp }: { t: Dict; lang: Lang; phon
         </div>
       </div>
 
-      <header className="sticky top-0 z-40 border-b border-slate-200 bg-white">
-        {/* Mobile: menu | logo | account */}
-        <div className="grid h-14 grid-cols-[44px_1fr_44px] items-center px-2 lg:hidden">
-          <button onClick={() => setOpen(true)} className="grid h-11 w-11 place-items-center rounded-lg text-brand-900" aria-label="Open menu" aria-expanded={open}>
-            <IconMenu className="h-6 w-6" />
-          </button>
-          <div className="flex justify-center"><Logo /></div>
-          <Link href="/login" className="grid h-11 w-11 place-items-center rounded-lg text-brand-900" aria-label="Sign in or create account">
-            <IconUser className="h-6 w-6" />
-          </Link>
+      <header className="sticky top-0 z-40 border-b border-slate-200 bg-white pt-[env(safe-area-inset-top)]">
+        {/* Phones: home = menu | logo | account ; inner pages = back | title | cart */}
+        <div className="grid h-14 grid-cols-[48px_1fr_48px] items-center px-1 lg:hidden">
+          {isHome ? (
+            <>
+              <button onClick={() => setOpen(true)} className={iconBtn} aria-label="Open menu" aria-expanded={open}><IconMenu className="h-6 w-6" /></button>
+              <div className="flex justify-center"><Logo /></div>
+              <Link href="/login" className={iconBtn} aria-label="Sign in or create account"><IconUser className="h-6 w-6" /></Link>
+            </>
+          ) : (
+            <>
+              <button onClick={back} className={iconBtn} aria-label="Go back">
+                <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 5l-7 7 7 7" /></svg>
+              </button>
+              <p className="truncate text-center text-base font-semibold text-brand-900">{pageTitle(path, t)}</p>
+              {path === "/cart" || path === "/checkout" ? (
+                <button onClick={() => setOpen(true)} className={iconBtn} aria-label="Open menu"><IconMenu className="h-6 w-6" /></button>
+              ) : (
+                <Link href="/cart" className={`relative ${iconBtn}`} aria-label={`Cart, ${count} items`}>
+                  <IconCart className="h-6 w-6" />
+                  {count > 0 && <span className="absolute right-1 top-1 grid h-5 min-w-5 place-items-center rounded-full bg-brand-600 px-1 text-[11px] font-bold text-white">{count}</span>}
+                </Link>
+              )}
+            </>
+          )}
         </div>
 
         {/* Desktop */}
@@ -93,23 +129,25 @@ export function Header({ t, lang, phone, whatsapp }: { t: Dict; lang: Lang; phon
         </div>
       </header>
 
-      {/* Side drawer (mobile) */}
+      {/* Side drawer (phones) */}
       <div className={`fixed inset-0 z-50 lg:hidden ${open ? "" : "pointer-events-none"}`} aria-hidden={!open}>
         <div onClick={() => setOpen(false)} className={`absolute inset-0 bg-slate-900/40 transition-opacity duration-300 ${open ? "opacity-100" : "opacity-0"}`} />
-        <aside className={`absolute inset-y-0 left-0 flex w-[82%] max-w-xs flex-col bg-white shadow-xl transition-transform duration-300 ${open ? "translate-x-0" : "-translate-x-full"}`} role="dialog" aria-label="Menu">
+        <aside className={`absolute inset-y-0 left-0 flex w-[82%] max-w-xs flex-col bg-white pt-[env(safe-area-inset-top)] shadow-xl transition-transform duration-300 ${open ? "translate-x-0" : "-translate-x-full"}`} role="dialog" aria-label="Menu">
           <div className="flex h-14 items-center justify-between border-b border-slate-200 px-4">
             <Logo />
-            <button onClick={() => setOpen(false)} className="grid h-10 w-10 place-items-center rounded-lg" aria-label="Close menu"><IconX className="h-6 w-6" /></button>
+            <button onClick={() => setOpen(false)} className="grid h-10 w-10 place-items-center rounded-full active:bg-slate-100" aria-label="Close menu"><IconX className="h-6 w-6" /></button>
           </div>
           <nav className="flex-1 overflow-y-auto p-3">
             {links.map((l) => (
-              <Link key={l.href} href={l.href} className={`block rounded-lg px-3 py-3 text-base font-medium ${path === l.href ? "bg-brand-50 text-brand-700" : "text-brand-900"}`}>{l.label}</Link>
+              <Link key={l.href} href={l.href} className={`block rounded-xl px-3 py-3 text-base font-medium ${path === l.href ? "bg-brand-50 text-brand-700" : "text-brand-900 active:bg-slate-50"}`}>{l.label}</Link>
             ))}
-            <Link href="/cart" className="flex items-center justify-between rounded-lg px-3 py-3 text-base font-medium text-brand-900">
+            <Link href="/blog" className="block rounded-xl px-3 py-3 text-base font-medium text-brand-900 active:bg-slate-50">Blog</Link>
+            <Link href="/cart" className="flex items-center justify-between rounded-xl px-3 py-3 text-base font-medium text-brand-900 active:bg-slate-50">
               {t.cart}{count > 0 && <span className="rounded-full bg-brand-600 px-2 text-xs font-bold text-white">{count}</span>}
             </Link>
           </nav>
-          <div className="space-y-2 border-t border-slate-200 p-4">
+          <div className="space-y-2 border-t border-slate-200 p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
+            <InstallApp />
             <Link href="/login" className="btn-primary w-full"><IconUser className="h-5 w-5" />Sign in / Sign up</Link>
             <a href={waLink(whatsapp)} target="_blank" rel="noopener" className="btn-ghost w-full"><IconWhatsApp className="h-5 w-5 text-wa" />{t.whatsapp}</a>
             <button onClick={toggleLang} className="w-full py-2 text-sm text-slate-600">{lang === "en" ? "Roman Urdu mein dekhein" : "View in English"}</button>

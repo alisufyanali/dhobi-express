@@ -7,5 +7,5 @@ export const metadata: Metadata = { title: "Your Cart", robots: { index: false }
 
 export default async function CartPage() {
   const s = await getSettings();
-  return <CartView threshold={s.freeDeliveryThreshold} />;
+  return <CartView threshold={s.freeDeliveryThreshold} fee={s.deliveryFee} />;
 }

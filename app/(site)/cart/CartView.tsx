@@ -1,57 +1,83 @@
 "use client";
 import Link from "next/link";
 import { useCart } from "@/components/CartProvider";
-import { DeliveryProgress } from "@/components/DeliveryProgress";
+import { Stepper } from "@/components/Stepper";
+import { IconCart, IconTag, IconTruck } from "@/components/Icons";
 import { rs, UNIT_LABEL } from "@/lib/site";
 
-export function CartView({ threshold }: { threshold: number }) {
-  const { items, subtotal, setQty, remove, ready } = useCart();
+/** Laundo-style order summary: item table, promo hint, payment details, Continue. */
+export function CartView({ threshold, fee }: { threshold: number; fee: number }) {
+  const { items, subtotal, count, ready } = useCart();
   if (!ready) return <div className="container-x py-16" />;
 
   if (!items.length) {
     return (
       <div className="container-x py-20 text-center">
-        <h1 className="text-2xl font-bold">Your cart is empty</h1>
-        <p className="mt-2 text-slate-600">Add a few services to book a pickup.</p>
-        <Link href="/services" className="btn-primary mt-6">Browse services</Link>
+        <span className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-brand-50 text-brand-600"><IconCart className="h-8 w-8" /></span>
+        <h1 className="mt-4 text-xl font-bold text-brand-900">Your cart is empty</h1>
+        <p className="mt-1 text-slate-600">Add a few items to book a pickup.</p>
+        <Link href="/services" className="btn-primary mt-6">Book now</Link>
       </div>
     );
   }
 
+  const free = subtotal >= threshold;
+  const delivery = free ? 0 : fee;
+  const left = threshold - subtotal;
+
   return (
-    <div className="container-x py-8 md:grid md:grid-cols-[1fr_360px] md:gap-10 md:py-12">
-      <div>
-        <h1 className="text-2xl font-extrabold md:text-3xl">Your cart</h1>
-        <ul className="mt-6 divide-y divide-slate-200 rounded-2xl border border-slate-200">
-          {items.map((i) => {
-            const step = i.unit === "PER_KG" ? 0.5 : 1;
-            return (
-              <li key={i.serviceId} className="flex items-center gap-3 p-4">
-                <div className="min-w-0 flex-1">
-                  <p className="font-medium text-slate-900">{i.name}</p>
-                  <p className="text-sm text-slate-500">{rs(i.price)} {UNIT_LABEL[i.unit]}</p>
-                </div>
-                <div className="flex items-center rounded-xl border border-slate-200">
-                  <button className="h-10 w-10 text-lg" aria-label="Decrease" onClick={() => setQty(i.serviceId, +(i.quantity - step).toFixed(1))}>−</button>
-                  <span className="w-12 text-center text-sm font-semibold">{i.quantity}{i.unit === "PER_KG" ? "kg" : ""}</span>
-                  <button className="h-10 w-10 text-lg" aria-label="Increase" onClick={() => setQty(i.serviceId, +(i.quantity + step).toFixed(1))}>+</button>
-                </div>
-                <div className="hidden w-24 text-right font-semibold sm:block">{rs(i.price * i.quantity)}</div>
-                <button onClick={() => remove(i.serviceId)} className="text-sm text-slate-400 hover:text-red-600" aria-label={`Remove ${i.name}`}>✕</button>
-              </li>
-            );
-          })}
-        </ul>
-        <p className="mt-3 text-xs text-slate-500">Per-kg items are weighed at pickup; your final bill uses the actual weight.</p>
-      </div>
-      <aside className="mt-6 h-fit space-y-4 md:sticky md:top-24 md:mt-0">
-        <DeliveryProgress subtotal={subtotal} threshold={threshold} />
-        <div className="card p-5">
-          <div className="flex justify-between text-lg font-bold"><span>Subtotal</span><span>{rs(subtotal)}</span></div>
-          <p className="mt-1 text-xs text-slate-500">Delivery calculated at checkout.</p>
-          <Link href="/checkout" className="btn-primary mt-4 w-full text-base">Choose pickup time →</Link>
+    <div className="container-x pb-32 pt-4 md:mx-auto md:max-w-3xl md:py-10">
+      <h1 className="hidden text-3xl font-bold text-brand-900 md:block">Your order</h1>
+
+      <section className="overflow-hidden rounded-2xl bg-white ring-1 ring-slate-200 md:mt-6">
+        <div className="grid grid-cols-[1fr_auto_auto] gap-x-3 bg-brand-50 px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wide text-brand-700">
+          <span>Item</span><span className="w-16 text-right">Price</span><span className="w-[100px]" />
         </div>
-      </aside>
+        <ul className="divide-y divide-slate-100">
+          {items.map((i) => (
+            <li key={i.serviceId} className="grid grid-cols-[1fr_auto_auto] items-center gap-x-3 px-4 py-3">
+              <div className="min-w-0">
+                <p className="text-sm font-medium leading-snug text-brand-900">{i.name}</p>
+                <p className="text-xs text-slate-500">{rs(i.price)} {UNIT_LABEL[i.unit]}</p>
+              </div>
+              <p className="w-16 text-right text-sm font-semibold text-brand-900">{rs(i.price * i.quantity)}</p>
+              <div className="flex w-[100px] justify-end"><Stepper item={i} /></div>
+            </li>
+          ))}
+        </ul>
+        <Link href="/services" className="flex items-center gap-2 border-t border-slate-100 px-4 py-3 text-sm font-semibold text-brand-600">
+          <span className="grid h-6 w-6 place-items-center rounded-full bg-brand-100 text-base leading-none">+</span>Add more items
+        </Link>
+      </section>
+
+      <div className="mt-3 flex items-center gap-3 rounded-2xl bg-white px-4 py-3 ring-1 ring-slate-200">
+        <IconTag className="h-5 w-5 text-brand-600" />
+        <p className="flex-1 text-sm text-slate-700">Have a promo code? <span className="text-slate-500">Apply it at the next step.</span></p>
+      </div>
+
+      {!free && (
+        <div className="mt-3 flex items-center gap-3 rounded-2xl bg-brand-50 px-4 py-3 ring-1 ring-brand-100">
+          <IconTruck className="h-5 w-5 flex-none text-brand-600" />
+          <p className="text-sm text-brand-900">Add <b>{rs(left)}</b> more for free pickup &amp; delivery — or book for Sunday.</p>
+        </div>
+      )}
+
+      <section className="mt-3 rounded-2xl bg-white p-4 ring-1 ring-slate-200">
+        <h2 className="font-semibold text-brand-900">Payment details</h2>
+        <dl className="mt-3 space-y-2 text-sm">
+          <div className="flex justify-between"><dt className="text-slate-600">Items total</dt><dd>{rs(subtotal)}</dd></div>
+          <div className="flex justify-between"><dt className="text-slate-600">Pickup &amp; delivery</dt><dd className={free ? "font-medium text-emerald-600" : ""}>{free ? "Free" : rs(delivery)}</dd></div>
+          <div className="flex justify-between border-t border-dashed border-slate-200 pt-2 text-base font-bold text-brand-900"><dt>To pay</dt><dd className="text-brand-600">{rs(subtotal + delivery)}</dd></div>
+        </dl>
+        <p className="mt-2 text-xs text-slate-500">Sunday pickup &amp; delivery is free for any order. Per-kg items are weighed at pickup.</p>
+        <div className="hidden md:block"><Link href="/checkout" className="btn-primary mt-4 w-full text-base">Choose pickup time</Link></div>
+      </section>
+
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white px-4 pt-3 pb-[max(.75rem,env(safe-area-inset-bottom))] md:hidden">
+        <Link href="/checkout" className="btn-primary w-full py-3.5 text-base">
+          Continue · {count} item{count > 1 ? "s" : ""} · {rs(subtotal + delivery)}
+        </Link>
+      </div>
     </div>
   );
 }

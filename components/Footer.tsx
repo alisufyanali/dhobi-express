@@ -14,7 +14,7 @@ const GROUPS = [
 
 export function Footer({ s }: { s: S }) {
   return (
-    <footer className="mt-20 bg-brand-900 pb-24 text-slate-300 md:pb-0">
+    <footer className="mt-12 bg-brand-900 md:mt-20 pb-24 text-slate-300 md:pb-0">
       <Newsletter />
 
       <div className="container-x grid gap-8 py-10 md:grid-cols-[1.3fr_1fr_1fr_1fr] md:gap-10 md:py-14">
