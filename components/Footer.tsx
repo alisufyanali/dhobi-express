@@ -32,6 +32,7 @@ export function Footer({ s }: { s: S }) {
           <p className="font-semibold text-white">Company</p>
           <ul className="mt-3 space-y-2 text-sm">
             <li><Link href="/about">About</Link></li>
+            <li><Link href="/blog">Blog</Link></li>
             <li><Link href="/contact">Contact</Link></li>
             <li><Link href="/privacy-policy">Privacy Policy</Link></li>
             <li><Link href="/terms">Terms</Link></li>

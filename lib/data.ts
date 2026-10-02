@@ -2,6 +2,7 @@ import { prisma } from "./prisma";
 import { IS_DEMO } from "./demo";
 import { CATEGORIES, FAQS, REVIEWS } from "./seed-data";
 import { AREA_PAGES } from "./areas";
+import { STARTER_POSTS } from "./posts-seed";
 
 // Read-only queries for the public site. In demo mode they return the seed content.
 
@@ -54,4 +55,21 @@ export async function getLogos(): Promise<{ id: string; name: string; imageUrl: 
 export async function getAreas() {
   if (IS_DEMO) return AREA_PAGES.map((a) => ({ id: a.slug, name: a.name })).sort((a, b) => a.name.localeCompare(b.name));
   return prisma.area.findMany({ where: { active: true }, orderBy: { name: "asc" }, select: { id: true, name: true } });
+}
+
+export type PostT = { slug: string; title: string; excerpt: string; body: string; coverUrl: string | null; publishedAt: Date; updatedAt: Date };
+
+const unsplash = (id: string) => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=1200&q=70`;
+const DEMO_DATE = new Date("2026-10-01T00:00:00Z");
+const demoPosts = (): PostT[] =>
+  STARTER_POSTS.map((p) => ({ slug: p.slug, title: p.title, excerpt: p.excerpt, body: p.body, coverUrl: unsplash(p.cover), publishedAt: DEMO_DATE, updatedAt: DEMO_DATE }));
+
+export async function getPosts(): Promise<PostT[]> {
+  if (IS_DEMO) return demoPosts();
+  return prisma.post.findMany({ where: { published: true }, orderBy: { publishedAt: "desc" } });
+}
+
+export async function getPost(slug: string): Promise<PostT | null> {
+  if (IS_DEMO) return demoPosts().find((p) => p.slug === slug) ?? null;
+  return prisma.post.findFirst({ where: { slug, published: true } });
 }

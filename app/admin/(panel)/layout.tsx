@@ -16,6 +16,7 @@ const NAV = [
   ["/admin/clients", "Client logos"],
   ["/admin/coupons", "Coupons"],
   ["/admin/reviews", "Reviews"],
+  ["/admin/blog", "Blog"],
   ["/admin/subscribers", "Subscribers"],
   ["/admin/settings", "Settings"],
 ];

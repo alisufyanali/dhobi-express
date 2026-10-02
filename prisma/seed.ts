@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { AREA_PAGES } from "../lib/areas";
 import { CATEGORIES, FAQS, REVIEWS } from "../lib/seed-data";
+import { STARTER_POSTS } from "../lib/posts-seed";
 
 const prisma = new PrismaClient();
 
@@ -35,6 +36,14 @@ async function main() {
 
   if ((await prisma.faq.count()) === 0) {
     await prisma.faq.createMany({ data: FAQS.map((f, i) => ({ ...f, sortOrder: i })) });
+  }
+
+  for (const p of STARTER_POSTS) {
+    await prisma.post.upsert({
+      where: { slug: p.slug }, update: {},
+      create: { slug: p.slug, title: p.title, excerpt: p.excerpt, body: p.body,
+        coverUrl: `https://images.unsplash.com/photo-${p.cover}?auto=format&fit=crop&w=1200&q=70` },
+    });
   }
 
   await prisma.coupon.upsert({
