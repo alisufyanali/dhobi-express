@@ -21,6 +21,7 @@ export const orderSchema = z
     deliveryDate: dateStr,
     notes: z.string().trim().max(500).optional().or(z.literal("")),
     paymentMethod: z.enum(["COD", "JAZZCASH", "EASYPAISA", "BANK_TRANSFER"]),
+    couponCode: z.string().trim().max(40).optional().or(z.literal("")),
     items: z
       .array(z.object({ serviceId: z.string(), quantity: z.number().positive().max(500) }))
       .min(1, "Your cart is empty"),

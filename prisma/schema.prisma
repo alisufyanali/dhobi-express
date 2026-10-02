@@ -30,6 +30,11 @@ enum PaymentMethod {
   BANK_TRANSFER
 }
 
+enum CouponType {
+  PERCENT
+  FLAT
+}
+
 enum InquiryType {
   COMPANY
   HOSPITAL
@@ -99,6 +104,8 @@ model Order {
   notes         String?
   userEmail     String? // set when a signed-in customer places the order
   subtotal      Int
+  couponCode    String?
+  discount      Int           @default(0)
   deliveryFee   Int
   total         Int
   paymentMethod PaymentMethod @default(COD)
@@ -197,4 +204,18 @@ model NewsletterSubscriber {
   id        String   @id @default(cuid())
   contact   String   @unique // email or mobile number
   createdAt DateTime @default(now())
+}
+
+model Coupon {
+  id             String     @id @default(cuid())
+  code           String     @unique // stored uppercase
+  type           CouponType @default(PERCENT)
+  value          Int // percent (1–100) or rupees
+  minOrder       Int        @default(0)
+  maxUses        Int? // total uses across all customers; null = unlimited
+  used           Int        @default(0)
+  firstOrderOnly Boolean    @default(false)
+  active         Boolean    @default(true)
+  expiresAt      DateTime?
+  createdAt      DateTime   @default(now())
 }

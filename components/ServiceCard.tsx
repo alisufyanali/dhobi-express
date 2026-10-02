@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { AddToCart } from "./AddToCart";
 import { rs, UNIT_LABEL } from "@/lib/site";
-import { imageFor } from "@/lib/images";
+import { imageFor, canOptimize } from "@/lib/images";
 import type { Svc } from "@/lib/data";
 
 export function ServiceCard({ s, roman, label, addedLabel }: { s: Svc; roman: boolean; label: string; addedLabel: string }) {
@@ -9,7 +9,7 @@ export function ServiceCard({ s, roman, label, addedLabel }: { s: Svc; roman: bo
   return (
     <article className="card flex gap-3 overflow-hidden p-3 md:flex-col md:gap-0 md:p-0">
       <div className="relative h-24 w-24 flex-none overflow-hidden rounded-xl bg-brand-50 md:h-44 md:w-full md:rounded-none">
-        <Image src={s.imageUrl || imageFor(s.category.slug)} alt={`${s.name} — laundry service in Karachi`} fill sizes="(min-width:768px) 360px, 96px" className="object-cover" />
+        <Image unoptimized={!canOptimize(s.imageUrl || imageFor(s.category.slug))} src={s.imageUrl || imageFor(s.category.slug)} alt={`${s.name} — laundry service in Karachi`} fill sizes="(min-width:768px) 360px, 96px" className="object-cover" />
       </div>
       <div className="flex min-w-0 flex-1 flex-col md:p-4">
         <h3 className="font-semibold text-brand-900">{name}</h3>

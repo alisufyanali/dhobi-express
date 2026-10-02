@@ -26,3 +26,6 @@ export const B2B_IMAGES = {
   banquet: u("1677129663241-5be1f17fe6fe", 900), // banquet tables and chairs
   masjid: u("1670514862391-df20ad00b330", 900), // masjid interior
 };
+
+/** next/image can only optimise hosts listed in next.config. Pasted URLs from other sites load unoptimised. */
+export const canOptimize = (src: string) => /^https:\/\/(res\.cloudinary\.com|images\.unsplash\.com)\//.test(src);

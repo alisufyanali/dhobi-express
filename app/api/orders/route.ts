@@ -5,6 +5,7 @@ import { orderSchema } from "@/lib/validators";
 import { calcDelivery, karachiToday } from "@/lib/delivery";
 import { getSettings } from "@/lib/settings";
 import { getSession } from "@/lib/auth";
+import { checkCoupon } from "@/lib/coupons";
 
 function newCode() {
   return "DE-" + Math.floor(10000 + Math.random() * 90000);
@@ -48,6 +49,15 @@ export async function POST(req: Request) {
   const subtotal = lines.reduce((n, l) => n + l.lineTotal, 0);
   const { fee } = calcDelivery(subtotal, d.pickupDate, d.deliveryDate, s);
 
+  let discount = 0;
+  let couponCode: string | null = null;
+  if (d.couponCode) {
+    const c = await checkCoupon(d.couponCode, subtotal, d.phone);
+    if (!c.ok) return NextResponse.json({ error: c.message, errors: { couponCode: c.message } }, { status: 422 });
+    discount = c.discount;
+    couponCode = c.code;
+  }
+
   const session = await getSession();
   const userEmail = session?.user?.role === "customer" ? session.user.email ?? null : null;
 
@@ -70,11 +80,12 @@ export async function POST(req: Request) {
           notes: d.notes || null,
           userEmail,
           paymentMethod: d.paymentMethod,
-          subtotal, deliveryFee: fee, total: subtotal + fee,
+          subtotal, couponCode, discount, deliveryFee: fee, total: subtotal - discount + fee,
           items: { create: lines },
           history: { create: { status: "PICKUP_PENDING" } },
         },
       });
+      if (couponCode) await prisma.coupon.update({ where: { code: couponCode }, data: { used: { increment: 1 } } });
       return NextResponse.json({ code: order.code, phone: order.phone }, { status: 201 });
     } catch (e: unknown) {
       if ((e as { code?: string }).code === "P2002") continue; // order code collision, retry

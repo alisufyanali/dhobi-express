@@ -36,6 +36,7 @@ export default async function OrderDetail({ params }: { params: Promise<{ id: st
           <tbody>{o.items.map((i) => (<tr key={i.id} className="border-b border-slate-100"><td className="py-2">{i.name}</td><td>{i.quantity}{i.unit === "PER_KG" ? " kg" : ""}</td><td>{rs(i.price)} {UNIT_LABEL[i.unit]}</td><td className="text-right">{rs(i.lineTotal)}</td></tr>))}</tbody>
           <tfoot>
             <tr><td colSpan={3} className="pt-3 text-right">Subtotal</td><td className="pt-3 text-right">{rs(o.subtotal)}</td></tr>
+            {o.discount > 0 && <tr><td colSpan={3} className="text-right">Coupon {o.couponCode}</td><td className="text-right">− {rs(o.discount)}</td></tr>}
             <tr><td colSpan={3} className="text-right">Delivery</td><td className="text-right">{o.deliveryFee ? rs(o.deliveryFee) : "Free"}</td></tr>
             <tr className="text-base font-bold"><td colSpan={3} className="text-right">Total</td><td className="text-right">{rs(o.total)}</td></tr>
           </tfoot>

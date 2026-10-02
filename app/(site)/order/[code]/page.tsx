@@ -64,6 +64,7 @@ export default async function OrderPage({ params, searchParams }: { params: Prom
           ))}
         </ul>
         <div className="mt-3 space-y-1 border-t border-slate-200 pt-3 text-sm">
+          {order.discount > 0 && <div className="flex justify-between text-emerald-700"><span>Coupon {order.couponCode}</span><span>− {rs(order.discount)}</span></div>}
           <div className="flex justify-between"><span>Delivery</span><span>{order.deliveryFee ? rs(order.deliveryFee) : "Free"}</span></div>
           <div className="flex justify-between text-base font-bold"><span>Total</span><span>{rs(order.total)}</span></div>
           <p className="text-slate-500">Payment: {PAYMENT_LABEL[order.paymentMethod]}</p>

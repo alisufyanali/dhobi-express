@@ -37,6 +37,11 @@ async function main() {
     await prisma.faq.createMany({ data: FAQS.map((f, i) => ({ ...f, sortOrder: i })) });
   }
 
+  await prisma.coupon.upsert({
+    where: { code: "WELCOME10" }, update: {},
+    create: { code: "WELCOME10", type: "PERCENT", value: 10, firstOrderOnly: true },
+  });
+
   const email = process.env.ADMIN_EMAIL;
   const password = process.env.ADMIN_PASSWORD;
   if (email && password) {

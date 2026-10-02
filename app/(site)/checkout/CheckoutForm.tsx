@@ -27,12 +27,25 @@ export function CheckoutForm({ demo, areas, slots, today, settings }: Props) {
   const [errors, setErrors] = useState<Errors>({});
   const [submitting, setSubmitting] = useState(false);
   const [serverError, setServerError] = useState("");
+  const [couponInput, setCouponInput] = useState("");
+  const [coupon, setCoupon] = useState<{ code: string; discount: number; label: string } | null>(null);
+  const [couponMsg, setCouponMsg] = useState("");
+
+  async function applyCoupon() {
+    setCouponMsg("");
+    const res = await fetch("/api/coupons", { method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ code: couponInput, subtotal, phone: f.phone || undefined }) }).catch(() => null);
+    const data = await res?.json().catch(() => null);
+    if (data?.ok) { setCoupon({ code: data.code, discount: data.discount, label: data.label }); setCouponInput(data.code); }
+    else { setCoupon(null); setCouponMsg(data?.message ?? "Couldn't check the coupon."); }
+  }
 
   const set = (k: keyof typeof f) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
     setF((p) => ({ ...p, [k]: e.target.value }));
 
   const delivery = calcDelivery(subtotal, f.pickupDate || undefined, f.deliveryDate || undefined, settings);
-  const total = subtotal + delivery.fee;
+  const discount = coupon?.discount ?? 0;
+  const total = subtotal - discount + delivery.fee;
 
   if (!ready) return <div className="container-x py-16" />;
   if (!items.length) {
@@ -47,7 +60,7 @@ export function CheckoutForm({ demo, areas, slots, today, settings }: Props) {
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setServerError("");
-    const payload = { ...f, items: items.map((i) => ({ serviceId: i.serviceId, quantity: i.quantity })) };
+    const payload = { ...f, couponCode: coupon?.code ?? "", items: items.map((i) => ({ serviceId: i.serviceId, quantity: i.quantity })) };
     const parsed = orderSchema.safeParse(payload);
     if (!parsed.success) {
       const errs: Errors = {};
@@ -162,11 +175,23 @@ export function CheckoutForm({ demo, areas, slots, today, settings }: Props) {
           </ul>
           <div className="mt-3 space-y-1.5 border-t border-slate-200 pt-3 text-sm">
             <div className="flex justify-between"><span>Subtotal</span><span>{rs(subtotal)}</span></div>
+            {coupon && (
+              <div className="flex justify-between text-emerald-700"><span>Coupon {coupon.code} ({coupon.label})</span><span>− {rs(coupon.discount)}</span></div>
+            )}
             <div className="flex justify-between">
               <span>Delivery {delivery.reason === "sunday" && <span className="text-emerald-700">(Sunday free)</span>}</span>
               <span>{delivery.fee ? rs(delivery.fee) : "Free"}</span>
             </div>
             <div className="flex justify-between pt-1 text-lg font-bold"><span>Total</span><span>{rs(total)}</span></div>
+          </div>
+          <div className="mt-4 border-t border-slate-200 pt-4">
+            <div className="flex gap-2">
+              <input value={couponInput} onChange={(e) => { setCouponInput(e.target.value.toUpperCase()); if (coupon) setCoupon(null); }}
+                placeholder="Coupon code" aria-label="Coupon code" className="input py-2 text-sm uppercase" />
+              <button type="button" onClick={applyCoupon} disabled={!couponInput.trim()} className="btn-ghost px-4 py-2">Apply</button>
+            </div>
+            {couponMsg && <p className="err">{couponMsg}</p>}
+            {!coupon && !couponMsg && <p className="mt-1.5 text-xs text-slate-500">First order? Use <b>WELCOME10</b> for 10% off.</p>}
           </div>
           {serverError && <p className="err mt-3">{serverError}</p>}
           <button disabled={submitting} className="btn-primary mt-4 w-full text-base">{submitting ? "Placing order…" : "Place order"}</button>

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { canOptimize } from "@/lib/images";
 
 type Logo = { id: string; name: string; imageUrl: string };
 
@@ -19,7 +20,7 @@ export function ClientSlider({ logos, placeholder }: { logos: Logo[]; placeholde
           <li key={`${l.id}-${i}`} aria-hidden={i >= items.length} className="flex w-40 flex-none flex-col items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-4">
             <div className="relative grid h-12 w-full place-items-center">
               {l.imageUrl
-                ? <Image src={l.imageUrl} alt={l.name} fill sizes="160px" className="object-contain" />
+                ? <Image unoptimized={!canOptimize(l.imageUrl)} src={l.imageUrl} alt={l.name} fill sizes="160px" className="object-contain" />
                 : <span className="h-10 w-24 rounded-md border border-dashed border-slate-300" />}
             </div>
             <span className="truncate text-xs font-medium text-slate-600">{l.name}</span>
