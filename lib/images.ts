@@ -14,6 +14,7 @@ export const CATEGORY_IMAGE: Record<string, string> = {
   curtains: u("1582735689369-4fe89db7114c", 800),
   bedding: u("1582735689369-4fe89db7114c", 800),
   uniforms: u("1542058186993-286fdce0b580", 800),
+  packages: u("1635274605638-d44babc08a4f", 800),
 };
 
 export const imageFor = (slug: string) => CATEGORY_IMAGE[slug] ?? CATEGORY_IMAGE["wash-press"];

@@ -2,8 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCart } from "./CartProvider";
-import { IconCart, IconTruck, IconWhatsApp } from "./Icons";
-import { waLink } from "@/lib/site";
+import { IconCart, IconTruck } from "./Icons";
 
 const I = {
   home: <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 11 12 4l9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" /></svg>,
@@ -12,18 +11,13 @@ const I = {
 };
 
 /** Mobile: bottom nav with a raised Order button. Desktop: WhatsApp bubble. */
-export function StickyActions({ whatsapp, orderLabel, waLabel }: { whatsapp: string; orderLabel: string; waLabel: string }) {
+export function StickyActions({ orderLabel }: { orderLabel: string }) {
   const path = usePathname();
   const { count } = useCart();
-  const href = waLink(whatsapp, "Assalam o Alaikum, I want to book a laundry pickup.");
   const tab = (p: string) => (path === p ? "text-brand-600" : "text-slate-500");
 
   return (
     <>
-      <a href={href} target="_blank" rel="noopener" aria-label={waLabel}
-        className="fixed bottom-24 right-4 z-40 grid h-12 w-12 place-items-center rounded-full bg-wa text-white shadow-lg md:bottom-6 md:right-6 md:h-14 md:w-14">
-        <IconWhatsApp className="h-6 w-6 md:h-7 md:w-7" />
-      </a>
 
       <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white pb-[env(safe-area-inset-bottom)] md:hidden" aria-label="Quick navigation">
         <div className="grid grid-cols-5 items-end px-1 pb-1.5 pt-1">

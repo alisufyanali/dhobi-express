@@ -4,6 +4,7 @@ import { IS_DEMO } from "@/lib/demo";
 import { orderSchema } from "@/lib/validators";
 import { calcDelivery, karachiToday } from "@/lib/delivery";
 import { getSettings } from "@/lib/settings";
+import { getSession } from "@/lib/auth";
 
 function newCode() {
   return "DE-" + Math.floor(10000 + Math.random() * 90000);
@@ -47,6 +48,9 @@ export async function POST(req: Request) {
   const subtotal = lines.reduce((n, l) => n + l.lineTotal, 0);
   const { fee } = calcDelivery(subtotal, d.pickupDate, d.deliveryDate, s);
 
+  const session = await getSession();
+  const userEmail = session?.user?.role === "customer" ? session.user.email ?? null : null;
+
   const customer = await prisma.customer.upsert({
     where: { phone: d.phone },
     update: { name: d.name },
@@ -64,6 +68,7 @@ export async function POST(req: Request) {
           deliveryDate: new Date(d.deliveryDate + "T00:00:00Z"),
           pickupSlot: d.pickupSlot,
           notes: d.notes || null,
+          userEmail,
           paymentMethod: d.paymentMethod,
           subtotal, deliveryFee: fee, total: subtotal + fee,
           items: { create: lines },

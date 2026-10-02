@@ -27,3 +27,8 @@ body { @apply bg-white text-slate-700 antialiased; }
 @utility h-section { @apply text-2xl font-bold tracking-tight text-brand-900 md:text-3xl; }
 @utility eyebrow { @apply text-xs font-semibold uppercase tracking-[.14em] text-brand-600; }
 @utility err { @apply mt-1 text-sm text-red-600; }
+
+/* Client logo slider */
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@utility animate-marquee { animation: marquee 30s linear infinite; }
+@media (prefers-reduced-motion: reduce) { .animate-marquee { animation: none; } }

@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { getLogos } from "@/lib/data";
 import { InquiryForm } from "./InquiryForm";
 import { IconCheck } from "@/components/Icons";
+import { ClientSlider } from "@/components/ClientSlider";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
@@ -38,11 +38,9 @@ export default async function BusinessPage() {
       </section>
 
       {logos.length > 0 && (
-        <section className="container-x pb-6">
-          <h2 className="text-center text-sm font-semibold uppercase tracking-wider text-slate-500">Clients we work with</h2>
-          <div className="mt-6 flex flex-wrap justify-center gap-8">
-            {logos.map((l) => (<div key={l.id} className="relative h-14 w-32"><Image src={l.imageUrl} alt={l.name} fill sizes="128px" className="object-contain" /></div>))}
-          </div>
+        <section className="pb-6">
+          <h2 className="container-x mb-6 text-center text-sm font-medium text-slate-500">Clients we work with</h2>
+          <ClientSlider logos={logos} />
         </section>
       )}
 

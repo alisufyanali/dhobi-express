@@ -7,7 +7,7 @@ const en = {
   whatsapp: "WhatsApp Us",
   heroTitle: "Pani ka masla? Time nahi? Kapray hum dhoyenge.",
   heroSub: "Wash, press and dry clean with free pickup & delivery across Karachi. Clean clothes back in 24–48 hours.",
-  freeDeliveryNote: "Free pickup & delivery every Sunday, and on orders above Rs. 2,000 any day.",
+  freeDeliveryNote: "Free pickup & delivery every Sunday, and on orders above Rs. 1,000 any day.",
   howItWorks: "How it works",
   steps: [
     { t: "Pickup", d: "Book online or on WhatsApp. Our rider collects from your door." },
@@ -33,7 +33,7 @@ const ru: typeof en = {
   whatsapp: "WhatsApp Karein",
   heroTitle: "Pani ka masla? Time nahi? Kapray hum dhoyenge.",
   heroSub: "Dhulai, press aur dry clean — ghar se pickup aur delivery free. 24–48 ghante mein saaf kapray wapas.",
-  freeDeliveryNote: "Har Itwar free pickup aur delivery, aur Rs. 2,000 se zyada ke order par har din free.",
+  freeDeliveryNote: "Har Itwar free pickup aur delivery, aur Rs. 1,000 se zyada ke order par har din free.",
   howItWorks: "Kaise kaam karta hai",
   steps: [
     { t: "Pickup", d: "Online ya WhatsApp par book karein. Rider ghar se kapray le jayega." },

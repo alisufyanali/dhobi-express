@@ -1,13 +1,15 @@
 import Link from "next/link";
 import { AREA_PAGES } from "@/lib/areas";
+import { Newsletter } from "./Newsletter";
 
 type S = { phone: string; email: string; address: string };
 
 export function Footer({ s }: { s: S }) {
   return (
     <footer className="mt-20 bg-brand-900 pb-28 text-slate-300 md:pb-10">
-      <div className="container-x grid gap-10 py-12 md:grid-cols-4">
-        <div>
+      <Newsletter />
+      <div className="container-x grid grid-cols-2 gap-8 py-10 md:grid-cols-4 md:gap-10 md:py-12">
+        <div className="col-span-2 md:col-span-1">
           <p className="text-lg font-extrabold text-white">Dhobi<span className="text-brand-500">Express</span></p>
           <p className="mt-3 text-sm leading-relaxed">Laundry pickup and delivery for homes and businesses across Karachi.</p>
           <p className="mt-4 text-sm">{s.phone}<br />{s.email}<br />{s.address}</p>

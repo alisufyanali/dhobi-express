@@ -11,6 +11,8 @@ import { AREA_PAGES } from "@/lib/areas";
 import { B2B_IMAGES, CATEGORY_IMAGE, IMAGES, imageFor } from "@/lib/images";
 import { PromoBanners, type Banner } from "@/components/PromoBanners";
 import { CategoryIcon } from "@/components/CategoryIcon";
+import { ClientSlider } from "@/components/ClientSlider";
+import { Packages } from "@/components/Packages";
 import { rs, SITE, waLink } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
@@ -20,7 +22,8 @@ export default async function Home() {
     getDict(), getLang(), getSettings(), getCatalog(), getLogos(), getReviews(), getFaqs(),
   ]);
   const roman = lang === "ru";
-  const cats = catalog.filter((c) => c.services.length);
+  const cats = catalog.filter((c) => c.services.length && c.slug !== "packages");
+  const packages = catalog.find((c) => c.slug === "packages")?.services ?? [];
   const stepIcons = [IconTruck, IconDrop, IconIron, IconBox];
   const wa = waLink(s.whatsappNumber, "Assalam o Alaikum, I want to book a laundry pickup.");
   const showClients = logos.length > 0 || IS_DEMO;
@@ -120,6 +123,17 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* Packages */}
+      {packages.length > 0 && (
+        <section className="container-x py-14 md:pb-20 md:pt-0">
+          <div className="flex items-end justify-between gap-4">
+            <div><p className="eyebrow">Packages</p><h2 className="h-section mt-1">Save with a bundle</h2></div>
+            <Link href="/services#packages" className="text-sm font-semibold text-brand-600">All packages →</Link>
+          </div>
+          <div className="mt-6"><Packages items={packages} label={t.addToCart} addedLabel={t.added} /></div>
+        </section>
+      )}
+
       {/* How it works */}
       <section className="border-y border-brand-100 bg-brand-50">
         <div className="container-x py-14 md:py-16">
@@ -187,19 +201,11 @@ export default async function Home() {
 
       {/* Clients */}
       {showClients && (
-        <section className="container-x pb-14 md:pb-20">
-          <p className="text-center text-sm font-medium text-slate-500">{t.clients}</p>
-          <div className="mt-6 grid grid-cols-2 items-center gap-4 sm:grid-cols-3 md:grid-cols-6">
-            {logos.length > 0
-              ? logos.map((l) => (
-                  <div key={l.id} className="relative h-14 grayscale transition hover:grayscale-0">
-                    <Image src={l.imageUrl} alt={l.name} fill sizes="160px" className="object-contain" />
-                  </div>
-                ))
-              : Array.from({ length: 6 }).map((_, i) => (
-                  <div key={i} className="grid h-14 place-items-center rounded-xl border border-dashed border-slate-300 text-xs text-slate-400">Client logo</div>
-                ))}
+        <section className="pb-14 md:pb-20">
+          <div className="container-x mb-6 flex items-end justify-between gap-4">
+            <div><p className="eyebrow">Our contract clients</p><h2 className="h-section mt-1">{t.clients}</h2></div>
           </div>
+          <ClientSlider logos={logos} placeholder={IS_DEMO} />
         </section>
       )}
 

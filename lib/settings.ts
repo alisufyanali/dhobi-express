@@ -4,7 +4,7 @@ import { IS_DEMO } from "./demo";
 const DEFAULTS = {
   id: "default",
   deliveryFee: 150,
-  freeDeliveryThreshold: 2000,
+  freeDeliveryThreshold: 1000,
   sundayFreeDelivery: true,
   timeSlots: ["10am-1pm", "4pm-7pm"],
   whatsappNumber: "923000000000",

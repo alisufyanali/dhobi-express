@@ -3,6 +3,15 @@ import type { Unit } from "@prisma/client";
 // Shared by the database seed and demo mode, so both show identical content.
 export const CATEGORIES: { name: string; nameUr: string; slug: string; services: [string, string, number, Unit, string, boolean?][] }[] = [
   {
+    name: "Packages", nameUr: "Packages", slug: "packages",
+    services: [
+      ["Office Week", "Office Week", 999, "PER_PIECE", "10 shirts · 5 trousers · wash + press", true],
+      ["Family Monthly", "Family Monthly", 4200, "PER_PIECE", "20 kg mixed clothes · wash + fold · 4 pickups", true],
+      ["Bedding Refresh", "Bedding Refresh", 1050, "PER_PIECE", "2 bedsheet sets · 1 razai or kambal · deep wash", true],
+      ["Press Bundle", "Press Bundle", 999, "PER_PIECE", "30 pieces · steam press only", true],
+    ],
+  },
+  {
     name: "Wash + Press", nameUr: "Dhulai + Press", slug: "wash-press",
     services: [
       ["Shalwar Kameez", "Shalwar Kameez", 120, "PER_PIECE", "Washed, steam pressed and folded.", true],
@@ -27,9 +36,12 @@ export const CATEGORIES: { name: string; nameUr: string; slug: string; services:
     ],
   },
   {
-    name: "Curtains", nameUr: "Parday", slug: "curtains",
+    name: "Curtains & Home", nameUr: "Parday aur ghar ka saman", slug: "curtains",
     services: [
-      ["Curtain (per panel)", "Parda (ek panel)", 300, "PER_PIECE", "Washed and pressed. Heavy curtains may cost more."],
+      ["Curtain (per panel)", "Parda (ek panel)", 300, "PER_PIECE", "Washed and pressed. Heavy curtains may cost more.", true],
+      ["Sofa cover (per seat)", "Sofa cover (ek seat)", 200, "PER_PIECE", "Removable sofa and cushion covers."],
+      ["Table cloth", "Table cloth", 150, "PER_PIECE", "Dining and event table cloths."],
+      ["Jaa-namaz / prayer mat", "Jaa-namaz", 120, "PER_PIECE", "Gentle wash, air dried."],
     ],
   },
   {
@@ -37,7 +49,9 @@ export const CATEGORIES: { name: string; nameUr: string; slug: string; services:
     services: [
       ["Bedsheet set", "Chadar set", 250, "PER_PIECE", "Bedsheet with two pillow covers.", true],
       ["Quilt (Razai)", "Razai", 700, "PER_PIECE", "Deep wash and full dry."],
-      ["Blanket", "Kambal", 600, "PER_PIECE", "Single or double blanket."],
+      ["Blanket", "Kambal", 600, "PER_PIECE", "Single or double blanket.", true],
+      ["Comforter / Duvet", "Comforter / Duvet", 800, "PER_PIECE", "Deep wash, fully dried, no musty smell."],
+      ["Pillow", "Takiya", 150, "PER_PIECE", "Washed and dried through."],
     ],
   },
   {
@@ -55,7 +69,7 @@ export const REVIEWS = [
 ];
 
 export const FAQS = [
-  { question: "Is pickup and delivery really free?", answer: "Yes — every Sunday (pickup and delivery both on Sunday), and on any day for orders above Rs. 2,000. Below that a small delivery charge applies." },
+  { question: "Is pickup and delivery really free?", answer: "Yes — every Sunday (pickup and delivery both on Sunday), and on any day for orders above Rs. 1,000. Below that a small delivery charge applies." },
   { question: "How long does it take?", answer: "Usually 24–48 hours. Dry cleaning and quilts can take up to 72 hours." },
   { question: "Will my clothes get mixed with others?", answer: "No. Every order is tagged at pickup and washed separately." },
   { question: "How do I pay?", answer: "Cash on delivery, or JazzCash, Easypaisa and bank transfer. Businesses get a monthly invoice." },

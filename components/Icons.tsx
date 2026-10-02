@@ -25,3 +25,6 @@ export const IconClock = ({ className }: P) => (<svg {...base} className={classN
 export const IconShield = ({ className }: P) => (<svg {...base} className={className} aria-hidden><path d="M12 3 5 6v6c0 4.5 3 7.5 7 9 4-1.5 7-4.5 7-9V6z" /><path d="m9 12 2 2 4-4" /></svg>);
 export const IconTag = ({ className }: P) => (<svg {...base} className={className} aria-hidden><path d="M3 12V4h8l10 10-8 8z" /><circle cx="7.5" cy="8" r="1.5" /></svg>);
 export const IconArrow = ({ className }: P) => (<svg {...base} className={className} aria-hidden><path d="M5 12h14M13 6l6 6-6 6" /></svg>);
+export const IconUser = ({ className }: P) => (<svg {...base} className={className} aria-hidden><circle cx="12" cy="8" r="4" /><path d="M4 21a8 8 0 0 1 16 0" /></svg>);
+export const IconChat = ({ className }: P) => (<svg {...base} className={className} aria-hidden><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z" /><path d="M8.5 12h.01M12 12h.01M15.5 12h.01" /></svg>);
+export const IconSend = ({ className }: P) => (<svg {...base} className={className} aria-hidden><path d="M4 12 20 4l-6 16-3-7z" /></svg>);

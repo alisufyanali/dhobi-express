@@ -97,6 +97,7 @@ model Order {
   pickupSlot    String
   deliveryDate  DateTime      @db.Date
   notes         String?
+  userEmail     String? // set when a signed-in customer places the order
   subtotal      Int
   deliveryFee   Int
   total         Int
@@ -110,6 +111,7 @@ model Order {
 
   @@index([status])
   @@index([createdAt])
+  @@index([userEmail])
 }
 
 model OrderItem {
@@ -175,7 +177,7 @@ model Faq {
 model Setting {
   id                    String   @id @default("default")
   deliveryFee           Int      @default(150)
-  freeDeliveryThreshold Int      @default(2000)
+  freeDeliveryThreshold Int      @default(1000)
   sundayFreeDelivery    Boolean  @default(true)
   timeSlots             String[] @default(["10am-1pm", "4pm-7pm"])
   whatsappNumber        String   @default("923000000000")
@@ -189,4 +191,10 @@ model AdminUser {
   email        String @unique
   name         String
   passwordHash String
+}
+
+model NewsletterSubscriber {
+  id        String   @id @default(cuid())
+  contact   String   @unique // email or mobile number
+  createdAt DateTime @default(now())
 }
