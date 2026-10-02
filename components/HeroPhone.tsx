@@ -43,11 +43,11 @@ export function HeroPhone() {
           <div className="mt-4 rounded-full bg-brand-600 py-3 text-center text-sm font-semibold">Track Order</div>
         </div>
       </div>
-      <div className="absolute -left-10 top-24 hidden rounded-2xl bg-white px-4 py-3 text-brand-900 shadow-xl lg:block">
+      <div className="absolute -left-12 top-[46%] hidden rounded-2xl bg-white px-4 py-3 text-brand-900 shadow-xl lg:block">
         <p className="text-[10px] font-bold uppercase tracking-wider text-brand-600">Sunday</p>
         <p className="text-sm font-extrabold">Free delivery</p>
       </div>
-      <div className="absolute -right-8 bottom-28 hidden rounded-2xl bg-sun-400 px-4 py-3 text-brand-900 shadow-xl lg:block">
+      <div className="absolute -right-10 top-10 hidden rounded-2xl bg-sun-400 px-4 py-3 text-brand-900 shadow-xl lg:block">
         <p className="text-sm font-extrabold">24–48h</p><p className="text-[10px] font-semibold">turnaround</p>
       </div>
     </div>
