@@ -5,6 +5,7 @@ const u = (id: string, w = 1200) => `https://images.unsplash.com/photo-${id}?aut
 export const IMAGES = {
   hero: u("1635274605638-d44babc08a4f", 1400), // folded shirts
   machines: u("1638949493140-edb10b7be2f3"), // row of washers
+  winter: u("1734553529922-bc020a21643b", 1400), // stack of blankets
 };
 
 export const CATEGORY_IMAGE: Record<string, string> = {
@@ -12,7 +13,7 @@ export const CATEGORY_IMAGE: Record<string, string> = {
   "press-only": u("1489274495757-95c7c837b101", 800),
   "dry-clean": u("1549037173-e3b717902c57", 800),
   curtains: u("1582735689369-4fe89db7114c", 800),
-  bedding: u("1582735689369-4fe89db7114c", 800),
+  bedding: u("1734553529922-bc020a21643b", 800),
   uniforms: u("1542058186993-286fdce0b580", 800),
   packages: u("1635274605638-d44babc08a4f", 800),
 };

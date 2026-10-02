@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useCart } from "@/components/CartProvider";
+import { PhoneInput } from "@/components/PhoneInput";
 import { DeliveryProgress } from "@/components/DeliveryProgress";
 import { calcDelivery, isSunday, type DeliverySettings } from "@/lib/delivery";
 import { orderSchema } from "@/lib/validators";
@@ -134,7 +135,7 @@ export function CheckoutForm({ demo, areas, slots, today, settings }: Props) {
           <legend className="mb-2 font-semibold text-slate-900">2. Your details</legend>
           <div className="grid gap-4 sm:grid-cols-2">
             <div><label className="label" htmlFor="name">Name</label><input id="name" name="name" className="input" autoComplete="name" value={f.name} onChange={set("name")} /><E k="name" /></div>
-            <div><label className="label" htmlFor="phone">Mobile number</label><input id="phone" name="phone" type="tel" inputMode="tel" placeholder="03001234567" className="input" autoComplete="tel" value={f.phone} onChange={set("phone")} /><E k="phone" /></div>
+            <div><label className="label" htmlFor="phone">Mobile number</label><PhoneInput id="phone" name="phone" defaultValue={f.phone} onChange={(v) => setF((p) => ({ ...p, phone: v }))} /><E k="phone" /></div>
           </div>
           <div>
             <label className="label" htmlFor="areaId">Area</label>

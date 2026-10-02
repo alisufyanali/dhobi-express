@@ -1,12 +1,13 @@
 import { z } from "zod";
 
-// Pakistani mobile: 03xxxxxxxxx or +923xxxxxxxxx / 923xxxxxxxxx
+// Pakistani mobile numbers only: 030x–035x networks (Jazz, Zong, Ufone, Telenor, SCO).
+// Accepts 03001234567, 3001234567, +923001234567 or 923001234567; stores as 03001234567.
 export const phoneSchema = z
   .string()
   .trim()
-  .transform((v) => v.replace(/[\s-]/g, ""))
-  .refine((v) => /^(03\d{9}|\+?923\d{9})$/.test(v), "Enter a valid mobile number, e.g. 03001234567")
-  .transform((v) => (v.startsWith("03") ? v : "0" + v.replace(/^\+?92/, "")));
+  .transform((v) => v.replace(/[\s()-]/g, ""))
+  .transform((v) => v.replace(/^(\+92|0092|92)/, "0").replace(/^(3\d{9})$/, "0$1"))
+  .refine((v) => /^03[0-5]\d{8}$/.test(v), "Enter a Pakistani mobile number, e.g. 0300 1234567");
 
 const dateStr = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Choose a date");
 

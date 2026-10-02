@@ -6,7 +6,7 @@ import { IS_DEMO } from "@/lib/demo";
 // Accepts an email or a Pakistani mobile number
 const schema = z.object({
   contact: z.string().trim().max(120).refine(
-    (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || /^(03\d{9}|\+?923\d{9})$/.test(v.replace(/[\s-]/g, "")),
+    (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || /^03[0-5]\d{8}$/.test(v.replace(/[\s()-]/g, "").replace(/^(\+92|0092|92)/, "0")),
     "Enter an email or mobile number",
   ),
 });

@@ -24,7 +24,7 @@ export function ServiceBrowser({ cats, roman, label, addedLabel }: { cats: Cat[]
 
   return (
     <>
-      <div className="sticky top-16 z-30 -mx-4 mt-6 border-b border-slate-200 bg-white px-4 pb-3 pt-3 md:static md:mx-0 md:border-0 md:px-0">
+      <div className="sticky top-14 z-30 -mx-4 mt-6 border-b border-slate-200 bg-white px-4 pb-3 pt-3 md:static md:mx-0 md:border-0 md:px-0">
         <div className="relative">
           <svg viewBox="0 0 24 24" className="pointer-events-none absolute left-3.5 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
           <input type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search e.g. shalwar kameez, razai, suit" className="input pl-11" aria-label="Search services" />
@@ -41,7 +41,7 @@ export function ServiceBrowser({ cats, roman, label, addedLabel }: { cats: Cat[]
         {shown.map((c) => (
           <section key={c.id} id={c.slug} className="scroll-mt-40">
             <h2 className="text-lg font-semibold text-brand-900">{roman && c.nameUr ? c.nameUr : c.name}</h2>
-            <div className="mt-3 grid gap-3 md:grid-cols-2 md:gap-5 lg:grid-cols-3">
+            <div className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-5 lg:grid-cols-4">
               {c.services.map((s) => <ServiceCard key={s.id} s={s} roman={roman} label={label} addedLabel={addedLabel} />)}
             </div>
           </section>

@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { inquirySchema } from "@/lib/validators";
+import { PhoneInput } from "@/components/PhoneInput";
 
 const TYPES = [["COMPANY", "Company / Factory"], ["HOSPITAL", "Hospital / Clinic"], ["LAWN_BANQUET", "Lawn / Banquet"], ["MASJID", "Masjid / Madrasa"], ["OTHER", "Other"]];
 
@@ -34,7 +35,7 @@ export function InquiryForm() {
       <div><label className="label" htmlFor="b-org">Organization</label><input id="b-org" name="organization" className="input" /><E k="organization" /></div>
       <div><label className="label" htmlFor="b-type">Type</label><select id="b-type" name="type" className="input" defaultValue="COMPANY">{TYPES.map(([v, l]) => <option key={v} value={v}>{l}</option>)}</select></div>
       <div><label className="label" htmlFor="b-vol">Approx. monthly volume</label><input id="b-vol" name="monthlyVolume" className="input" placeholder="e.g. 300 uniforms / 200 kg" /></div>
-      <div><label className="label" htmlFor="b-phone">Phone</label><input id="b-phone" name="phone" type="tel" className="input" /><E k="phone" /></div>
+      <div><label className="label" htmlFor="b-phone">Phone</label><PhoneInput id="b-phone" name="phone" /><E k="phone" /></div>
       <div><label className="label" htmlFor="b-email">Email (optional)</label><input id="b-email" name="email" type="email" className="input" /><E k="email" /></div>
       <div className="sm:col-span-2"><label className="label" htmlFor="b-msg">Message</label><textarea id="b-msg" name="message" rows={3} className="input" /></div>
       {state === "error" && <p className="err sm:col-span-2">Couldn&apos;t send (the site may be in demo mode). Please WhatsApp us.</p>}

@@ -47,7 +47,7 @@ export async function getFaqs() {
   return prisma.faq.findMany({ orderBy: { sortOrder: "asc" } });
 }
 
-export async function getLogos(): Promise<{ id: string; name: string; imageUrl: string }[]> {
+export async function getLogos(): Promise<{ id: string; name: string; imageUrl: string; sector: string | null }[]> {
   if (IS_DEMO) return [];
   return prisma.clientLogo.findMany({ where: { active: true }, orderBy: { sortOrder: "asc" } });
 }

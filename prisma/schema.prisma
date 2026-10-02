@@ -158,6 +158,7 @@ model BusinessInquiry {
 model ClientLogo {
   id        String  @id @default(cuid())
   name      String
+  sector    String? // e.g. Hospital, Factory, Banquet, Masjid
   imageUrl  String
   sortOrder Int     @default(0)
   active    Boolean @default(true)

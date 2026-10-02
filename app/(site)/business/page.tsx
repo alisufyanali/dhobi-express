@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { getLogos } from "@/lib/data";
 import { InquiryForm } from "./InquiryForm";
 import { IconCheck } from "@/components/Icons";
-import { ClientSlider } from "@/components/ClientSlider";
+import { ContractClients } from "@/components/ContractClients";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
@@ -37,12 +37,7 @@ export default async function BusinessPage() {
         ))}
       </section>
 
-      {logos.length > 0 && (
-        <section className="pb-6">
-          <h2 className="container-x mb-6 text-center text-sm font-medium text-slate-500">Clients we work with</h2>
-          <ClientSlider logos={logos} />
-        </section>
-      )}
+      <ContractClients logos={logos} demo={false} />
 
       <section id="inquiry" className="container-x scroll-mt-20 py-14 md:grid md:grid-cols-[1fr_1.2fr] md:gap-12">
         <div>
