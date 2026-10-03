@@ -41,7 +41,7 @@ export function Footer({ s }: { s: S }) {
           <div key={g.title}>
             <details className="group border-t border-white/10 md:hidden">
               <summary className="flex cursor-pointer list-none items-center justify-between py-4 font-semibold text-white">
-                {g.title}<span className="text-xl text-brand-500 transition group-open:rotate-45">+</span>
+                {g.title}<span className="text-xl text-brand-500 faq-plus">+</span>
               </summary>
               <ul className={`pb-4 text-sm ${g.title === "Areas" ? "grid grid-cols-2 gap-2.5" : "space-y-2.5"}`}>
                 {g.links.map(([l, h]) => <li key={h}><Link href={h} className="hover:text-white">{l}</Link></li>)}

@@ -43,3 +43,7 @@ body { @apply bg-[#f3f5f8] text-slate-700 antialiased md:bg-white; }
 @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 @utility animate-marquee { animation: marquee 30s linear infinite; }
 @media (prefers-reduced-motion: reduce) { .animate-marquee { animation: none; } }
+
+/* "+" turns into "×" when an FAQ/footer section opens (transform works on older Chrome; the rotate property needs 104+) */
+.faq-plus { display: inline-block; transition: transform .2s ease; }
+details[open] > summary .faq-plus { transform: rotate(45deg); }
