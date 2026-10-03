@@ -57,6 +57,7 @@ export const serviceSchema = z.object({
   unit: z.enum(["PER_PIECE", "PER_KG"]),
   imageUrl: z.string().trim().url().optional().or(z.literal("")),
   categoryId: z.string().min(1),
+  segment: z.enum(["men", "women", "kids", "household"]).optional().or(z.literal("")).transform((v) => v || null),
   active: z.coerce.boolean(),
   featured: z.coerce.boolean(),
 });

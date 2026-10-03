@@ -42,3 +42,18 @@ export function waLink(number: string, text?: string) {
   const n = number.replace(/\D/g, "");
   return `https://wa.me/${n}${text ? `?text=${encodeURIComponent(text)}` : ""}`;
 }
+
+export const SEGMENTS = [
+  { key: "men", label: "Men", ur: "Mard" },
+  { key: "women", label: "Women", ur: "Khawateen" },
+  { key: "kids", label: "Kids", ur: "Bachay" },
+  { key: "household", label: "Household", ur: "Ghar ka saman" },
+] as const;
+export const SEGMENT_LABEL: Record<string, string> = Object.fromEntries(SEGMENTS.map((s) => [s.key, s.label]));
+
+/** Full item name used in the cart, orders and invoices, e.g. "Shirt (Men) — Wash & Iron". */
+export function itemLabel(name: string, segment: string | null | undefined, typeName: string, typeSlug: string) {
+  if (typeSlug === "packages") return name;
+  const who = segment && segment !== "household" ? ` (${SEGMENT_LABEL[segment] ?? segment})` : "";
+  return `${name}${who} — ${typeName}`;
+}

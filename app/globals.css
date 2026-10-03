@@ -102,3 +102,9 @@ details[open] > summary .faq-plus { transform: rotate(45deg); }
   .wm-drum, .wm-body, .wm-bubble, .wm-wave, .drive, .spin-wheel { animation: none !important; }
   .bubble, .pulse-ring { display: none; }
 }
+
+/* Top offer line */
+@keyframes marquee-x { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.marquee-track { animation: marquee-x 28s linear infinite; }
+.marquee-track:hover { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) { .marquee-track { animation: none; } }

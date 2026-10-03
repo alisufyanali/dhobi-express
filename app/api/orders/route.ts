@@ -6,6 +6,7 @@ import { calcDelivery, karachiToday } from "@/lib/delivery";
 import { getSettings } from "@/lib/settings";
 import { getSession } from "@/lib/auth";
 import { checkCoupon } from "@/lib/coupons";
+import { itemLabel } from "@/lib/site";
 import { notifyNewOrder } from "@/lib/notify";
 
 function newCode() {
@@ -37,7 +38,7 @@ export async function POST(req: Request) {
   if (!area) return NextResponse.json({ error: "We don't serve that area yet.", errors: { areaId: "Choose your area" } }, { status: 422 });
 
   // Prices come from the database, never from the client
-  const services = await prisma.service.findMany({ where: { id: { in: d.items.map((i) => i.serviceId) }, active: true } });
+  const services = await prisma.service.findMany({ where: { id: { in: d.items.map((i) => i.serviceId) }, active: true }, include: { category: true } });
   const byId = new Map(services.map((sv) => [sv.id, sv]));
   const missing = d.items.find((i) => !byId.has(i.serviceId));
   if (missing) return NextResponse.json({ error: "A service in your cart is no longer available. Please refresh your cart." }, { status: 409 });
@@ -45,7 +46,7 @@ export async function POST(req: Request) {
   const lines = d.items.map((i) => {
     const sv = byId.get(i.serviceId)!;
     const qty = sv.unit === "PER_PIECE" ? Math.round(i.quantity) : i.quantity;
-    return { serviceId: sv.id, name: sv.name, unit: sv.unit, price: sv.price, quantity: qty, lineTotal: Math.round(sv.price * qty) };
+    return { serviceId: sv.id, name: itemLabel(sv.name, sv.segment, sv.category.name, sv.category.slug), unit: sv.unit, price: sv.price, quantity: qty, lineTotal: Math.round(sv.price * qty) };
   });
   const subtotal = lines.reduce((n, l) => n + l.lineTotal, 0);
   const { fee } = calcDelivery(subtotal, d.pickupDate, d.deliveryDate, s);

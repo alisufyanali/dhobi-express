@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useCart } from "./CartProvider";
 import { IconCart, IconClock, IconMenu, IconTag, IconTruck, IconUser, IconWhatsApp, IconX } from "./Icons";
 import { InstallApp } from "./InstallApp";
+import { AnnouncementBar } from "./AnnouncementBar";
 import { waLink } from "@/lib/site";
 import type { Dict, Lang } from "@/lib/dict";
 
@@ -33,7 +34,7 @@ function pageTitle(path: string, t: Dict): string {
   return "Dhobi Express";
 }
 
-export function Header({ t, lang, phone, whatsapp }: { t: Dict; lang: Lang; phone: string; whatsapp: string }) {
+export function Header({ t, lang, phone, whatsapp, threshold }: { t: Dict; lang: Lang; phone: string; whatsapp: string; threshold: number }) {
   const [open, setOpen] = useState(false);
   const { count } = useCart();
   const path = usePathname();
@@ -69,14 +70,7 @@ export function Header({ t, lang, phone, whatsapp }: { t: Dict; lang: Lang; phon
 
   return (
     <>
-      <div className="hidden border-b border-brand-100 bg-brand-50 text-xs text-brand-900 md:block">
-        <div className="container-x flex h-9 items-center gap-6">
-          <span className="flex items-center gap-1.5"><IconTruck className="h-4 w-4 text-brand-600" />{t.freeDeliveryNote}</span>
-          <span className="flex items-center gap-1.5"><IconClock className="h-4 w-4 text-brand-600" />24–48 hour turnaround</span>
-          <span className="flex items-center gap-1.5"><IconTag className="h-4 w-4 text-brand-600" />Every order tagged separately</span>
-          <a href={`tel:${phone}`} className="ml-auto font-semibold">Call {phone}</a>
-        </div>
-      </div>
+      <AnnouncementBar threshold={threshold} />
 
       <header className="sticky top-0 z-40 border-b border-slate-200 bg-white pt-[env(safe-area-inset-top)]">
         {/* Phones: home = menu | logo | account ; inner pages = back | title | cart */}

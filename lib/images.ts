@@ -9,6 +9,9 @@ export const IMAGES = {
 };
 
 export const CATEGORY_IMAGE: Record<string, string> = {
+  "wash-iron": u("1604335398980-ededcadcc37d", 800),
+  "iron-only": u("1489274495757-95c7c837b101", 800),
+  "wash-only": u("1635274605638-d44babc08a4f", 800),
   "wash-press": u("1604335398980-ededcadcc37d", 800),
   "press-only": u("1489274495757-95c7c837b101", 800),
   "dry-clean": u("1549037173-e3b717902c57", 800),

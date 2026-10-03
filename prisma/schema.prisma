@@ -68,6 +68,7 @@ model Service {
   active      Boolean     @default(true)
   featured    Boolean     @default(false)
   sortOrder   Int         @default(0)
+  segment     String? // men | women | kids | household (null for packages)
   categoryId  String
   category    Category    @relation(fields: [categoryId], references: [id])
   orderItems  OrderItem[]
@@ -190,7 +191,7 @@ model Faq {
 model Setting {
   id                    String   @id @default("default")
   deliveryFee           Int      @default(150)
-  freeDeliveryThreshold Int      @default(1000)
+  freeDeliveryThreshold Int      @default(2000)
   sundayFreeDelivery    Boolean  @default(true)
   timeSlots             String[] @default(["10am-1pm", "4pm-7pm"])
   whatsappNumber        String   @default("923000000000")
@@ -202,6 +203,7 @@ model Setting {
   latitude              Float?
   longitude             Float?
   openingHours          String   @default("Mon–Sun, 10am–7pm")
+  catalogVersion        Int      @default(0) // one-time data updates already applied by the seed
 }
 
 model AdminUser {

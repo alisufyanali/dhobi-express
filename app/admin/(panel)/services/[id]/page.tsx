@@ -23,7 +23,8 @@ export default async function ServiceEdit({ params, searchParams }: { params: Pr
         <div className="sm:col-span-2"><label className="label">Description</label><input name="description" defaultValue={s?.description ?? ""} className="input" /></div>
         <div><label className="label">Price (Rs.)</label><input name="price" type="number" min={0} defaultValue={s?.price} required className="input" /></div>
         <div><label className="label">Unit</label><select name="unit" defaultValue={s?.unit ?? "PER_PIECE"} className="input"><option value="PER_PIECE">Per piece</option><option value="PER_KG">Per kg</option></select></div>
-        <div><label className="label">Category</label><select name="categoryId" defaultValue={s?.categoryId} className="input">{cats.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}</select></div>
+        <div><label className="label">Section</label><select name="segment" defaultValue={s?.segment ?? ""} className="input"><option value="">— (packages)</option><option value="men">Men</option><option value="women">Women</option><option value="kids">Kids</option><option value="household">Household</option></select></div>
+        <div><label className="label">Service type</label><select name="categoryId" defaultValue={s?.categoryId} className="input">{cats.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}</select></div>
         <div className="sm:col-span-2"><ImageUpload name="imageUrl" defaultValue={s?.imageUrl} label="Photo (optional — the category photo is used if empty)" /></div>
         <label className="flex items-center gap-2 text-sm"><input type="checkbox" name="active" defaultChecked={s?.active ?? true} /> Active</label>
         <label className="flex items-center gap-2 text-sm"><input type="checkbox" name="featured" defaultChecked={s?.featured ?? false} /> Featured on home page</label>

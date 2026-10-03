@@ -24,15 +24,20 @@ const QUICK = ["Rates", "Free delivery", "Areas", "How long?", "Packages", "Busi
 const ALIASES: [string, string][] = [
   ["razai", "quilt"], ["rajai", "quilt"], ["kambal", "blanket"], ["parda", "curtain"], ["parday", "curtain"],
   ["chadar", "bedsheet"], ["bedsheet", "bedsheet"], ["takiya", "pillow"], ["sofa", "sofa"], ["duvet", "comforter"],
-  ["shalwar", "shalwar kameez"], ["kameez", "shalwar kameez"], ["kurta", "shirt"], ["shirt", "shirt"],
+  ["shalwar", "shalwar"], ["kameez", "kameez"], ["kurta", "shirt"], ["shirt", "shirt"],
   ["pant", "trouser"], ["jeans", "trouser"], ["suit", "suit"], ["sherwani", "sherwani"], ["jora", "formal"],
   ["dress", "formal"], ["uniform", "uniform"], ["jaa-namaz", "jaa-namaz"], ["jainamaz", "jaa-namaz"], ["table cloth", "table cloth"],
 ];
 
 function findItems(t: string, prices: Price[]) {
   const keys = ALIASES.filter(([w]) => t.includes(w)).map(([, k]) => k);
-  const found = prices.filter((p) => keys.some((k) => p.name.toLowerCase().includes(k)));
-  return [...new Map(found.map((p) => [p.name, p])).values()];
+  let found = prices.filter((p) => keys.some((k) => p.name.toLowerCase().split(" — ")[0].includes(k)));
+  // Show the service type the customer asked about; default to Wash & Iron (plus Dry clean for formal wear)
+  const want = /iron|press|istri/.test(t) && !/wash|dhulai/.test(t) ? "Iron only" : /dry/.test(t) ? "Dry clean" : /wash only|sirf dhulai/.test(t) ? "Wash only" : null;
+  const pick = found.filter((p) => (want ? p.name.endsWith(want) : p.name.endsWith("Wash & Iron")));
+  if (pick.length) found = pick;
+  else if (!want) found = found.filter((p) => p.name.endsWith("Wash only") || p.name.endsWith("Dry clean")).length ? found.filter((p) => !p.name.endsWith("Iron only")) : found;
+  return [...new Map(found.map((p) => [p.name, p])).values()].slice(0, 6);
 }
 
 function answer(q: string, i: Info): Msg {

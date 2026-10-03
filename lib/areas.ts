@@ -103,7 +103,7 @@ export const AREA_PAGES: AreaContent[] = [
     local: [
       "Weekly family laundry with flexible morning and evening pickup slots.",
       "Bedsheets and curtains washed and pressed.",
-      "Free delivery on orders above Rs. 1,000.",
+      "Free delivery on orders above Rs. 2,000.",
     ],
     keywords: ["laundry FC Area Karachi", "dhobi FC Area"],
   },

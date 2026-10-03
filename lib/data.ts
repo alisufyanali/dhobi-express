@@ -9,6 +9,7 @@ import { STARTER_POSTS } from "./posts-seed";
 export type Svc = {
   id: string; name: string; nameUr: string | null; description: string | null;
   price: number; unit: "PER_PIECE" | "PER_KG"; imageUrl: string | null; featured: boolean;
+  segment: string | null;
   category: { name: string; slug: string };
 };
 export type Cat = { id: string; name: string; nameUr: string | null; slug: string; services: Svc[] };
@@ -16,8 +17,9 @@ export type Cat = { id: string; name: string; nameUr: string | null; slug: strin
 function demoCatalog(): Cat[] {
   return CATEGORIES.map((c) => ({
     id: c.slug, name: c.name, nameUr: c.nameUr, slug: c.slug,
-    services: c.services.map(([name, nameUr, price, unit, description, featured], i) => ({
-      id: `${c.slug}-${i}`, name, nameUr, price, unit, description, featured: !!featured, imageUrl: null,
+    services: c.services.map(([name, nameUr, price, unit, description, featured, segment], i) => ({
+      id: `${c.slug}-${i}`, name, nameUr, price, unit, description: description || null, featured: !!featured, imageUrl: null,
+      segment: segment ?? null,
       category: { name: c.name, slug: c.slug },
     })),
   }));

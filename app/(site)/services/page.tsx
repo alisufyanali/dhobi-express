@@ -4,17 +4,18 @@ import { getLang } from "@/lib/i18n";
 import { ServiceBrowser } from "./ServiceBrowser";
 import { JsonLd } from "@/components/JsonLd";
 import { SITE } from "@/lib/site";
+import { getSettings } from "@/lib/settings";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Laundry Services & Rates in Karachi",
-  description: "Wash + press, press only, dry cleaning, curtains, bedsheets, quilts and uniforms. Clear per-piece and per-kg rates with free pickup in Karachi.",
+  description: "Laundry price list and bill calculator for Karachi: wash & iron, iron only, wash only and dry cleaning for men, women, kids and household items. Free pickup and delivery.",
   alternates: { canonical: "/services" },
 };
 
 export default async function ServicesPage({ searchParams }: { searchParams: Promise<{ focus?: string }> }) {
   const { focus } = await searchParams;
-  const [lang, cats] = await Promise.all([getLang(), getCatalog()]);
+  const [lang, cats, settings] = await Promise.all([getLang(), getCatalog(), getSettings()]);
   const visible = cats.filter((c) => c.services.length);
 
   return (
@@ -27,8 +28,8 @@ export default async function ServicesPage({ searchParams }: { searchParams: Pro
             offers: { "@type": "Offer", price: s.price, priceCurrency: "PKR" } },
         })),
       }} />
-      <h1 className="sr-only md:not-sr-only md:mx-auto md:block md:max-w-3xl md:text-3xl md:font-bold md:tracking-tight md:text-brand-900">Services &amp; rates</h1>
-      <ServiceBrowser cats={visible} roman={lang === "ru"} autoFocus={focus === "search"} />
+      <h1 className="sr-only md:not-sr-only md:block md:pb-6 md:text-3xl md:font-bold md:tracking-tight md:text-brand-900">Services &amp; rates</h1>
+      <ServiceBrowser cats={visible} roman={lang === "ru"} autoFocus={focus === "search"} threshold={settings.freeDeliveryThreshold} fee={settings.deliveryFee} />
     </div>
   );
 }

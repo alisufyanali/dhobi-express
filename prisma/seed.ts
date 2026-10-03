@@ -6,13 +6,18 @@ import { STARTER_POSTS } from "../lib/posts-seed";
 
 const prisma = new PrismaClient();
 
-
-
 async function main() {
-  await prisma.setting.upsert({ where: { id: "default" }, update: {}, create: { id: "default" } });
-  // One-time move to the Rs. 1,000 threshold for databases created with the old Rs. 2,000 default.
-  // Only touches the row if both values are still the untouched old defaults.
-  await prisma.setting.updateMany({ where: { id: "default", freeDeliveryThreshold: 2000, deliveryFee: 150 }, data: { freeDeliveryThreshold: 1000 } });
+  const settings = await prisma.setting.upsert({ where: { id: "default" }, update: {}, create: { id: "default" } });
+
+  // One-time update to catalog v2 (service type × men/women/kids/household) and the Rs. 2,000
+  // free-delivery threshold. Runs once per database; afterwards admin edits are never overwritten.
+  const migrating = settings.catalogVersion < 2;
+  if (migrating) {
+    // Old-style services are switched off, not deleted, so past orders and invoices stay intact
+    await prisma.service.updateMany({ where: { segment: null, category: { slug: { not: "packages" } } }, data: { active: false } });
+    await prisma.service.updateMany({ where: { category: { slug: "packages" } }, data: { active: false } });
+    await prisma.category.updateMany({ where: { slug: { notIn: CATEGORIES.map((c) => c.slug) } }, data: { sortOrder: 50 } });
+  }
 
   for (const a of AREA_PAGES) {
     await prisma.area.upsert({ where: { slug: a.slug }, update: {}, create: { name: a.name, slug: a.slug } });
@@ -21,16 +26,25 @@ async function main() {
   for (const [ci, c] of CATEGORIES.entries()) {
     const cat = await prisma.category.upsert({
       where: { slug: c.slug },
-      update: {},
+      update: migrating ? { name: c.name, nameUr: c.nameUr, sortOrder: ci } : {},
       create: { name: c.name, nameUr: c.nameUr, slug: c.slug, sortOrder: ci },
     });
-    const existing = await prisma.service.count({ where: { categoryId: cat.id } });
-    if (existing) continue;
-    for (const [si, [name, nameUr, price, unit, description, featured]] of c.services.entries()) {
-      await prisma.service.create({
-        data: { name, nameUr, price, unit, description, featured: !!featured, sortOrder: si, categoryId: cat.id },
-      });
+    const active = await prisma.service.count({ where: { categoryId: cat.id, active: true } });
+    const any = await prisma.service.count({ where: { categoryId: cat.id } });
+    if (any && !(migrating && active === 0)) continue;
+    await prisma.service.createMany({
+      data: c.services.map(([name, nameUr, price, unit, description, featured, segment], si) => ({
+        name, nameUr, price, unit, description: description || null, featured: !!featured, segment: segment ?? null, sortOrder: si, categoryId: cat.id,
+      })),
+    });
+  }
+
+  if (migrating) {
+    for (const f of await prisma.faq.findMany({ where: { answer: { contains: "Rs. 1,000" } } })) {
+      await prisma.faq.update({ where: { id: f.id }, data: { answer: f.answer.replace(/Rs\. 1,000/g, "Rs. 2,000") } });
     }
+    await prisma.setting.update({ where: { id: "default" }, data: { catalogVersion: 2, freeDeliveryThreshold: 2000 } });
+    console.log("Catalog updated to v2; free delivery threshold set to Rs. 2,000.");
   }
 
   if ((await prisma.review.count()) === 0) {

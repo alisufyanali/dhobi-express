@@ -31,7 +31,7 @@ export default async function Home() {
   const roman = lang === "ru";
   const cats = catalog.filter((c) => c.services.length && c.slug !== "packages");
   const packages = catalog.find((c) => c.slug === "packages")?.services ?? [];
-  const winterItems = (catalog.find((c) => c.slug === "bedding")?.services ?? [])
+  const winterItems = (catalog.find((c) => c.slug === "wash-only")?.services ?? []).filter((x) => x.segment === "household")
     .filter((x) => /quilt|blanket|comforter|razai|kambal/i.test(x.name)).slice(0, 3);
   const wa = waLink(s.whatsappNumber, "Assalam o Alaikum, I want to book a laundry pickup.");
   const stepIcons = [IconTruck, IconDrop, IconIron, IconBox];
@@ -45,7 +45,7 @@ export default async function Home() {
     {
       eyebrow: "Winter is coming", title: "Kambal & razai", highlight: "deep wash", tone: "deep",
       text: "Fully dried, no musty smell — ready before the cold sets in.", image: IMAGES.winter, alt: "Stack of clean folded blankets",
-      primary: { label: "Book kambal wash", href: "/services#bedding" },
+      primary: { label: "Book kambal wash", href: "/services#wash-only/household" },
     },
     {
       eyebrow: "Free pickup & delivery", title: `Every day above ${rs(s.freeDeliveryThreshold)}`, highlight: "· any size on Sunday",
@@ -128,7 +128,7 @@ export default async function Home() {
         <div className="container-x mt-3 md:mt-6">
           <div className="no-scrollbar -mx-4 flex snap-x scroll-px-4 gap-3 overflow-x-auto px-4 pb-1 md:mx-0 md:grid md:grid-cols-6 md:gap-5 md:overflow-visible md:px-0">
             {cats.map((c) => (
-              <Link key={c.id} href={`/services#${c.slug}`} className="lift group w-[84px] flex-none snap-start rounded-2xl bg-white p-1.5 ring-1 ring-slate-200 transition active:scale-[.97] md:w-auto md:p-2 md:hover:ring-brand-500">
+              <Link key={c.id} href={`/services#${c.slug}/men`} className="lift group w-[84px] flex-none snap-start rounded-2xl bg-white p-1.5 ring-1 ring-slate-200 transition active:scale-[.97] md:w-auto md:p-2 md:hover:ring-brand-500">
                 <div className="relative aspect-square overflow-hidden rounded-xl bg-brand-50">
                   <Image src={imageFor(c.slug)} alt={`${c.name} service in Karachi`} fill sizes="(min-width:768px) 180px, 84px" className="object-cover transition duration-300 group-hover:scale-105" />
                 </div>
@@ -164,7 +164,7 @@ export default async function Home() {
                   </li>
                 ))}
               </ul>
-              <Link href="/services#bedding" className="mt-5 inline-flex text-sm font-semibold text-brand-600">All bedding rates →</Link>
+              <Link href="/services#wash-only/household" className="mt-5 inline-flex text-sm font-semibold text-brand-600">All bedding rates →</Link>
             </div>
           </div>
         </section>
