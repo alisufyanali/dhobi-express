@@ -1,24 +1,34 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { getSettings } from "@/lib/settings";
-import { waLink } from "@/lib/site";
+import { InfoPage } from "@/components/InfoPage";
+import { rs } from "@/lib/site";
 
-export const metadata: Metadata = { title: "Terms of Service", description: "Terms for using Dhobi Express laundry services.", alternates: { canonical: "/terms" } };
+export const dynamic = "force-dynamic";
+export const metadata: Metadata = {
+  title: "Terms of Service",
+  description: "Terms for using Dhobi Express laundry pickup and delivery in Karachi: pricing, delivery, turnaround, payment and claims.",
+  alternates: { canonical: "/terms" },
+};
 
-export default async function Page() {
+export default async function Terms() {
   const s = await getSettings();
-  void waLink;
   return (
-    <article className="container-x max-w-3xl py-12 [&_h2]:mt-8 [&_h2]:text-xl [&_h2]:font-bold [&_p]:mt-3 [&_p]:leading-relaxed [&_p]:text-slate-700">
-      <h1 className="text-3xl font-extrabold">Terms of Service</h1>
-      <p>By placing an order you agree to these terms.</p>
-      <h2>Pricing</h2>
-      <p>Per-piece prices are fixed as listed. Per-kg items are weighed at pickup and the final bill reflects actual weight.</p>
+    <InfoPage title="Terms of service" updated="October 2026" cta={false} intro="By placing an order with Dhobi Express you agree to these terms.">
+      <h2>Prices</h2>
+      <p>Per-piece prices are as listed on our <Link href="/services">services page</Link>. Per-kg items are weighed at pickup and the final bill uses the actual weight. Heavy, oversized or specially embellished items may be quoted at pickup before we accept them.</p>
+      <h2>Pickup &amp; delivery</h2>
+      <p>Free when the order is above {rs(s.freeDeliveryThreshold)}, or when both pickup and delivery are on a Sunday. Otherwise a {rs(s.deliveryFee)} charge applies. Please be available during the slot you choose; a missed pickup may be rescheduled.</p>
       <h2>Turnaround</h2>
-      <p>Standard turnaround is 24–48 hours. Dry cleaning, quilts and bulk orders may take longer; we will tell you at pickup.</p>
-      <h2>Damage and loss</h2>
-      <p>Please point out stains, tears or delicate items at pickup. We take great care, but we are not responsible for colour bleeding of non-colourfast fabrics or items left in pockets. Claims must be made within 24 hours of delivery; compensation is limited to 10 times the service charge for the item.</p>
-      <h2>Unclaimed items</h2>
-      <p>Items not collected or accepted within 30 days may be donated.</p>
-    </article>
+      <p>Usually 24–48 hours. Dry cleaning, quilts, blankets and bulk orders can take up to 72 hours — we tell you at pickup.</p>
+      <h2>Payment</h2>
+      <p>Cash on delivery, JazzCash, Easypaisa or bank transfer. Business clients are invoiced monthly as agreed in their contract.</p>
+      <h2>Your items</h2>
+      <p>Please empty pockets and point out stains, tears and delicate items at pickup. We follow care labels where they exist.</p>
+      <h2>Claims, refunds &amp; cancellations</h2>
+      <p>Covered in full in our <Link href="/refund-policy">refund &amp; compensation policy</Link>. In short: report problems within 24 hours of delivery; compensation for damaged or missing items is up to 10 times the service charge for that item; unclaimed items may be donated after 30 days.</p>
+      <h2>Contact</h2>
+      <p>Questions or complaints: <Link href="/complaints">complaints page</Link>, {s.phone}, or <a href={`mailto:${s.email}`}>{s.email}</a>.</p>
+    </InfoPage>
   );
 }

@@ -175,7 +175,7 @@ export default async function Home() {
       {/* Why choose us */}
       <section className="border-y border-brand-100 bg-brand-50">
         <div className="container-x py-10 md:py-20">
-          <div className="max-w-2xl"><p className="eyebrow">Why choose us</p><h2 className="h-section mt-1">Laundry you don&apos;t have to think about</h2></div>
+          <div className="flex items-end justify-between gap-4"><div className="max-w-2xl"><p className="eyebrow">Why choose us</p><h2 className="h-section mt-1">Laundry you don&apos;t have to think about</h2></div><Link href="/why-choose-us" className="flex-none text-sm font-semibold text-brand-600">Learn more</Link></div>
           <ul className="mt-6 grid grid-cols-2 gap-3 md:mt-8 md:gap-4 lg:grid-cols-3">
             {why.map(({ I, t: title, d }) => (
               <li key={title} className="rounded-2xl bg-white p-4 ring-1 ring-brand-100 md:flex md:gap-4 md:p-5">

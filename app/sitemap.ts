@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
-  const core = ["", "/services", "/business", "/blog", "/track", "/about", "/contact", "/privacy-policy", "/terms"];
+  const core = ["", "/services", "/business", "/blog", "/track", "/about", "/why-choose-us", "/contact", "/complaints", "/refund-policy", "/privacy-policy", "/terms"];
   const posts = await getPosts().catch(() => []);
   return [
     ...core.map((p) => ({ url: `${SITE.url}${p}`, lastModified: now, priority: p === "" ? 1 : 0.7 })),

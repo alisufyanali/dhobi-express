@@ -23,7 +23,8 @@ function pageTitle(path: string, t: Dict): string {
   const exact: Record<string, string> = {
     "/services": t.nav.services, "/cart": t.cart, "/checkout": t.checkout, "/track": t.nav.track,
     "/business": t.nav.business, "/contact": t.nav.contact, "/about": "About us", "/login": "Sign in",
-    "/account": "My account", "/blog": "Blog", "/privacy-policy": "Privacy", "/terms": "Terms",
+    "/account": "My account", "/blog": "Blog", "/privacy-policy": "Privacy policy", "/terms": "Terms",
+    "/why-choose-us": "Why choose us", "/refund-policy": "Refund policy", "/complaints": "Complaints",
   };
   if (exact[path]) return exact[path];
   if (path.startsWith("/blog/")) return "Blog";
@@ -141,7 +142,9 @@ export function Header({ t, lang, phone, whatsapp }: { t: Dict; lang: Lang; phon
             {links.map((l) => (
               <Link key={l.href} href={l.href} className={`block rounded-xl px-3 py-3 text-base font-medium ${path === l.href ? "bg-brand-50 text-brand-700" : "text-brand-900 active:bg-slate-50"}`}>{l.label}</Link>
             ))}
+            <Link href="/why-choose-us" className="block rounded-xl px-3 py-3 text-base font-medium text-brand-900 active:bg-slate-50">Why choose us</Link>
             <Link href="/blog" className="block rounded-xl px-3 py-3 text-base font-medium text-brand-900 active:bg-slate-50">Blog</Link>
+            <Link href="/complaints" className="block rounded-xl px-3 py-3 text-base font-medium text-brand-900 active:bg-slate-50">Help &amp; complaints</Link>
             <Link href="/cart" className="flex items-center justify-between rounded-xl px-3 py-3 text-base font-medium text-brand-900 active:bg-slate-50">
               {t.cart}{count > 0 && <span className="rounded-full bg-brand-600 px-2 text-xs font-bold text-white">{count}</span>}
             </Link>

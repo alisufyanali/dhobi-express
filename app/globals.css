@@ -47,3 +47,14 @@ body { @apply bg-[#f3f5f8] text-slate-700 antialiased md:bg-white; }
 /* "+" turns into "×" when an FAQ/footer section opens (transform works on older Chrome; the rotate property needs 104+) */
 .faq-plus { display: inline-block; transition: transform .2s ease; }
 details[open] > summary .faq-plus { transform: rotate(45deg); }
+
+/* Long-form text on policy/about pages */
+.prose-de { color: var(--color-slate-700); font-size: 1rem; line-height: 1.75; }
+.prose-de > * + * { margin-top: 1rem; }
+.prose-de h2 { margin-top: 2.25rem; font-size: 1.2rem; font-weight: 700; line-height: 1.35; color: var(--color-brand-900); }
+.prose-de h3 { margin-top: 1.5rem; font-weight: 600; color: var(--color-brand-900); }
+.prose-de ul { padding-left: 1.25rem; list-style: disc; }
+.prose-de ul > li + li { margin-top: .4rem; }
+.prose-de a { color: var(--color-brand-600); font-weight: 600; }
+.prose-de strong { color: var(--color-brand-900); }
+@media (min-width: 48rem) { .prose-de { font-size: 1.0625rem; } .prose-de h2 { font-size: 1.4rem; } }

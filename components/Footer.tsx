@@ -8,7 +8,8 @@ type S = { phone: string; email: string; address: string; whatsappNumber: string
 
 const GROUPS = [
   { title: "Services", links: [["All services & rates", "/services"], ["Packages", "/services#packages"], ["Business contracts", "/business"], ["Track your order", "/track"]] },
-  { title: "Company", links: [["About", "/about"], ["Blog", "/blog"], ["Contact", "/contact"], ["Privacy Policy", "/privacy-policy"], ["Terms", "/terms"]] },
+  { title: "Company", links: [["About us", "/about"], ["Why choose us", "/why-choose-us"], ["Blog", "/blog"], ["Contact", "/contact"]] },
+  { title: "Help", links: [["Complaints", "/complaints"], ["Refund policy", "/refund-policy"], ["Privacy policy", "/privacy-policy"], ["Terms", "/terms"]] },
   { title: "Areas", links: AREA_PAGES.map((a) => [a.name, `/${a.path}`]) },
 ];
 
@@ -17,7 +18,7 @@ export function Footer({ s }: { s: S }) {
     <footer className="mt-12 bg-brand-900 md:mt-20 pb-24 text-slate-300 md:pb-0">
       <Newsletter />
 
-      <div className="container-x grid gap-8 py-10 md:grid-cols-[1.3fr_1fr_1fr_1fr] md:gap-10 md:py-14">
+      <div className="container-x grid gap-8 py-10 md:grid-cols-[1.3fr_1fr_1fr_1fr_1fr] md:gap-10 md:py-14">
         {/* Brand + quick contact */}
         <div>
           <p className="text-xl font-bold text-white">Dhobi<span className="text-brand-500">Express</span></p>
