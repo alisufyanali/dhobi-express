@@ -14,7 +14,7 @@ export function Packages({ items, label, addedLabel }: { items: Svc[]; label: st
           <p className="mt-1 text-2xl font-bold text-brand-900">{rs(p.price)}</p>
           <ul className="mt-3 flex-1 space-y-1.5 text-sm text-slate-600">
             {(p.description ?? "").split("·").map((x) => x.trim()).filter(Boolean).map((x) => (
-              <li key={x} className="flex gap-2"><IconCheck className="h-4 w-4 flex-none translate-y-0.5 text-brand-600" />{x}</li>
+              <li key={x} className="flex gap-2"><IconCheck className="h-4 w-4 flex-none mt-0.5 text-brand-600" />{x}</li>
             ))}
           </ul>
           <div className="mt-4 [&>button]:w-full">

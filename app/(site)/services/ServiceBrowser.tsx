@@ -41,8 +41,8 @@ export function ServiceBrowser({ cats, roman, autoFocus }: { cats: Cat[]; roman:
   return (
     <div className="md:mx-auto md:max-w-3xl">
       {/* Search */}
-      <div className="relative pt-4 md:pt-6">
-        <svg viewBox="0 0 24 24" className="pointer-events-none absolute left-4 top-[calc(50%+8px)] h-5 w-5 -translate-y-1/2 text-slate-400 md:top-[calc(50%+12px)]" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
+      <div className="relative mt-4 md:mt-6">
+        <svg viewBox="0 0 24 24" className="pointer-events-none absolute inset-y-0 left-4 my-auto h-5 w-5 text-slate-400" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
         <input type="search" value={q} onChange={(e) => setQ(e.target.value)} autoFocus={autoFocus}
           placeholder="Search shalwar kameez, razai, suit…" aria-label="Search services"
           className="w-full rounded-2xl border-0 bg-white py-3.5 pl-12 pr-4 text-base ring-1 ring-slate-200 outline-none focus:ring-2 focus:ring-brand-500" />

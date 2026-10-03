@@ -132,7 +132,7 @@ export function Header({ t, lang, phone, whatsapp }: { t: Dict; lang: Lang; phon
       {/* Side drawer (phones) */}
       <div className={`fixed inset-0 z-50 lg:hidden ${open ? "" : "pointer-events-none"}`} aria-hidden={!open}>
         <div onClick={() => setOpen(false)} className={`absolute inset-0 bg-slate-900/40 transition-opacity duration-300 ${open ? "opacity-100" : "opacity-0"}`} />
-        <aside className={`absolute inset-y-0 left-0 flex w-[82%] max-w-xs flex-col bg-white pt-[env(safe-area-inset-top)] shadow-xl transition-transform duration-300 ${open ? "translate-x-0" : "-translate-x-full"}`} role="dialog" aria-label="Menu">
+        <aside className="absolute inset-y-0 left-0 flex w-[82%] max-w-xs flex-col bg-white pt-[env(safe-area-inset-top)] shadow-xl transition-transform duration-300" style={{ transform: open ? "translateX(0)" : "translateX(-100%)" }} role="dialog" aria-label="Menu">
           <div className="flex h-14 items-center justify-between border-b border-slate-200 px-4">
             <Logo />
             <button onClick={() => setOpen(false)} className="grid h-10 w-10 place-items-center rounded-full active:bg-slate-100" aria-label="Close menu"><IconX className="h-6 w-6" /></button>

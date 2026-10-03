@@ -67,10 +67,10 @@ export function HeroSlider({ slides }: { slides: Slide[] }) {
             </div>
           ))}
         </div>
-        <button onClick={() => go(i - 1)} aria-label="Previous offer" className="absolute -left-5 top-1/2 hidden h-11 w-11 -translate-y-1/2 place-items-center rounded-full bg-white text-brand-900 shadow-md hover:bg-brand-50 md:grid">
+        <button onClick={() => go(i - 1)} aria-label="Previous offer" className="absolute inset-y-0 -left-5 my-auto hidden h-11 w-11 place-items-center rounded-full bg-white text-brand-900 shadow-md hover:bg-brand-50 md:grid">
           <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2"><path d="m15 6-6 6 6 6" /></svg>
         </button>
-        <button onClick={() => go(i + 1)} aria-label="Next offer" className="absolute -right-5 top-1/2 hidden h-11 w-11 -translate-y-1/2 place-items-center rounded-full bg-white text-brand-900 shadow-md hover:bg-brand-50 md:grid">
+        <button onClick={() => go(i + 1)} aria-label="Next offer" className="absolute inset-y-0 -right-5 my-auto hidden h-11 w-11 place-items-center rounded-full bg-white text-brand-900 shadow-md hover:bg-brand-50 md:grid">
           <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2"><path d="m9 6 6 6-6 6" /></svg>
         </button>
       </div>
