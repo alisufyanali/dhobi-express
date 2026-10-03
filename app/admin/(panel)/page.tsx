@@ -6,13 +6,14 @@ import { rs, STATUS_LABEL } from "@/lib/site";
 export default async function Dashboard() {
   const { today, startToday, startMonth } = karachiRanges();
   const notCancelled = { status: { not: "CANCELLED" as const } };
-  const [todayOrders, pendingPickups, revToday, revMonth, newInquiries, openComplaints, recent] = await Promise.all([
+  const [todayOrders, pendingPickups, revToday, revMonth, newInquiries, openComplaints, unreadChats, recent] = await Promise.all([
     prisma.order.count({ where: { createdAt: { gte: startToday } } }),
     prisma.order.count({ where: { status: "PICKUP_PENDING", pickupDate: { lte: new Date(today + "T00:00:00Z") } } }),
     prisma.order.aggregate({ _sum: { total: true }, where: { createdAt: { gte: startToday }, ...notCancelled } }),
     prisma.order.aggregate({ _sum: { total: true }, where: { createdAt: { gte: startMonth }, ...notCancelled } }),
     prisma.businessInquiry.count({ where: { replied: false } }),
     prisma.complaint.count({ where: { status: "OPEN" } }),
+    prisma.chatThread.count({ where: { unread: true } }),
     prisma.order.findMany({ orderBy: { createdAt: "desc" }, take: 8, include: { area: true } }),
   ]);
 
@@ -29,6 +30,7 @@ export default async function Dashboard() {
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         {stats.map(([l, v]) => (<div key={String(l)} className="card p-4"><p className="text-xs text-slate-500">{l}</p><p className="mt-1 text-2xl font-bold">{v}</p></div>))}
       </div>
+      {unreadChats > 0 && <Link href="/admin/chat" className="block rounded-xl bg-brand-50 p-4 text-sm font-medium text-brand-900">{unreadChats} unread chat{unreadChats === 1 ? "" : "s"} — customers are waiting →</Link>}
       {openComplaints > 0 && <Link href="/admin/complaints" className="block rounded-xl bg-red-50 p-4 text-sm font-medium text-red-800">{openComplaints} open complaint{openComplaints === 1 ? "" : "s"} — reply within 24 hours →</Link>}
       {newInquiries > 0 && <Link href="/admin/inquiries" className="block rounded-xl bg-amber-50 p-4 text-sm font-medium">{newInquiries} business inquir{newInquiries === 1 ? "y" : "ies"} waiting for a reply →</Link>}
       <div className="card overflow-hidden">

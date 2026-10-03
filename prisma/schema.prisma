@@ -261,3 +261,29 @@ model Complaint {
 
   @@index([status])
 }
+
+/// Live chat between a website visitor and the team (admin replies from /admin/chat)
+model ChatThread {
+  id        String        @id @default(cuid())
+  token     String        @unique // secret kept in the visitor's browser
+  name      String
+  phone     String
+  closed    Boolean       @default(false)
+  unread    Boolean       @default(true) // new customer message not yet seen by admin
+  lastAt    DateTime      @default(now())
+  createdAt DateTime      @default(now())
+  messages  ChatMessage[]
+
+  @@index([lastAt])
+}
+
+model ChatMessage {
+  id        String     @id @default(cuid())
+  threadId  String
+  thread    ChatThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  from      String // "customer" | "team"
+  text      String
+  createdAt DateTime   @default(now())
+
+  @@index([threadId, createdAt])
+}

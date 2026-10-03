@@ -62,3 +62,11 @@ export function notifyNewComplaint(c: { code: string; name: string; phone: strin
      <p><a href="${SITE.url}/admin/complaints">Open complaints</a> · <a href="${wa}">WhatsApp customer</a></p>`,
   );
 }
+
+export function notifyNewChat(c: { id: string; name: string; phone: string; text: string }) {
+  return send(
+    `Live chat from ${c.name}`,
+    `<h2>New live chat</h2><p>${esc(c.name)} · ${esc(c.phone)}</p><p>${esc(c.text)}</p>
+     <p><a href="${SITE.url}/admin/chat/${c.id}">Reply in admin</a></p>`,
+  );
+}

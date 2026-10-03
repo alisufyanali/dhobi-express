@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCart } from "./CartProvider";
+import { PhoneInput } from "./PhoneInput";
 import { FLOW_PATHS, hasCartBar } from "./StickyActions";
 import { useEffect, useRef, useState } from "react";
 import { IconChat, IconSend, IconWhatsApp, IconX } from "./Icons";
@@ -94,24 +95,117 @@ function answer(q: string, i: Info): Msg {
   return { from: "bot", text: "I'm not sure about that one. Our team can answer on WhatsApp.", wa: q };
 }
 
+type TeamMsg = { id: string; from: "customer" | "team"; text: string };
+const TOKEN_KEY = "de-chat-token";
+
+/** Live conversation with the team: start form, then messages polled every few seconds while open. */
+function TeamChat({ whatsapp }: { whatsapp: string }) {
+  const [token, setToken] = useState<string | null>(null);
+  const [msgs, setMsgs] = useState<TeamMsg[]>([]);
+  const [text, setText] = useState("");
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [err, setErr] = useState("");
+  const [busy, setBusy] = useState(false);
+  const end = useRef<HTMLDivElement>(null);
+
+  useEffect(() => { try { setToken(localStorage.getItem(TOKEN_KEY)); } catch {} }, []);
+
+  useEffect(() => {
+    if (!token) return;
+    let stop = false;
+    const load = async () => {
+      const r = await fetch(`/api/chat?token=${token}`, { cache: "no-store" }).catch(() => null);
+      if (r?.status === 404) { try { localStorage.removeItem(TOKEN_KEY); } catch {} setToken(null); return; }
+      const d = await r?.json().catch(() => null);
+      if (!stop && d?.messages) setMsgs(d.messages);
+    };
+    load();
+    const t = setInterval(() => !document.hidden && load(), 5000);
+    return () => { stop = true; clearInterval(t); };
+  }, [token]);
+
+  useEffect(() => end.current?.scrollIntoView({ behavior: "smooth" }), [msgs]);
+
+  async function start(e: React.FormEvent) {
+    e.preventDefault(); setErr(""); setBusy(true);
+    const r = await fetch("/api/chat/start", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name, phone, text }) }).catch(() => null);
+    const d = await r?.json().catch(() => null);
+    setBusy(false);
+    if (!r?.ok) return setErr(d?.error ?? "Couldn't connect. Please WhatsApp us.");
+    try { localStorage.setItem(TOKEN_KEY, d.token); } catch {}
+    setMsgs([{ id: "local", from: "customer", text }]); setText(""); setToken(d.token);
+  }
+
+  async function sendMsg(e: React.FormEvent) {
+    e.preventDefault();
+    const t = text.trim();
+    if (!t || !token) return;
+    setText("");
+    setMsgs((m) => [...m, { id: `local-${Date.now()}`, from: "customer", text: t }]);
+    const r = await fetch("/api/chat", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ token, text: t }) }).catch(() => null);
+    if (!r?.ok) setErr("Message not sent. Check your connection.");
+  }
+
+  if (!token) {
+    return (
+      <form onSubmit={start} className="flex-1 space-y-3 overflow-y-auto bg-slate-50 p-4">
+        <p className="text-sm text-slate-700">Leave a message and our team will reply here — usually within a few minutes during 10am–7pm.</p>
+        <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" aria-label="Your name" className="input py-2.5 text-sm" />
+        <PhoneInput name="chat-phone" onChange={setPhone} />
+        <textarea value={text} onChange={(e) => setText(e.target.value)} rows={3} placeholder="How can we help?" aria-label="Message" className="input py-2.5 text-sm" />
+        {err && <p className="err">{err} <a href={waLink(whatsapp)} target="_blank" rel="noopener" className="font-semibold underline">WhatsApp</a></p>}
+        <button disabled={busy} className="btn-primary w-full">{busy ? "Connecting…" : "Start chat"}</button>
+      </form>
+    );
+  }
+
+  return (
+    <>
+      <div className="flex-1 space-y-3 overflow-y-auto bg-slate-50 p-4">
+        <p className="text-center text-[11px] text-slate-400">You&apos;re chatting with the Dhobi Express team</p>
+        {msgs.map((m) => (
+          <div key={m.id} className={`flex ${m.from === "customer" ? "justify-end" : ""}`}>
+            <div className={`max-w-[85%] whitespace-pre-line rounded-2xl px-3.5 py-2.5 text-sm ${m.from === "customer" ? "rounded-br-md bg-brand-600 text-white" : "rounded-bl-md border border-slate-200 bg-white text-slate-700"}`}>
+              {m.from === "team" && <span className="mb-0.5 block text-[10px] font-semibold text-brand-600">Dhobi Express team</span>}
+              {m.text}
+            </div>
+          </div>
+        ))}
+        {msgs.length > 0 && msgs.every((m) => m.from === "customer") && <p className="text-center text-xs text-slate-500">Message received — we&apos;ll reply here shortly.</p>}
+        <div ref={end} />
+      </div>
+      {err && <p className="err px-3">{err}</p>}
+      <form onSubmit={sendMsg} className="flex gap-2 border-t border-slate-200 bg-white p-3">
+        <input value={text} onChange={(e) => setText(e.target.value)} placeholder="Type a message…" aria-label="Your message" className="min-w-0 flex-1 rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none focus:border-brand-500" />
+        <button className="grid h-10 w-10 place-items-center rounded-xl bg-brand-600 text-white" aria-label="Send"><IconSend className="h-5 w-5" /></button>
+      </form>
+    </>
+  );
+}
+
 export function ChatBot({ info }: { info: Info }) {
   const [open, setOpen] = useState(false);
-  const [msgs, setMsgs] = useState<Msg[]>([{ from: "bot", text: "Assalam o Alaikum! How can we help? Tap a question or type your own." }]);
+  const [mode, setMode] = useState<"bot" | "team">("bot");
+  const [msgs, setMsgs] = useState<Msg[]>([{ from: "bot", text: "Assalam o Alaikum! How can we help? Tap a question, type your own, or talk to our team." }]);
   const [input, setInput] = useState("");
   const end = useRef<HTMLDivElement>(null);
   const path = usePathname();
   const { count } = useCart();
-  // On phones, sit above the tab bar (and the cart bar when it shows); hide in cart/checkout flows
-  // Booking screens have + buttons on the right edge, so the chat button stays out of the way there
+  // On phones, sit above the tab bar (and the cart bar when it shows); hide in cart/checkout flows.
+  // Booking screens have + buttons on the right edge, so the chat button stays out of the way there.
   const inFlow = [...FLOW_PATHS, "/services"].some((p) => path.startsWith(p));
   const lifted = hasCartBar(path, count);
   const btnPos = inFlow ? "hidden md:grid" : `grid ${lifted ? "bottom-40" : "bottom-24"}`;
   const panelPos = lifted ? "bottom-56" : "bottom-40";
 
+  // Returning visitors with an open team conversation land straight in it
+  useEffect(() => { try { if (localStorage.getItem(TOKEN_KEY)) setMode("team"); } catch {} }, []);
   useEffect(() => end.current?.scrollIntoView({ behavior: "smooth" }), [msgs, open]);
 
   function ask(q: string) {
     if (!q.trim()) return;
+    if (/team|human|insaan|agent|baat/i.test(q) && q.length < 40) { setMode("team"); setInput(""); return; }
     setMsgs((m) => [...m, { from: "me", text: q }, answer(q, info)]);
     setInput("");
   }
@@ -124,38 +218,51 @@ export function ChatBot({ info }: { info: Info }) {
       </button>
 
       {open && (
-        <div className={`fixed inset-x-3 ${panelPos} z-40 flex max-h-[60vh] flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl md:inset-x-auto md:bottom-24 md:right-6 md:w-[370px]`} role="dialog" aria-label="Chat with Dhobi Express">
-          <div className="flex items-center gap-3 bg-brand-600 px-4 py-3 text-white">
-            <span className="grid h-9 w-9 place-items-center rounded-full bg-white/20"><IconChat className="h-5 w-5" /></span>
-            <div className="flex-1"><p className="text-sm font-semibold">Dhobi Express</p><p className="text-xs text-white/80">Instant answers · team on WhatsApp</p></div>
+        <div className={`fixed inset-x-3 ${panelPos} z-40 flex max-h-[68vh] flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl md:inset-x-auto md:bottom-24 md:right-6 md:w-[380px]`} role="dialog" aria-label="Chat with Dhobi Express">
+          <div className="bg-brand-600 px-4 pt-3 text-white">
+            <div className="flex items-center gap-3">
+              <span className="grid h-9 w-9 place-items-center rounded-full bg-white/20"><IconChat className="h-5 w-5" /></span>
+              <div className="flex-1"><p className="text-sm font-semibold">Dhobi Express</p><p className="text-xs text-white/80">{mode === "bot" ? "Instant answers" : "Our team replies here"}</p></div>
+            </div>
+            <div className="mt-3 grid grid-cols-2 text-xs font-semibold" role="tablist">
+              {([["bot", "Quick answers"], ["team", "Talk to our team"]] as const).map(([k, l]) => (
+                <button key={k} role="tab" aria-selected={mode === k} onClick={() => setMode(k)}
+                  className={`border-b-2 pb-2 ${mode === k ? "border-white text-white" : "border-transparent text-white/70"}`}>{l}</button>
+              ))}
+            </div>
           </div>
 
-          <div className="flex-1 space-y-3 overflow-y-auto bg-slate-50 p-4">
-            {msgs.map((m, i) => (
-              <div key={i} className={`flex ${m.from === "me" ? "justify-end" : ""}`}>
-                <div className={`max-w-[85%] whitespace-pre-line rounded-2xl px-3.5 py-2.5 text-sm ${m.from === "me" ? "rounded-br-md bg-brand-600 text-white" : "rounded-bl-md border border-slate-200 bg-white text-slate-700"}`}>
-                  {m.text}
-                  {(m.link || m.wa) && (
-                    <div className="mt-2 flex flex-wrap gap-2">
-                      {m.link && <Link href={m.link.href} onClick={() => setOpen(false)} className="rounded-lg bg-brand-50 px-2.5 py-1 text-xs font-semibold text-brand-700">{m.link.label}</Link>}
-                      {m.wa && <a href={waLink(info.whatsapp, m.wa)} target="_blank" rel="noopener" className="inline-flex items-center gap-1 rounded-lg bg-wa px-2.5 py-1 text-xs font-semibold text-white"><IconWhatsApp className="h-3.5 w-3.5" />WhatsApp</a>}
+          {mode === "team" ? <TeamChat whatsapp={info.whatsapp} /> : (
+            <>
+              <div className="flex-1 space-y-3 overflow-y-auto bg-slate-50 p-4">
+                {msgs.map((m, i) => (
+                  <div key={i} className={`flex ${m.from === "me" ? "justify-end" : ""}`}>
+                    <div className={`max-w-[85%] whitespace-pre-line rounded-2xl px-3.5 py-2.5 text-sm ${m.from === "me" ? "rounded-br-md bg-brand-600 text-white" : "rounded-bl-md border border-slate-200 bg-white text-slate-700"}`}>
+                      {m.text}
+                      {(m.link || m.wa) && (
+                        <div className="mt-2 flex flex-wrap gap-2">
+                          {m.link && <Link href={m.link.href} onClick={() => setOpen(false)} className="rounded-lg bg-brand-50 px-2.5 py-1 text-xs font-semibold text-brand-700">{m.link.label}</Link>}
+                          {m.wa && <button onClick={() => setMode("team")} className="rounded-lg bg-brand-600 px-2.5 py-1 text-xs font-semibold text-white">Ask our team</button>}
+                          {m.wa && <a href={waLink(info.whatsapp, m.wa)} target="_blank" rel="noopener" className="inline-flex items-center gap-1 rounded-lg bg-wa px-2.5 py-1 text-xs font-semibold text-white"><IconWhatsApp className="h-3.5 w-3.5" />WhatsApp</a>}
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
+                  </div>
+                ))}
+                <div ref={end} />
               </div>
-            ))}
-            <div ref={end} />
-          </div>
-
-          <div className="flex gap-2 overflow-x-auto border-t border-slate-200 bg-white px-3 py-2 [scrollbar-width:none]">
-            {QUICK.map((q) => (
-              <button key={q} onClick={() => ask(q)} className="flex-none rounded-full border border-brand-200 px-3 py-1 text-xs font-medium text-brand-700 hover:bg-brand-50">{q}</button>
-            ))}
-          </div>
-          <form onSubmit={(e) => { e.preventDefault(); ask(input); }} className="flex gap-2 border-t border-slate-200 bg-white p-3">
-            <input value={input} onChange={(e) => setInput(e.target.value)} placeholder="Type a question…" aria-label="Your question" className="min-w-0 flex-1 rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none focus:border-brand-500" />
-            <button className="grid h-10 w-10 place-items-center rounded-xl bg-brand-600 text-white" aria-label="Send"><IconSend className="h-5 w-5" /></button>
-          </form>
+              <div className="no-scrollbar flex gap-2 overflow-x-auto border-t border-slate-200 bg-white px-3 py-2">
+                <button onClick={() => setMode("team")} className="flex-none rounded-full bg-brand-600 px-3 py-1 text-xs font-semibold text-white">Talk to our team</button>
+                {QUICK.map((q) => (
+                  <button key={q} onClick={() => ask(q)} className="flex-none rounded-full border border-brand-200 px-3 py-1 text-xs font-medium text-brand-700 hover:bg-brand-50">{q}</button>
+                ))}
+              </div>
+              <form onSubmit={(e) => { e.preventDefault(); ask(input); }} className="flex gap-2 border-t border-slate-200 bg-white p-3">
+                <input value={input} onChange={(e) => setInput(e.target.value)} placeholder="Type a question…" aria-label="Your question" className="min-w-0 flex-1 rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none focus:border-brand-500" />
+                <button className="grid h-10 w-10 place-items-center rounded-xl bg-brand-600 text-white" aria-label="Send"><IconSend className="h-5 w-5" /></button>
+              </form>
+            </>
+          )}
         </div>
       )}
     </>
