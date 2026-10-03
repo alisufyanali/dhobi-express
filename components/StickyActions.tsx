@@ -40,7 +40,7 @@ export function StickyActions({ orderLabel }: { orderLabel: string }) {
             </span>
             Book Now
           </Link>
-          <Link href="/track" className={`flex flex-col items-center gap-0.5 py-1.5 text-[11px] font-medium ${tab("/track")}`}>{I.track}Orders</Link>
+          <Link href="/orders" className={`flex flex-col items-center gap-0.5 py-1.5 text-[11px] font-medium ${path === "/orders" || path === "/track" || path.startsWith("/order/") ? "text-brand-600" : "text-slate-500"}`}>{I.track}Orders</Link>
           <Link href="/login" className={`flex flex-col items-center gap-0.5 py-1.5 text-[11px] font-medium ${path === "/login" || path === "/account" ? "text-brand-600" : "text-slate-500"}`}>
             <IconUser className="h-6 w-6" />Profile
           </Link>

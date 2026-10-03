@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useCart } from "@/components/CartProvider";
+import { saveOrder } from "@/lib/my-orders";
 import { PhoneInput } from "@/components/PhoneInput";
 import { Sk } from "@/components/Skeleton";
 import { DeliveryProgress } from "@/components/DeliveryProgress";
@@ -93,7 +94,7 @@ export function CheckoutForm({ demo, areas, slots, today, settings }: Props) {
         setServerError(data.error ?? "Could not place the order. Please try again or WhatsApp us.");
         return;
       }
-      try { localStorage.setItem("last-order", JSON.stringify({ code: data.code, phone: data.phone })); } catch {}
+      saveOrder({ code: data.code, phone: data.phone });
       clear();
       router.push(`/order/${data.code}?phone=${encodeURIComponent(data.phone)}`);
     } catch {

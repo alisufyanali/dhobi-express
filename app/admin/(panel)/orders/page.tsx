@@ -29,7 +29,30 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
         <div className="flex gap-2"><button className="btn-primary flex-1">Filter</button><Link href="/admin/orders" className="btn-ghost">Reset</Link></div>
       </form>
 
-      <div className="card overflow-x-auto">
+      {/* Phones: one card per order */}
+      <ul className="space-y-3 md:hidden">
+        {orders.map((o) => (
+          <li key={o.id}>
+            <Link href={`/admin/orders/${o.id}`} className="card block p-4">
+              <div className="flex items-start justify-between gap-2">
+                <div>
+                  <p className="font-mono font-semibold text-brand-700">{o.code}</p>
+                  <p className="text-sm font-medium">{o.name} <span className="font-normal text-slate-500">· {o.area.name}</span></p>
+                </div>
+                <span className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${o.status === "DELIVERED" ? "bg-emerald-50 text-emerald-700" : o.status === "CANCELLED" ? "bg-red-50 text-red-700" : o.status === "PICKUP_PENDING" ? "bg-amber-50 text-amber-800" : "bg-brand-50 text-brand-700"}`}>{STATUS_LABEL[o.status]}</span>
+              </div>
+              <div className="mt-3 flex items-center justify-between text-sm">
+                <span className="text-slate-600">Pickup {o.pickupDate.toISOString().slice(5, 10)} · {o.pickupSlot}</span>
+                <span className="font-bold">{rs(o.total)}</span>
+              </div>
+              <p className="mt-1 text-xs text-slate-500">{o.phone}</p>
+            </Link>
+          </li>
+        ))}
+        {!orders.length && <li className="card p-6 text-center text-sm text-slate-500">No orders match.</li>}
+      </ul>
+
+      <div className="card hidden overflow-x-auto md:block">
         <table className="w-full min-w-[720px] text-sm">
           <thead className="bg-slate-50 text-left text-xs uppercase text-slate-500">
             <tr><th className="p-3">Order</th><th className="p-3">Customer</th><th className="p-3">Area</th><th className="p-3">Pickup</th><th className="p-3">Status</th><th className="p-3 text-right">Total</th></tr>

@@ -22,7 +22,7 @@ function Logo() {
 
 function pageTitle(path: string, t: Dict): string {
   const exact: Record<string, string> = {
-    "/services": t.nav.services, "/cart": t.cart, "/checkout": t.checkout, "/track": t.nav.track,
+    "/orders": "My orders", "/services": t.nav.services, "/cart": t.cart, "/checkout": t.checkout, "/track": t.nav.track,
     "/business": t.nav.business, "/contact": t.nav.contact, "/about": "About us", "/login": "Sign in",
     "/account": "My account", "/blog": "Blog", "/privacy-policy": "Privacy policy", "/terms": "Terms",
     "/why-choose-us": "Why choose us", "/refund-policy": "Refund policy", "/complaints": "Complaints",
@@ -53,6 +53,7 @@ export function Header({ t, lang, phone, whatsapp, threshold }: { t: Dict; lang:
     { href: "/", label: t.nav.home },
     { href: "/services", label: t.nav.services },
     { href: "/business", label: t.nav.business },
+    { href: "/orders", label: "My orders" },
     { href: "/track", label: t.nav.track },
     { href: "/contact", label: t.nav.contact },
   ];
