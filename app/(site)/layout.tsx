@@ -7,6 +7,7 @@ import { getSettings } from "@/lib/settings";
 import { IS_DEMO } from "@/lib/demo";
 import { ChatBot } from "@/components/ChatBot";
 import { Splash } from "@/components/Splash";
+import { RevealObserver } from "@/components/RevealObserver";
 import { getCatalog } from "@/lib/data";
 import { AREA_PAGES } from "@/lib/areas";
 import { UNIT_LABEL } from "@/lib/site";
@@ -23,6 +24,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
   return (
     <CartProvider>
       <Splash />
+      <RevealObserver />
       {IS_DEMO && (
         <div className="bg-brand-100 px-4 py-2 text-center text-xs font-medium text-brand-900">
           Demo preview — orders are not saved yet. Book on WhatsApp.

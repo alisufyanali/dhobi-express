@@ -8,7 +8,7 @@ export function Packages({ items, label, addedLabel }: { items: Svc[]; label: st
   return (
     <div className="-mx-4 flex snap-x scroll-px-4 gap-3 overflow-x-auto px-4 pb-2 [scrollbar-width:none] md:mx-0 md:grid md:grid-cols-3 lg:grid-cols-5 md:gap-5 md:overflow-visible md:px-0">
       {items.map((p, i) => (
-        <article key={p.id} className={`card flex w-[72%] flex-none snap-start flex-col p-5 md:w-auto ${i === 0 ? "border-brand-500 ring-1 ring-brand-500" : ""}`}>
+        <article key={p.id} className={`lift card flex w-[72%] flex-none snap-start flex-col p-5 md:w-auto ${i === 0 ? "border-brand-500 ring-1 ring-brand-500" : ""}`}>
           {i === 0 && <span className="mb-2 w-fit rounded-full bg-brand-600 px-2.5 py-0.5 text-[11px] font-semibold text-white">Most popular</span>}
           <h3 className="font-semibold text-brand-900">{p.name}</h3>
           <p className="mt-1 text-2xl font-bold text-brand-900">{rs(p.price)}</p>

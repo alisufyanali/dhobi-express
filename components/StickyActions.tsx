@@ -34,8 +34,9 @@ export function StickyActions({ orderLabel }: { orderLabel: string }) {
           <Link href="/" className={`flex flex-col items-center gap-0.5 py-1.5 text-[11px] font-medium ${tab("/")}`}>{I.home}Home</Link>
           <Link href="/services" className={`flex flex-col items-center gap-0.5 py-1.5 text-[11px] font-medium ${tab("/services")}`}>{I.grid}Services</Link>
           <Link href="/services" aria-label={orderLabel} className="-mt-6 flex flex-col items-center gap-1 text-[11px] font-semibold text-brand-700">
-            <span className="grid h-14 w-14 place-items-center rounded-full bg-brand-600 text-white shadow-lg shadow-brand-600/30 ring-4 ring-white">
-              <svg viewBox="0 0 24 24" className="h-7 w-7" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><path d="M12 5v14M5 12h14" /></svg>
+            <span className="relative grid h-14 w-14 place-items-center rounded-full bg-brand-600 text-white shadow-lg shadow-brand-600/30 ring-4 ring-white">
+              <span aria-hidden className="pulse-ring absolute inset-0 rounded-full bg-brand-500" />
+              <svg viewBox="0 0 24 24" className="relative h-7 w-7" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><path d="M12 5v14M5 12h14" /></svg>
             </span>
             Book Now
           </Link>

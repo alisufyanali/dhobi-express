@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { SITE } from "@/lib/site";
 import { SPLASH_SCRIPT } from "@/components/Splash";
+import { REVEAL_SCRIPT } from "@/components/RevealObserver";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
@@ -19,6 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: SPLASH_SCRIPT }} />
+        <script dangerouslySetInnerHTML={{ __html: REVEAL_SCRIPT }} />
       </head>
       <body>{children}</body>
     </html>

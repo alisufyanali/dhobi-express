@@ -8,6 +8,8 @@ import { JsonLd } from "@/components/JsonLd";
 import { HeroSlider, type Slide } from "@/components/HeroSlider";
 import { ContractClients } from "@/components/ContractClients";
 import { ShopLocation } from "@/components/ShopLocation";
+import { WashingMachine } from "@/components/WashingMachine";
+import { DeliveryRoad } from "@/components/DeliveryRoad";
 import { directionsUrl, hasShopLocation } from "@/lib/location";
 import { InstallApp } from "@/components/InstallApp";
 import { ActiveOrder } from "@/components/ActiveOrder";
@@ -118,7 +120,7 @@ export default async function Home() {
       </section>
 
       {/* Services: Laundo-style tiles */}
-      <section className="pt-6 pb-2 md:py-14">
+      <section data-reveal className="pt-6 pb-2 md:py-14">
         <div className="container-x flex items-end justify-between gap-4">
           <h2 className="h-section">Services</h2>
           <Link href="/services" className="text-sm font-semibold text-brand-600">See all</Link>
@@ -126,7 +128,7 @@ export default async function Home() {
         <div className="container-x mt-3 md:mt-6">
           <div className="no-scrollbar -mx-4 flex snap-x scroll-px-4 gap-3 overflow-x-auto px-4 pb-1 md:mx-0 md:grid md:grid-cols-6 md:gap-5 md:overflow-visible md:px-0">
             {cats.map((c) => (
-              <Link key={c.id} href={`/services#${c.slug}`} className="group w-[84px] flex-none snap-start rounded-2xl bg-white p-1.5 ring-1 ring-slate-200 transition active:scale-[.97] md:w-auto md:p-2 md:hover:ring-brand-500">
+              <Link key={c.id} href={`/services#${c.slug}`} className="lift group w-[84px] flex-none snap-start rounded-2xl bg-white p-1.5 ring-1 ring-slate-200 transition active:scale-[.97] md:w-auto md:p-2 md:hover:ring-brand-500">
                 <div className="relative aspect-square overflow-hidden rounded-xl bg-brand-50">
                   <Image src={imageFor(c.slug)} alt={`${c.name} service in Karachi`} fill sizes="(min-width:768px) 180px, 84px" className="object-cover transition duration-300 group-hover:scale-105" />
                 </div>
@@ -142,7 +144,7 @@ export default async function Home() {
 
       {/* Winter is coming */}
       {winterItems.length > 0 && (
-        <section className="container-x pt-6 pb-10 md:pb-20">
+        <section data-reveal className="container-x pt-6 pb-10 md:pb-20">
           <div className="grid overflow-hidden rounded-2xl border border-brand-100 bg-brand-50 md:grid-cols-2">
             <div className="relative aspect-[16/10] md:aspect-auto md:min-h-[360px]">
               <Image src={IMAGES.winter} alt="Clean folded blankets ready for winter" fill sizes="(min-width:768px) 560px, 100vw" className="object-cover" />
@@ -170,7 +172,7 @@ export default async function Home() {
 
       {/* Packages */}
       {packages.length > 0 && (
-        <section className="container-x pb-10 md:pb-20">
+        <section data-reveal className="container-x pb-10 md:pb-20">
           <div className="flex items-end justify-between gap-4">
             <div><p className="eyebrow">Packages</p><h2 className="h-section mt-1">Save with a bundle</h2></div>
             <Link href="/services#packages" className="text-sm font-semibold text-brand-600">All packages →</Link>
@@ -179,13 +181,18 @@ export default async function Home() {
         </section>
       )}
 
+      <DeliveryRoad
+        title={`Free pickup & delivery above ${rs(s.freeDeliveryThreshold)} — every day`}
+        sub={`Pickup slots ${s.timeSlots.join(" and ")} · any order size on Sunday`}
+      />
+
       {/* Why choose us */}
-      <section className="border-y border-brand-100 bg-brand-50">
+      <section data-reveal className="border-y border-brand-100 bg-brand-50">
         <div className="container-x py-10 md:py-20">
           <div className="flex items-end justify-between gap-4"><div className="max-w-2xl"><p className="eyebrow">Why choose us</p><h2 className="h-section mt-1">Laundry you don&apos;t have to think about</h2></div><Link href="/why-choose-us" className="flex-none text-sm font-semibold text-brand-600">Learn more</Link></div>
           <ul className="mt-6 grid grid-cols-2 gap-3 md:mt-8 md:gap-4 lg:grid-cols-3">
             {why.map(({ I, t: title, d }) => (
-              <li key={title} className="rounded-2xl bg-white p-4 ring-1 ring-brand-100 md:flex md:gap-4 md:p-5">
+              <li key={title} className="lift rounded-2xl bg-white p-4 ring-1 ring-brand-100 md:flex md:gap-4 md:p-5">
                 <span className="grid h-10 w-10 flex-none place-items-center rounded-xl bg-brand-600 text-white md:h-11 md:w-11"><I className="h-5 w-5" /></span>
                 <div className="mt-3 md:mt-0">
                   <h3 className="text-sm font-semibold leading-snug text-brand-900 md:text-base">{title}</h3>
@@ -198,9 +205,15 @@ export default async function Home() {
       </section>
 
       {/* How it works */}
-      <section className="container-x py-10 md:py-20">
-        <p className="eyebrow">{t.howItWorks}</p>
-        <h2 className="h-section mt-1">Four simple steps</h2>
+      <section data-reveal className="container-x py-10 md:py-20">
+        <div className="flex items-end justify-between gap-4">
+          <div>
+            <p className="eyebrow">{t.howItWorks}</p>
+            <h2 className="h-section mt-1">Four simple steps</h2>
+            <p className="mt-1 max-w-md text-sm text-slate-600 md:text-base">From your door, through our machines, and back — usually within 48 hours.</p>
+          </div>
+          <WashingMachine id="how" className="h-28 w-24 flex-none md:h-44 md:w-36" />
+        </div>
         <ol className="no-scrollbar -mx-4 mt-4 flex snap-x scroll-px-4 gap-3 overflow-x-auto px-4 pb-1 md:mx-0 md:mt-8 md:grid md:grid-cols-4 md:gap-6 md:overflow-visible md:px-0">
           {t.steps.map((st, i) => {
             const Icon = stepIcons[i];
@@ -218,7 +231,7 @@ export default async function Home() {
       </section>
 
       {/* Contracts */}
-      <section className="md:bg-white">
+      <section data-reveal className="md:bg-white">
         <div className="container-x pb-4">
           <div className="md:flex md:items-end md:justify-between md:gap-10">
             <div className="max-w-2xl">
@@ -230,7 +243,7 @@ export default async function Home() {
           </div>
           <div className="-mx-4 mt-6 flex snap-x scroll-px-4 gap-3 overflow-x-auto px-4 pb-2 md:mx-0 md:grid md:grid-cols-4 md:gap-5 md:overflow-visible md:px-0">
             {segments.map((g) => (
-              <Link key={g.t} href="/business#inquiry" className="group card w-[70%] flex-none snap-start overflow-hidden md:w-auto">
+              <Link key={g.t} href="/business#inquiry" className="lift group card w-[70%] flex-none snap-start overflow-hidden md:w-auto">
                 <div className="relative aspect-[4/3] bg-brand-50">
                   <Image src={g.img} alt={`Laundry service for ${g.t.toLowerCase()} in Karachi`} fill sizes="(min-width:768px) 270px, 70vw" className="object-cover transition duration-300 group-hover:scale-105" />
                 </div>
@@ -259,11 +272,11 @@ export default async function Home() {
 
       {/* Reviews */}
       {reviews.length > 0 && (
-        <section className="container-x pb-10 md:pb-20">
+        <section data-reveal className="container-x pb-10 md:pb-20">
           <h2 className="h-section">{t.reviews}</h2>
           <div className="-mx-4 mt-6 flex snap-x scroll-px-4 gap-4 overflow-x-auto px-4 pb-2 md:mx-0 md:grid md:grid-cols-3 md:overflow-visible md:px-0">
             {reviews.slice(0, 3).map((r) => (
-              <figure key={r.id} className="card w-[82%] flex-none snap-center p-5 md:w-auto">
+              <figure key={r.id} className="lift card w-[82%] flex-none snap-center p-5 md:w-auto">
                 <div className="flex text-amber-400" aria-label={`${r.rating} out of 5`}>{Array.from({ length: r.rating }).map((_, i) => <IconStar key={i} className="h-4 w-4" />)}</div>
                 <blockquote className="mt-3 text-sm leading-relaxed text-slate-700">{r.text}</blockquote>
                 <figcaption className="mt-4 flex items-center gap-3 text-sm">
@@ -280,7 +293,7 @@ export default async function Home() {
       <div className="container-x pb-10 md:pb-16" data-reveal><ShopLocation s={s} compact /></div>
 
       {/* FAQ + areas */}
-      <section className="container-x grid gap-10 md:grid-cols-[1.4fr_1fr]">
+      <section data-reveal className="container-x grid gap-10 md:grid-cols-[1.4fr_1fr]">
         <div>
           <h2 className="h-section">{t.faq}</h2>
           <div className="mt-6"><FaqList items={faqs} /></div>

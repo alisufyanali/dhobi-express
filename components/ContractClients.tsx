@@ -20,7 +20,7 @@ const SECTORS = [
 export function ContractClients({ logos }: { logos: Logo[] }) {
   const loop = [...logos, ...logos];
   return (
-    <section className="py-10 md:py-20">
+    <section className="py-10 md:py-20" data-reveal>
       <div className="container-x flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
         <div>
           <p className="eyebrow">Our contract clients</p>

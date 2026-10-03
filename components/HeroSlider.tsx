@@ -43,6 +43,9 @@ export function HeroSlider({ slides }: { slides: Slide[] }) {
           {slides.map((s, n) => (
             <div key={s.title} aria-roledescription="slide" aria-label={`${n + 1} of ${slides.length}`}
               className={`relative flex h-44 w-full flex-none snap-center overflow-hidden md:h-[380px] ${s.tone === "deep" ? "bg-brand-700" : "bg-brand-500"}`}>
+              {[[8, 14, 0], [22, 8, 2.5], [36, 18, 5], [48, 10, 1.2], [14, 22, 6.5]].map(([left, size, delay]) => (
+                <span key={left} aria-hidden className="bubble" style={{ left: `${left}%`, width: size, height: size, animationDelay: `${delay}s` }} />
+              ))}
               <div className="relative z-10 flex w-[60%] flex-col justify-center p-4 text-white md:w-1/2 md:p-12">
                 <p className="text-[10px] font-bold uppercase tracking-wider text-white/85 md:text-sm">{s.eyebrow}</p>
                 <h2 className="mt-1 text-lg font-extrabold leading-tight md:mt-3 md:text-5xl">

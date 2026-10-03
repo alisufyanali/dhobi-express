@@ -68,3 +68,37 @@ details[open] > summary .faq-plus { transform: rotate(45deg); }
 @keyframes splash-pop { from { opacity: 0; transform: scale(.85); } to { opacity: 1; transform: scale(1); } }
 @keyframes splash-dot { 0%, 100% { opacity: .35; transform: translateY(0); } 50% { opacity: 1; transform: translateY(-4px); } }
 @media (prefers-reduced-motion: reduce) { #splash { animation-duration: .01s; animation-delay: .4s; } .splash-pop, .splash-dot { animation: none; } }
+
+/* ---------- Motion: transform/opacity only (smooth on old phones, works on Chrome 101) ---------- */
+@keyframes wm-spin { to { transform: rotate(360deg); } }
+@keyframes wm-shake { 0%, 100% { transform: translate(0, 0); } 25% { transform: translate(-0.6px, 0.4px); } 50% { transform: translate(0.6px, -0.4px); } 75% { transform: translate(-0.4px, -0.3px); } }
+@keyframes wm-bubble { 0% { transform: translateY(0) scale(0.6); opacity: 0; } 20% { opacity: 0.9; } 100% { transform: translateY(-28px) scale(1); opacity: 0; } }
+@keyframes wm-wave { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(-10px); } }
+@keyframes rise { 0% { transform: translateY(0); opacity: 0; } 15% { opacity: 1; } 100% { transform: translateY(-260px); opacity: 0; } }
+@keyframes drive { from { transform: translateX(-18%); } to { transform: translateX(100%); } }
+@keyframes wheel { to { transform: rotate(360deg); } }
+@keyframes pulse-ring { 0% { transform: scale(1); opacity: 0.55; } 70%, 100% { transform: scale(1.6); opacity: 0; } }
+
+.wm-drum { animation: wm-spin 2.4s linear infinite; transform-origin: 60px 88px; }
+.wm-body { animation: wm-shake 0.35s linear infinite; }
+.wm-bubble { animation: wm-bubble 2.2s ease-in infinite; }
+.wm-wave { animation: wm-wave 2.4s ease-in-out infinite; }
+.bubble { position: absolute; bottom: -24px; border-radius: 9999px; background: rgba(255, 255, 255, 0.16); animation: rise 9s linear infinite; pointer-events: none; }
+.drive { animation: drive 8s linear infinite; }
+.spin-wheel { transform-box: fill-box; transform-origin: center; animation: wheel 0.6s linear infinite; }
+.pulse-ring { animation: pulse-ring 2.6s ease-out infinite; }
+
+@media (hover: hover) {
+  .lift { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+  .lift:hover { transform: translateY(-4px); box-shadow: 0 14px 30px -14px rgba(16, 36, 63, 0.3); }
+}
+
+/* Scroll reveal: content is only hidden while JS is running and motion is allowed */
+@media (prefers-reduced-motion: no-preference) {
+  .js-reveal [data-reveal] { opacity: 0; transform: translateY(18px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .js-reveal [data-reveal].is-in { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wm-drum, .wm-body, .wm-bubble, .wm-wave, .drive, .spin-wheel { animation: none !important; }
+  .bubble, .pulse-ring { display: none; }
+}
