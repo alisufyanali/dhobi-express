@@ -70,6 +70,10 @@ export const settingsSchema = z.object({
   phone: z.string().trim().min(5),
   email: z.string().trim().email(),
   address: z.string().trim().min(3),
+  mapsUrl: z.string().trim().url().refine((u) => /(google\.[a-z.]+\/maps|maps\.app\.goo\.gl|goo\.gl\/maps)/.test(u), "Use a Google Maps link").optional().or(z.literal("")).transform((v) => v ?? ""),
+  latitude: z.union([z.literal("").transform(() => null), z.coerce.number().min(23).max(37)]).optional().transform((v) => v ?? null),
+  longitude: z.union([z.literal("").transform(() => null), z.coerce.number().min(60).max(78)]).optional().transform((v) => v ?? null),
+  openingHours: z.string().trim().min(3).max(80),
 });
 
 export const COMPLAINT_TYPES = [

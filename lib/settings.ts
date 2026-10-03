@@ -11,6 +11,10 @@ const DEFAULTS = {
   phone: "0300-0000000",
   email: "info@dhobiexpress.pk",
   address: "Karachi, Pakistan",
+  mapsUrl: "",
+  latitude: null as number | null,
+  longitude: null as number | null,
+  openingHours: "Mon–Sun, 10am–7pm",
 };
 
 export async function getSettings() {

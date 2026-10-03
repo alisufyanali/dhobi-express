@@ -197,6 +197,11 @@ model Setting {
   phone                 String   @default("0300-0000000")
   email                 String   @default("info@dhobiexpress.pk")
   address               String   @default("Karachi, Pakistan")
+  // Shop location (optional): shown on Contact/About/home with a map and directions
+  mapsUrl               String   @default("") // Google Maps share link for the shop
+  latitude              Float?
+  longitude             Float?
+  openingHours          String   @default("Mon–Sun, 10am–7pm")
 }
 
 model AdminUser {

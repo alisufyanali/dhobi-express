@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ShopLocation } from "@/components/ShopLocation";
 import Link from "next/link";
 import { getSettings } from "@/lib/settings";
 import { AREA_PAGES } from "@/lib/areas";
@@ -36,6 +37,7 @@ export default async function About() {
 
       <h2>Get in touch</h2>
       <p>Call or WhatsApp <strong>{s.phone}</strong>, or email <a href={`mailto:${s.email}`}>{s.email}</a>. We&apos;re open 7 days a week, 10am–7pm. Something not right? <Link href="/complaints">Tell us here</Link>.</p>
+      <ShopLocation s={s} compact />
     </InfoPage>
   );
 }

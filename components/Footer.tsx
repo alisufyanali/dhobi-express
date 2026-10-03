@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { AREA_PAGES } from "@/lib/areas";
+import { directionsUrl, hasShopLocation } from "@/lib/location";
 import { waLink } from "@/lib/site";
 import { Newsletter } from "./Newsletter";
 import { IconWhatsApp } from "./Icons";
 
-type S = { phone: string; email: string; address: string; whatsappNumber: string };
+type S = { phone: string; email: string; address: string; whatsappNumber: string; mapsUrl: string; latitude: number | null; longitude: number | null; openingHours: string };
 
 const GROUPS = [
   { title: "Services", links: [["All services & rates", "/services"], ["Packages", "/services#packages"], ["Business contracts", "/business"], ["Track your order", "/track"]] },
@@ -35,6 +36,7 @@ export function Footer({ s }: { s: S }) {
             </a>
           </div>
           <p className="mt-4 text-sm text-slate-400">{s.phone} · {s.address}</p>
+          {hasShopLocation(s) && <a href={directionsUrl(s)} target="_blank" rel="noopener" className="mt-1 inline-block text-sm font-semibold text-brand-500 hover:text-white">Get directions →</a>}
         </div>
 
         {/* Link groups: collapsible on phones, open columns on desktop */}

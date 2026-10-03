@@ -7,6 +7,8 @@ import { FaqList } from "@/components/Faq";
 import { JsonLd } from "@/components/JsonLd";
 import { HeroSlider, type Slide } from "@/components/HeroSlider";
 import { ContractClients } from "@/components/ContractClients";
+import { ShopLocation } from "@/components/ShopLocation";
+import { directionsUrl, hasShopLocation } from "@/lib/location";
 import { InstallApp } from "@/components/InstallApp";
 import { ActiveOrder } from "@/components/ActiveOrder";
 import { Packages } from "@/components/Packages";
@@ -76,7 +78,12 @@ export default async function Home() {
       <JsonLd data={{
         "@context": "https://schema.org", "@type": "DryCleaningOrLaundry", name: SITE.name, url: SITE.url,
         telephone: s.phone, email: s.email, priceRange: "Rs. 40 - Rs. 1200", image: IMAGES.hero,
-        address: { "@type": "PostalAddress", addressLocality: "Karachi", addressRegion: "Sindh", addressCountry: "PK" },
+        address: {
+          "@type": "PostalAddress", addressLocality: "Karachi", addressRegion: "Sindh", addressCountry: "PK",
+          ...(hasShopLocation(s) ? { streetAddress: s.address } : {}),
+        },
+        ...(s.latitude != null && s.longitude != null ? { geo: { "@type": "GeoCoordinates", latitude: s.latitude, longitude: s.longitude } } : {}),
+        ...(hasShopLocation(s) ? { hasMap: directionsUrl(s) } : {}),
         areaServed: AREA_PAGES.map((a) => ({ "@type": "Place", name: `${a.name}, Karachi` })),
         openingHours: "Mo-Su 10:00-19:00",
       }} />
@@ -268,6 +275,9 @@ export default async function Home() {
           </div>
         </section>
       )}
+
+      {/* Shop location (shows once an address or map pin is set in Admin → Settings) */}
+      <div className="container-x pb-10 md:pb-16" data-reveal><ShopLocation s={s} compact /></div>
 
       {/* FAQ + areas */}
       <section className="container-x grid gap-10 md:grid-cols-[1.4fr_1fr]">
