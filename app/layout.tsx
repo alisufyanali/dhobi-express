@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { SITE } from "@/lib/site";
+import { SPLASH_SCRIPT } from "@/components/Splash";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
@@ -15,7 +16,10 @@ export const viewport: Viewport = { themeColor: "#ffffff", width: "device-width"
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: SPLASH_SCRIPT }} />
+      </head>
       <body>{children}</body>
     </html>
   );

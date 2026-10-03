@@ -93,19 +93,19 @@ export default async function WhyChooseUs() {
       <section className="container-x pt-10 md:pt-16">
         <h2 className="h-section">How we compare</h2>
         <div className="-mx-4 mt-5 overflow-x-auto px-4 md:mx-0 md:px-0">
-          <table className="w-full min-w-[560px] overflow-hidden rounded-2xl bg-white text-sm ring-1 ring-slate-200">
+          <table className="w-full min-w-[520px] overflow-hidden rounded-2xl bg-white text-sm ring-1 ring-slate-200">
             <thead>
               <tr className="bg-brand-50 text-left text-xs font-semibold uppercase tracking-wide text-brand-700">
-                <th className="p-3" /><th className="p-3">At home</th><th className="p-3">Typical dhobi</th><th className="bg-brand-600 p-3 text-white">Dhobi Express</th>
+                <th className="p-3" /><th className="bg-brand-600 p-3 text-white">Dhobi Express</th><th className="p-3">Typical dhobi</th><th className="p-3">At home</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               {ROWS.map(([label, home, dhobi, us]) => (
                 <tr key={label}>
                   <td className="p-3 font-medium text-brand-900">{label}</td>
-                  <td className="p-3 text-slate-600">{home}</td>
-                  <td className="p-3 text-slate-600">{dhobi}</td>
                   <td className="bg-brand-50 p-3 font-semibold text-brand-700">{us}</td>
+                  <td className="p-3 text-slate-600">{dhobi}</td>
+                  <td className="p-3 text-slate-600">{home}</td>
                 </tr>
               ))}
             </tbody>

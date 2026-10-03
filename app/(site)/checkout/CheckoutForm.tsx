@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useCart } from "@/components/CartProvider";
 import { PhoneInput } from "@/components/PhoneInput";
+import { Sk } from "@/components/Skeleton";
 import { DeliveryProgress } from "@/components/DeliveryProgress";
 import { calcDelivery, isSunday, type DeliverySettings } from "@/lib/delivery";
 import { orderSchema } from "@/lib/validators";
@@ -48,7 +49,15 @@ export function CheckoutForm({ demo, areas, slots, today, settings }: Props) {
   const discount = coupon?.discount ?? 0;
   const total = subtotal - discount + delivery.fee;
 
-  if (!ready) return <div className="container-x py-16" />;
+  if (!ready) {
+    return (
+      <div className="container-x space-y-3 pt-4 md:py-12">
+        {[0, 1, 2].map((i) => (
+          <div key={i} className="card space-y-3 p-4"><Sk className="h-5 w-32" /><Sk className="h-12 w-full rounded-2xl" /><Sk className="h-12 w-full rounded-2xl" /></div>
+        ))}
+      </div>
+    );
+  }
   if (!items.length) {
     return (
       <div className="container-x py-20 text-center">

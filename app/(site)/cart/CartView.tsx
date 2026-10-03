@@ -4,11 +4,19 @@ import { useCart } from "@/components/CartProvider";
 import { Stepper } from "@/components/Stepper";
 import { IconCart, IconTag, IconTruck } from "@/components/Icons";
 import { rs, UNIT_LABEL } from "@/lib/site";
+import { Sk, SkRow } from "@/components/Skeleton";
 
 /** Laundo-style order summary: item table, promo hint, payment details, Continue. */
 export function CartView({ threshold, fee }: { threshold: number; fee: number }) {
   const { items, subtotal, count, ready } = useCart();
-  if (!ready) return <div className="container-x py-16" />;
+  if (!ready) {
+    return (
+      <div className="container-x pt-4 md:mx-auto md:max-w-3xl md:py-10">
+        <div className="overflow-hidden rounded-2xl bg-white ring-1 ring-slate-200"><div className="divide-y divide-slate-100">{[0, 1, 2].map((i) => <SkRow key={i} />)}</div></div>
+        <Sk className="mt-3 h-14 w-full rounded-2xl" /><Sk className="mt-3 h-36 w-full rounded-2xl" />
+      </div>
+    );
+  }
 
   if (!items.length) {
     return (

@@ -58,3 +58,13 @@ details[open] > summary .faq-plus { transform: rotate(45deg); }
 .prose-de a { color: var(--color-brand-600); font-weight: 600; }
 .prose-de strong { color: var(--color-brand-900); }
 @media (min-width: 48rem) { .prose-de { font-size: 1.0625rem; } .prose-de h2 { font-size: 1.4rem; } }
+
+/* Splash screen (components/Splash.tsx) — fades out by itself after ~1s */
+#splash { animation: splash-out .35s ease 1s forwards; }
+.no-splash #splash { display: none; }
+.splash-pop { animation: splash-pop .45s ease-out both; }
+.splash-dot { animation: splash-dot .9s ease-in-out infinite; }
+@keyframes splash-out { to { opacity: 0; visibility: hidden; } }
+@keyframes splash-pop { from { opacity: 0; transform: scale(.85); } to { opacity: 1; transform: scale(1); } }
+@keyframes splash-dot { 0%, 100% { opacity: .35; transform: translateY(0); } 50% { opacity: 1; transform: translateY(-4px); } }
+@media (prefers-reduced-motion: reduce) { #splash { animation-duration: .01s; animation-delay: .4s; } .splash-pop, .splash-dot { animation: none; } }
