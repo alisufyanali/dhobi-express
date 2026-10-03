@@ -15,12 +15,14 @@ import { InstallApp } from "@/components/InstallApp";
 import { ActiveOrder } from "@/components/ActiveOrder";
 import { Packages } from "@/components/Packages";
 import { Stepper } from "@/components/Stepper";
+import { AutoRail } from "@/components/AutoRail";
+import { GarmentIcon, TypeArt } from "@/components/GarmentIcon";
 import {
   IconArrow, IconBox, IconCheck, IconClock, IconDrop, IconIron, IconPin, IconShield, IconStar, IconTag, IconTruck, IconWhatsApp,
 } from "@/components/Icons";
 import { AREA_PAGES } from "@/lib/areas";
 import { B2B_IMAGES, IMAGES, imageFor } from "@/lib/images";
-import { rs, SITE, UNIT_LABEL, waLink } from "@/lib/site";
+import { itemLabel, rs, SEGMENT_LABEL, SITE, UNIT_LABEL, waLink } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
@@ -58,6 +60,29 @@ export default async function Home() {
       primary: { label: "Get a quote", href: "/business#inquiry" }, secondary: { label: "Learn more", href: "/business" },
     },
   ];
+
+  const offers = [
+    { k: "New customer", t: "10% off · WELCOME10", cta: "Order now", href: "/services", bg: "bg-amber-400", fg: "text-brand-900", sub: "text-brand-900/70" },
+    { k: "Every day", t: `Free delivery above ${rs(s.freeDeliveryThreshold)}`, cta: "Schedule pickup", href: "/services", bg: "bg-brand-500", fg: "text-white", sub: "text-white/80" },
+    { k: "Sunday special", t: "Free delivery, any size", cta: "Book Sunday", href: "/services", bg: "bg-emerald-500", fg: "text-white", sub: "text-white/80" },
+    { k: "Winter is coming", t: "Kambal & razai wash", cta: "See rates", href: "/services#wash-only/household", bg: "bg-brand-900", fg: "text-white", sub: "text-brand-100" },
+  ];
+  const SERVICE_BLURB: Record<string, string> = {
+    "wash-iron": "Washed, pressed and folded — ready to wear.",
+    "iron-only": "Steam pressed, crease-free, on hangers.",
+    "wash-only": "Washed, dried and folded. Bedding and razai too.",
+    "dry-clean": "Suits, sherwani and delicate fabrics.",
+    "per-kg": "Mixed everyday load, priced by weight.",
+  };
+  const PICKS: [string, string, string][] = [
+    ["Shirt", "men", "wash-iron"], ["Kameez", "women", "wash-iron"], ["Shalwar", "men", "wash-iron"],
+    ["Bedsheet (double)", "household", "wash-iron"], ["Suit (2-piece)", "men", "dry-clean"], ["Kameez", "men", "iron-only"],
+  ];
+  const popular = PICKS.flatMap(([n, seg, type]) => {
+    const c = catalog.find((x) => x.slug === type);
+    const x = c?.services.find((y) => y.name === n && y.segment === seg);
+    return c && x ? [{ id: x.id, name: x.name, label: itemLabel(x.name, x.segment, c.name, c.slug), price: x.price, unit: x.unit, type: c.name, seg: x.segment }] : [];
+  });
 
   const why = [
     { I: IconTruck, t: "Free pickup & delivery", d: `Above ${rs(s.freeDeliveryThreshold)} every day, any size on Sunday.` },
@@ -119,26 +144,72 @@ export default async function Home() {
         </ul>
       </section>
 
-      {/* Services: Laundo-style tiles */}
-      <section data-reveal className="pt-6 pb-2 md:py-14">
+      {/* Colourful offer cards */}
+      <section className="container-x pt-4 md:pt-6">
+        <ul className="no-scrollbar -mx-4 flex snap-x scroll-px-4 gap-3 overflow-x-auto px-4 pb-1 md:mx-0 md:grid md:grid-cols-4 md:gap-5 md:overflow-visible md:px-0">
+          {offers.map((o) => (
+            <li key={o.t} className="w-[62%] flex-none snap-start sm:w-[40%] md:w-auto">
+              <Link href={o.href} className={`lift relative flex h-full min-h-[118px] flex-col justify-between overflow-hidden rounded-2xl p-4 md:min-h-[150px] md:p-5 ${o.bg}`}>
+                <span aria-hidden className="absolute -bottom-6 -right-6 h-24 w-24 rounded-full bg-white/20 md:h-32 md:w-32" />
+                <span aria-hidden className="absolute -right-2 top-3 h-10 w-10 rounded-full bg-white/15" />
+                <div className="relative">
+                  <p className={`text-[11px] font-bold uppercase tracking-wider ${o.sub}`}>{o.k}</p>
+                  <p className={`mt-1 text-lg font-extrabold leading-tight md:text-2xl ${o.fg}`}>{o.t}</p>
+                </div>
+                <p className={`relative mt-3 text-xs font-semibold md:text-sm ${o.fg}`}>{o.cta} →</p>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* Our services: auto-sliding photo cards */}
+      <section data-reveal className="pt-8 pb-2 md:py-16">
         <div className="container-x flex items-end justify-between gap-4">
-          <h2 className="h-section">Services</h2>
+          <div><p className="eyebrow">What we do</p><h2 className="h-section mt-1">Our services</h2></div>
           <Link href="/services" className="text-sm font-semibold text-brand-600">See all</Link>
         </div>
-        <div className="container-x mt-3 md:mt-6">
-          <div className="no-scrollbar -mx-4 flex snap-x scroll-px-4 gap-3 overflow-x-auto px-4 pb-1 md:mx-0 md:grid md:grid-cols-6 md:gap-5 md:overflow-visible md:px-0">
+        <div className="mt-4 md:container-x md:mt-8">
+          <AutoRail label="Our services">
             {cats.map((c) => (
-              <Link key={c.id} href={`/services#${c.slug}/men`} className="lift group w-[84px] flex-none snap-start rounded-2xl bg-white p-1.5 ring-1 ring-slate-200 transition active:scale-[.97] md:w-auto md:p-2 md:hover:ring-brand-500">
-                <div className="relative aspect-square overflow-hidden rounded-xl bg-brand-50">
-                  <Image src={imageFor(c.slug)} alt={`${c.name} service in Karachi`} fill sizes="(min-width:768px) 180px, 84px" className="object-cover transition duration-300 group-hover:scale-105" />
+              <Link key={c.id} href={`/services#${c.slug}/men`} className="lift group w-[44%] flex-none snap-start overflow-hidden rounded-2xl bg-white ring-1 ring-slate-200 sm:w-[30%] md:w-[calc((100%-40px)/3)] lg:w-[calc((100%-50px)/3.4)] md:hover:ring-brand-500">
+                <div className="relative aspect-[4/3] bg-brand-100">
+                  <TypeArt slug={c.slug} />
+                  <Image src={imageFor(c.slug)} alt={`${c.name} service in Karachi`} fill sizes="(min-width:768px) 300px, 45vw" className="object-cover transition duration-500 group-hover:scale-105" />
+                  <span className="absolute left-2 top-2 rounded-full bg-white px-2 py-0.5 text-[10px] font-bold text-brand-700 md:left-3 md:top-3 md:text-xs">From {rs(Math.min(...c.services.map((x) => x.price)))}</span>
                 </div>
-                <p className="mt-1.5 rounded-lg bg-brand-500 px-1 py-1 text-center text-[10px] font-semibold leading-tight text-white md:py-1.5 md:text-sm">{roman && c.nameUr ? c.nameUr : c.name}</p>
-                <p className="mt-1 hidden text-center text-xs text-slate-500 md:block">From {rs(Math.min(...c.services.map((x) => x.price)))}</p>
+                <div className="p-3 md:p-4">
+                  <h3 className="text-sm font-bold text-brand-900 md:text-lg">{roman && c.nameUr ? c.nameUr : c.name}</h3>
+                  <p className="mt-0.5 line-clamp-2 text-[11px] leading-snug text-slate-500 md:text-sm">{SERVICE_BLURB[c.slug] ?? "Picked up, cleaned and delivered."}</p>
+                  <p className="mt-2 hidden text-sm font-semibold text-brand-600 md:block">View rates →</p>
+                </div>
               </Link>
             ))}
-          </div>
+          </AutoRail>
         </div>
       </section>
+
+      {/* Popular items: quick add */}
+      {popular.length > 0 && (
+        <section data-reveal className="container-x pt-6 md:pt-0 md:pb-16">
+          <div className="flex items-end justify-between gap-4">
+            <h2 className="h-section">Popular picks</h2>
+            <Link href="/services" className="text-sm font-semibold text-brand-600">All items</Link>
+          </div>
+          <ul className="mt-4 grid gap-2.5 md:mt-6 md:grid-cols-2 md:gap-4 lg:grid-cols-3">
+            {popular.map((p) => (
+              <li key={p.id} className="flex items-center gap-3 rounded-2xl bg-white p-2.5 ring-1 ring-slate-200 md:p-3">
+                <GarmentIcon name={p.name} className="h-12 w-12 md:h-14 md:w-14" />
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-semibold text-brand-900">{p.name}{p.seg && p.seg !== "household" && <span className="font-normal text-slate-500"> · {SEGMENT_LABEL[p.seg]}</span>}</p>
+                  <p className="text-xs text-slate-500">{p.type} · <b className="text-brand-700">{rs(p.price)}</b></p>
+                </div>
+                <Stepper item={{ serviceId: p.id, name: p.label, price: p.price, unit: p.unit }} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       <ActiveOrder />
 
@@ -155,7 +226,8 @@ export default async function Home() {
               <p className="mt-2 text-slate-600">Beat the November rush. Deep wash, fully dried and packed — ready the day the cold arrives.</p>
               <ul className="mt-5 space-y-3">
                 {winterItems.map((w) => (
-                  <li key={w.id} className="flex items-center gap-3 rounded-xl bg-white p-3 ring-1 ring-brand-100">
+                  <li key={w.id} className="flex items-center gap-3 rounded-xl bg-white p-2.5 ring-1 ring-brand-100">
+                    <GarmentIcon name={w.name} />
                     <div className="min-w-0 flex-1">
                       <p className="text-sm font-semibold text-brand-900">{roman && w.nameUr ? w.nameUr : w.name}</p>
                       <p className="text-xs text-slate-500">{rs(w.price)} {UNIT_LABEL[w.unit]}</p>
@@ -205,34 +277,46 @@ export default async function Home() {
       </section>
 
       {/* How it works */}
-      <section data-reveal className="container-x py-10 md:py-20">
-        <div className="flex items-end justify-between gap-4">
-          <div>
-            <p className="eyebrow">{t.howItWorks}</p>
-            <h2 className="h-section mt-1">Four simple steps</h2>
-            <p className="mt-1 max-w-md text-sm text-slate-600 md:text-base">From your door, through our machines, and back — usually within 48 hours.</p>
+      <section data-reveal className="bg-brand-600 text-white">
+        <div className="container-x py-10 md:py-16">
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-wider text-brand-100">{t.howItWorks}</p>
+              <h2 className="mt-1 text-2xl font-bold md:text-4xl">Laundry in four easy steps</h2>
+              <p className="mt-1 max-w-md text-sm text-white/80 md:text-base">From your door, through our machines, and back — usually within 48 hours.</p>
+            </div>
+            <WashingMachine id="how" className="hidden h-36 w-28 flex-none md:block" />
           </div>
-          <WashingMachine id="how" className="h-28 w-24 flex-none md:h-44 md:w-36" />
+          <ol className="mt-8 grid grid-cols-4 gap-1 md:mt-10 md:gap-4">
+            {t.steps.map((st, i) => {
+              const Icon = stepIcons[i];
+              return (
+                <li key={st.t} className="relative flex flex-col items-center text-center">
+                  {i < 3 && (
+                    <svg aria-hidden viewBox="0 0 40 12" className="absolute left-[calc(50%+30px)] top-[22px] w-[calc(100%-60px)] text-white/60 md:left-[calc(50%+46px)] md:top-[34px] md:w-[calc(100%-92px)]" preserveAspectRatio="none" fill="none" stroke="currentColor" strokeWidth="1.5">
+                      <path d="M0 6h36" strokeDasharray="3 3" /><path d="m33 2 4 4-4 4" />
+                    </svg>
+                  )}
+                  <span className="relative grid h-12 w-12 place-items-center rounded-full bg-white text-brand-600 md:h-[72px] md:w-[72px]">
+                    <Icon className="h-6 w-6 md:h-8 md:w-8" />
+                    <span className="absolute -right-1 -top-1 grid h-5 w-5 place-items-center rounded-full bg-amber-400 text-[11px] font-bold text-brand-900 md:h-6 md:w-6 md:text-xs">{i + 1}</span>
+                  </span>
+                  <h3 className="mt-3 text-xs font-semibold leading-tight md:text-lg">{st.t}</h3>
+                  <p className="mt-1 hidden max-w-[220px] text-sm leading-relaxed text-white/80 md:block">{st.d}</p>
+                </li>
+              );
+            })}
+          </ol>
+          <div className="mt-8 flex justify-center gap-3">
+            <Link href="/services" className="btn bg-white text-brand-700 hover:bg-brand-50">Book a pickup</Link>
+            <a href={wa} target="_blank" rel="noopener" className="btn border border-white/60 text-white hover:bg-white/10"><IconWhatsApp className="h-5 w-5" />WhatsApp</a>
+          </div>
         </div>
-        <ol className="no-scrollbar -mx-4 mt-4 flex snap-x scroll-px-4 gap-3 overflow-x-auto px-4 pb-1 md:mx-0 md:mt-8 md:grid md:grid-cols-4 md:gap-6 md:overflow-visible md:px-0">
-          {t.steps.map((st, i) => {
-            const Icon = stepIcons[i];
-            return (
-              <li key={st.t} className="w-[46%] flex-none snap-start rounded-2xl bg-brand-50 p-4 ring-1 ring-brand-100 md:w-auto md:bg-transparent md:p-0 md:ring-0">
-                <span className="relative grid h-12 w-12 flex-none place-items-center rounded-full bg-white text-brand-700 ring-1 ring-brand-100 md:bg-brand-100 md:ring-0">
-                  <Icon className="h-5 w-5" />
-                  <span className="absolute -right-1 -top-1 grid h-5 w-5 place-items-center rounded-full bg-brand-600 text-[11px] font-bold text-white">{i + 1}</span>
-                </span>
-                <div className="mt-3"><h3 className="font-semibold text-brand-900">{st.t}</h3><p className="mt-1 text-xs leading-relaxed text-slate-600 md:text-sm">{st.d}</p></div>
-              </li>
-            );
-          })}
-        </ol>
       </section>
 
       {/* Contracts */}
       <section data-reveal className="md:bg-white">
-        <div className="container-x pb-4">
+        <div className="container-x pb-4 pt-10 md:pt-20">
           <div className="md:flex md:items-end md:justify-between md:gap-10">
             <div className="max-w-2xl">
               <p className="eyebrow">For institutions</p>

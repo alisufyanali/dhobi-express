@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { Cat, Svc } from "@/lib/data";
 import { Stepper } from "@/components/Stepper";
 import { BillSummary } from "@/components/BillSummary";
+import { GarmentIcon, TypeArt } from "@/components/GarmentIcon";
 import { imageFor } from "@/lib/images";
 import { itemLabel, rs, SEGMENTS, SEGMENT_LABEL, UNIT_LABEL } from "@/lib/site";
 
@@ -69,6 +70,7 @@ export function ServiceBrowser({ cats, roman, autoFocus, threshold, fee }: { cat
               <button key={c.slug} data-slug={c.slug} onClick={() => go(c.slug)} aria-pressed={active}
                 className={`w-[84px] flex-none snap-start rounded-2xl p-1.5 text-left transition md:w-auto ${active ? "bg-brand-100 ring-2 ring-brand-500" : "bg-white ring-1 ring-slate-200"}`}>
                 <div className="relative aspect-square overflow-hidden rounded-xl bg-brand-50">
+                  <TypeArt slug={c.slug} />
                   <Image src={imageFor(c.slug)} alt="" fill sizes="110px" className="object-cover" />
                 </div>
                 <p className={`mt-1.5 rounded-lg px-1 py-1 text-center text-[10px] font-semibold leading-tight text-white md:text-xs ${active ? "bg-brand-700" : "bg-brand-500"}`}>{name(c)}</p>
@@ -101,21 +103,17 @@ export function ServiceBrowser({ cats, roman, autoFocus, threshold, fee }: { cat
                 <h3 className="font-semibold text-brand-900">{g.title}</h3>
                 <span className="text-xs text-slate-500">{g.items.length} items</span>
               </div>
-              <div className="grid grid-cols-[1fr_auto_auto] gap-x-3 bg-brand-50 px-4 py-2 text-[11px] font-semibold uppercase tracking-wide text-brand-700">
-                <span>Item</span><span className="w-16 text-right">Price</span><span className="w-[100px]" />
-              </div>
               <ul className="divide-y divide-slate-100">
                 {g.items.map((s) => (
-                  <li key={s.id} className="grid grid-cols-[1fr_auto_auto] items-center gap-x-3 px-4 py-3">
-                    <div className="min-w-0">
-                      <p className="text-sm font-medium leading-snug text-brand-900">{name(s)}</p>
+                  <li key={s.id} className="flex items-center gap-3 px-3 py-2.5 md:px-4">
+                    <GarmentIcon name={g.type.slug === "packages" ? "package" : s.name} />
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-semibold leading-snug text-brand-900">{name(s)}</p>
                       {term && s.segment && <p className="text-[11px] text-slate-500">{SEGMENT_LABEL[s.segment]}</p>}
                       {s.description && <p className="mt-0.5 line-clamp-2 text-xs text-slate-500">{s.description}</p>}
+                      <p className="mt-0.5 text-sm font-bold text-brand-700">{rs(s.price)} <span className="text-[11px] font-normal text-slate-500">{g.type.slug === "packages" ? "package" : UNIT_LABEL[s.unit]}</span></p>
                     </div>
-                    <p className="w-16 text-right text-sm font-semibold text-brand-900">
-                      {rs(s.price)}<span className="block text-[10px] font-normal text-slate-500">{g.type.slug === "packages" ? "package" : UNIT_LABEL[s.unit]}</span>
-                    </p>
-                    <div className="flex w-[100px] justify-end">
+                    <div className="flex-none">
                       <Stepper item={{ serviceId: s.id, name: itemLabel(s.name, s.segment, g.type.name, g.type.slug), price: s.price, unit: s.unit }} />
                     </div>
                   </li>

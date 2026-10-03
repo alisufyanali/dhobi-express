@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useCart } from "@/components/CartProvider";
 import { Stepper } from "@/components/Stepper";
+import { GarmentIcon } from "@/components/GarmentIcon";
 import { IconCart, IconTag, IconTruck } from "@/components/Icons";
 import { rs, UNIT_LABEL } from "@/lib/site";
 import { Sk, SkRow } from "@/components/Skeleton";
@@ -38,12 +39,11 @@ export function CartView({ threshold, fee }: { threshold: number; fee: number })
       <h1 className="hidden text-3xl font-bold text-brand-900 md:block">Your order</h1>
 
       <section className="overflow-hidden rounded-2xl bg-white ring-1 ring-slate-200 md:mt-6">
-        <div className="grid grid-cols-[1fr_auto_auto] gap-x-3 bg-brand-50 px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wide text-brand-700">
-          <span>Item</span><span className="w-16 text-right">Price</span><span className="w-[100px]" />
-        </div>
+        <div className="bg-brand-50 px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wide text-brand-700">{items.length} item{items.length === 1 ? "" : "s"} in your order</div>
         <ul className="divide-y divide-slate-100">
           {items.map((i) => (
-            <li key={i.serviceId} className="grid grid-cols-[1fr_auto_auto] items-center gap-x-3 px-4 py-3">
+            <li key={i.serviceId} className="grid grid-cols-[auto_1fr_auto_auto] items-center gap-x-3 px-3 py-2.5 md:px-4">
+              <GarmentIcon name={i.name.split(" — ")[0]} className="h-10 w-10" />
               <div className="min-w-0">
                 <p className="text-sm font-medium leading-snug text-brand-900">{i.name}</p>
                 <p className="text-xs text-slate-500">{rs(i.price)} {UNIT_LABEL[i.unit]}</p>

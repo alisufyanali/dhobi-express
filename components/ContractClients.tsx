@@ -4,58 +4,58 @@ import { canOptimize } from "@/lib/images";
 
 type Logo = { id: string; name: string; imageUrl: string; sector: string | null };
 
-const SECTORS = [
-  { t: "Hospitals", d: "Bed linen, gowns" },
-  { t: "Clinics", d: "Sheets, lab coats" },
-  { t: "Factories", d: "Staff uniforms" },
-  { t: "Offices", d: "Uniforms, towels" },
-  { t: "Banquet halls", d: "Tablecloths, chair covers" },
-  { t: "Masjids", d: "Chadar, ghilaf, curtains" },
-];
+/** Sector groups shown in this order; anything else falls into "Other clients". */
+const ORDER = ["Hospital", "Clinic", "Factory", "Corporate office", "Hotel", "Banquet hall", "Lawn", "Masjid", "Madrasa", "School"];
+const PLURAL: Record<string, string> = {
+  Hospital: "Hospitals", Clinic: "Clinics", Factory: "Factories", "Corporate office": "Corporate offices", Hotel: "Hotels",
+  "Banquet hall": "Banquet halls", Lawn: "Lawns", Masjid: "Masjids", Madrasa: "Madrasas", School: "Schools",
+};
 
-/**
- * "Meet our contract clients". With logos added in admin it shows a scrolling strip of
- * logo + name + sector. With none yet, it shows the sectors served instead of empty boxes.
- */
+
+/** "Our clients": logos grouped under sector headings, circular logo with the name underneath. */
 export function ContractClients({ logos }: { logos: Logo[] }) {
-  const loop = [...logos, ...logos];
+  if (!logos.length) return null; // nothing to show until real logos are added in Admin → Client logos
+  const groups = new Map<string, Logo[]>();
+  for (const l of logos) {
+    const k = l.sector && ORDER.includes(l.sector) ? l.sector : "Other";
+    groups.set(k, [...(groups.get(k) ?? []), l]);
+  }
+  const keys = [...ORDER, "Other"].filter((k) => groups.has(k));
+
   return (
     <section className="py-10 md:py-20" data-reveal>
-      <div className="container-x flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-        <div>
-          <p className="eyebrow">Our contract clients</p>
-          <h2 className="h-section mt-1">{logos.length ? "Meet the organisations we work for" : "Who we work for"}</h2>
-          <p className="mt-2 max-w-xl text-slate-600">Hospitals, factories, banquet halls and masjids across Karachi send us their laundry every week.</p>
+      <div className="container-x">
+        <div className="text-center">
+          <p className="eyebrow">Trusted across Karachi</p>
+          <h2 className="h-section mt-1">Our clients</h2>
+          <p className="mx-auto mt-2 max-w-xl text-sm text-slate-600 md:text-base">Hospitals, companies, banquet halls and masjids send us their laundry every week on a monthly contract.</p>
         </div>
-        <Link href="/business#inquiry" className="text-sm font-semibold text-brand-600">Become a contract client →</Link>
-      </div>
 
-      {logos.length ? (
-        <div className="group mt-6 overflow-hidden md:mt-8">
-          <ul className="animate-marquee flex w-max gap-4 pl-4 group-hover:[animation-play-state:paused]">
-            {loop.map((l, n) => (
-              <li key={`${l.id}-${n}`} aria-hidden={n >= logos.length} className="card flex w-56 flex-none items-center gap-3 p-4">
-                <div className="relative h-14 w-14 flex-none overflow-hidden rounded-xl bg-white ring-1 ring-slate-200">
-                  <Image unoptimized={!canOptimize(l.imageUrl)} src={l.imageUrl} alt={l.name} fill sizes="56px" className="object-contain p-1.5" />
+        <div className="mt-8 space-y-8 md:mt-10 md:space-y-10">
+            {keys.map((k) => (
+              <div key={k}>
+                <div className="flex items-center gap-3">
+                  <h3 className="text-sm font-bold uppercase tracking-wider text-brand-700 md:text-base">{k === "Other" ? "Other clients" : PLURAL[k]}</h3>
+                  <span className="h-px flex-1 bg-slate-200" />
                 </div>
-                <div className="min-w-0">
-                  <p className="truncate text-sm font-semibold text-brand-900">{l.name}</p>
-                  {l.sector && <p className="text-xs text-slate-500">{l.sector}</p>}
-                </div>
-              </li>
+                <ul className="mt-4 grid grid-cols-3 gap-x-3 gap-y-5 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8">
+                  {groups.get(k)!.map((l) => (
+                    <li key={l.id} className="flex flex-col items-center text-center">
+                      <div className="lift relative h-16 w-16 overflow-hidden rounded-full bg-white ring-1 ring-slate-200 md:h-20 md:w-20">
+                        <Image unoptimized={!canOptimize(l.imageUrl)} src={l.imageUrl} alt={l.name} fill sizes="80px" className="object-contain p-2.5" />
+                      </div>
+                      <p className="mt-2 line-clamp-2 text-xs font-medium leading-snug text-slate-700 md:text-sm">{l.name}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             ))}
-          </ul>
+          </div>
+
+        <div className="mt-8 text-center">
+          <Link href="/business#inquiry" className="btn-primary">Become a contract client</Link>
         </div>
-      ) : (
-        <ul className="container-x mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 md:mt-8 lg:grid-cols-6">
-          {SECTORS.map((x) => (
-            <li key={x.t} className="rounded-2xl border border-slate-200 bg-white p-4 text-center">
-              <p className="font-semibold text-brand-900">{x.t}</p>
-              <p className="mt-0.5 text-xs text-slate-500">{x.d}</p>
-            </li>
-          ))}
-        </ul>
-      )}
+      </div>
     </section>
   );
 }

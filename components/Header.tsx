@@ -103,19 +103,19 @@ export function Header({ t, lang, phone, whatsapp, threshold }: { t: Dict; lang:
         {/* Desktop */}
         <div className="container-x hidden h-16 items-center gap-3 lg:flex">
           <Logo />
-          <nav className="ml-8 flex items-center gap-1">
+          <nav className="ml-6 flex items-center gap-0.5">
             {links.map((l) => (
               <Link key={l.href} href={l.href}
-                className={`rounded-lg px-3.5 py-2 text-sm font-medium transition ${path === l.href ? "bg-brand-50 text-brand-700" : "text-slate-600 hover:text-brand-900"}`}>
+                className={`whitespace-nowrap rounded-lg px-3 py-2 text-sm font-medium transition ${path === l.href ? "bg-brand-50 text-brand-700" : "text-slate-600 hover:text-brand-900"}`}>
                 {l.label}
               </Link>
             ))}
           </nav>
           <div className="ml-auto flex items-center gap-2">
-            <button onClick={toggleLang} className="rounded-lg border border-slate-200 px-2.5 py-1.5 text-xs font-medium text-slate-600 hover:border-brand-500">
+            <button onClick={toggleLang} className="whitespace-nowrap rounded-lg border border-slate-200 px-2.5 py-1.5 text-xs font-medium text-slate-600 hover:border-brand-500">
               {lang === "en" ? "Roman Urdu" : "English"}
             </button>
-            <Link href="/login" className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-brand-50"><IconUser className="h-5 w-5" />Sign in</Link>
+            <Link href="/login" className="flex items-center gap-1.5 whitespace-nowrap rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-brand-50"><IconUser className="h-5 w-5" />Sign in</Link>
             <Link href="/cart" className="relative rounded-lg p-2 text-brand-900 hover:bg-brand-50" aria-label={`Cart, ${count} items`}>
               <IconCart className="h-6 w-6" />
               {count > 0 && <span className="absolute -right-0.5 -top-0.5 grid h-5 min-w-5 place-items-center rounded-full bg-brand-600 px-1 text-[11px] font-bold text-white">{count}</span>}
