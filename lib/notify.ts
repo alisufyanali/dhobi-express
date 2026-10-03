@@ -50,3 +50,15 @@ export function notifyNewInquiry(q: { name: string; organization: string; type: 
      <p><a href="${SITE.url}/admin/inquiries">Open inquiries</a></p>`,
   );
 }
+
+export function notifyNewComplaint(c: { code: string; name: string; phone: string; orderCode?: string | null; type: string; message: string; contactPref: string }) {
+  const wa = waLink(c.phone.replace(/^0/, "92"), `Assalam o Alaikum ${c.name}, Dhobi Express here about your complaint ${c.code}.`);
+  return send(
+    `Complaint ${c.code} — ${c.type}`,
+    `<h2>New complaint ${esc(c.code)}</h2>
+     <p><b>${esc(c.type)}</b>${c.orderCode ? ` · order ${esc(c.orderCode)}` : ""}</p>
+     <p>${esc(c.name)} · ${esc(c.phone)} · prefers ${c.contactPref === "CALL" ? "a call" : "WhatsApp"}</p>
+     <p>${esc(c.message)}</p>
+     <p><a href="${SITE.url}/admin/complaints">Open complaints</a> · <a href="${wa}">WhatsApp customer</a></p>`,
+  );
+}

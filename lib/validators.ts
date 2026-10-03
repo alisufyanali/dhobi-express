@@ -71,3 +71,17 @@ export const settingsSchema = z.object({
   email: z.string().trim().email(),
   address: z.string().trim().min(3),
 });
+
+export const COMPLAINT_TYPES = [
+  "Damaged item", "Missing item", "Late pickup or delivery", "Cleaning not satisfactory",
+  "Wrong bill", "Rider behaviour", "Something else",
+] as const;
+
+export const complaintSchema = z.object({
+  name: z.string().trim().min(2, "Enter your name").max(80),
+  phone: phoneSchema,
+  orderCode: z.string().trim().toUpperCase().max(20).optional().or(z.literal("")),
+  type: z.enum(COMPLAINT_TYPES, { errorMap: () => ({ message: "Choose what went wrong" }) }),
+  message: z.string().trim().min(10, "Tell us a little more (at least 10 characters)").max(1500),
+  contactPref: z.enum(["WHATSAPP", "CALL"]),
+});

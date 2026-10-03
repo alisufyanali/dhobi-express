@@ -30,6 +30,11 @@ enum PaymentMethod {
   BANK_TRANSFER
 }
 
+enum ComplaintStatus {
+  OPEN
+  RESOLVED
+}
+
 enum CouponType {
   PERCENT
   FLAT
@@ -231,4 +236,21 @@ model Post {
   published   Boolean   @default(true)
   publishedAt DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+}
+
+model Complaint {
+  id          String          @id @default(cuid())
+  code        String          @unique // ticket number shown to the customer, e.g. CMP-48213
+  name        String
+  phone       String
+  orderCode   String?
+  type        String
+  message     String
+  contactPref String          @default("WHATSAPP")
+  status      ComplaintStatus @default(OPEN)
+  adminNote   String?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@index([status])
 }

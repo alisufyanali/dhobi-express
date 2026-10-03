@@ -39,6 +39,11 @@ function answer(q: string, i: Info): Msg {
   const t = q.toLowerCase();
   const has = (...w: string[]) => w.some((x) => t.includes(x));
 
+  // Complaints first: "my razai got damaged" should reach support, not the price list
+  if (has("complain", "shikayat", "shikayet", "damage", "kharab", "phat", "refund", "paisay wapas", "lost", "gum ho", "missing", "problem")) {
+    return { from: "bot", text: "Sorry to hear that. Register a complaint and you'll get a ticket number — we reply within 24 hours. Refunds and compensation are explained in our refund policy.", link: { href: "/complaints", label: "Register complaint" }, wa: "Assalam o Alaikum, I have a complaint about my order." };
+  }
+
   // A specific item always wins: "razai kitne ki" → the quilt price
   const items = findItems(t, i.prices);
   if (items.length) {

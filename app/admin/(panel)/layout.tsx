@@ -13,6 +13,7 @@ const NAV = [
   ["/admin/reports", "Reports"],
   ["/admin/services", "Services"],
   ["/admin/categories", "Categories"],
+  ["/admin/complaints", "Complaints"],
   ["/admin/inquiries", "Inquiries"],
   ["/admin/clients", "Client logos"],
   ["/admin/coupons", "Coupons"],
