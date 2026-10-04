@@ -25,7 +25,7 @@ export function CartView({ threshold, fee }: { threshold: number; fee: number })
         <span className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-brand-50 text-brand-600"><IconCart className="h-8 w-8" /></span>
         <h1 className="mt-4 text-xl font-bold text-brand-900">Your cart is empty</h1>
         <p className="mt-1 text-slate-600">Add a few items to book a pickup.</p>
-        <Link href="/services" className="btn-primary mt-6">Book now</Link>
+        <Link href="/bill-calculator" className="btn-primary mt-6">Book now</Link>
       </div>
     );
   }
@@ -53,7 +53,7 @@ export function CartView({ threshold, fee }: { threshold: number; fee: number })
             </li>
           ))}
         </ul>
-        <Link href="/services" className="flex items-center gap-2 border-t border-slate-100 px-4 py-3 text-sm font-semibold text-brand-600">
+        <Link href="/bill-calculator" className="flex items-center gap-2 border-t border-slate-100 px-4 py-3 text-sm font-semibold text-brand-600">
           <span className="grid h-6 w-6 place-items-center rounded-full bg-brand-100 text-base leading-none">+</span>Add more items
         </Link>
       </section>

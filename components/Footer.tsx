@@ -8,13 +8,13 @@ import { IconWhatsApp } from "./Icons";
 type S = { phone: string; email: string; address: string; whatsappNumber: string; mapsUrl: string; latitude: number | null; longitude: number | null; openingHours: string };
 
 const GROUPS = [
-  { title: "Services", links: [["All services & rates", "/services"], ["Packages", "/services#packages"], ["Business contracts", "/business"], ["Track your order", "/track"]] },
+  { title: "Services", links: [["Our services", "/services"], ["Pricing & packages", "/pricing"], ["Bill calculator", "/bill-calculator"], ["Business contracts", "/business"], ["Track your order", "/track"]] },
   { title: "Company", links: [["About us", "/about"], ["Why choose us", "/why-choose-us"], ["Blog", "/blog"], ["Contact", "/contact"]] },
   { title: "Help", links: [["Complaints", "/complaints"], ["Refund policy", "/refund-policy"], ["Privacy policy", "/privacy-policy"], ["Terms", "/terms"]] },
   { title: "Areas", links: AREA_PAGES.map((a) => [a.name, `/${a.path}`]) },
 ];
 
-const MAIN_LINKS: [string, string][] = [["Services", "/services"], ["Packages", "/services#packages"], ["Business", "/business"], ["Track order", "/track"], ["About", "/about"], ["Why us", "/why-choose-us"], ["Blog", "/blog"], ["Contact", "/contact"]];
+const MAIN_LINKS: [string, string][] = [["Services", "/services"], ["Pricing", "/pricing"], ["Bill calculator", "/bill-calculator"], ["Business", "/business"], ["Track order", "/track"], ["About", "/about"], ["Why us", "/why-choose-us"], ["Blog", "/blog"], ["Contact", "/contact"]];
 const HELP_LINKS: [string, string][] = [["Complaints", "/complaints"], ["Refund policy", "/refund-policy"], ["Privacy", "/privacy-policy"], ["Terms", "/terms"]];
 
 const iconBtn = "grid h-10 w-10 place-items-center rounded-full bg-white/10 text-white hover:bg-white/20";

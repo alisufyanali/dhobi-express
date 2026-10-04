@@ -53,17 +53,17 @@ function answer(q: string, i: Info): Msg {
   // A specific item always wins: "razai kitne ki" → the quilt price
   const items = findItems(t, i.prices);
   if (items.length) {
-    return { from: "bot", text: items.map((p) => `${p.name} — ${rs(p.price)} ${p.unit}`).join("\n") + "\nPickup and delivery free above " + rs(i.threshold) + ".", link: { href: "/services", label: "Book now" } };
+    return { from: "bot", text: items.map((p) => `${p.name} — ${rs(p.price)} ${p.unit}`).join("\n") + "\nPickup and delivery free above " + rs(i.threshold) + ".", link: { href: "/bill-calculator", label: "Book now" } };
   }
 
   if (has("rate", "price", "kitne", "kitna", "qeemat", "rs", "charges", "cost")) {
     const hit = i.prices.find((p) => t.includes(p.name.toLowerCase().split(" ")[0]));
-    if (hit) return { from: "bot", text: `${hit.name}: ${rs(hit.price)} ${hit.unit}.`, link: { href: "/services", label: "See all rates" } };
-    return { from: "bot", text: "Some popular rates:\n" + i.prices.slice(0, 6).map((p) => `• ${p.name} — ${rs(p.price)} ${p.unit}`).join("\n"), link: { href: "/services", label: "See all rates" } };
+    if (hit) return { from: "bot", text: `${hit.name}: ${rs(hit.price)} ${hit.unit}.`, link: { href: "/bill-calculator", label: "See all rates" } };
+    return { from: "bot", text: "Some popular rates:\n" + i.prices.slice(0, 6).map((p) => `• ${p.name} — ${rs(p.price)} ${p.unit}`).join("\n"), link: { href: "/bill-calculator", label: "See all rates" } };
   }
   if (has("razai", "quilt", "kambal", "blanket", "curtain", "parda", "parday", "bedsheet", "chadar", "sofa", "duvet")) {
     const hits = i.prices.filter((p) => /razai|quilt|blanket|kambal|curtain|bedsheet|sofa|duvet|comforter/i.test(p.name));
-    return { from: "bot", text: "Yes, we wash all of these:\n" + hits.map((p) => `• ${p.name} — ${rs(p.price)} ${p.unit}`).join("\n"), link: { href: "/services#bedding", label: "See bedding rates" } };
+    return { from: "bot", text: "Yes, we wash all of these:\n" + hits.map((p) => `• ${p.name} — ${rs(p.price)} ${p.unit}`).join("\n"), link: { href: "/bill-calculator#bedding", label: "See bedding rates" } };
   }
   if (has("free", "delivery", "pickup charge", "delivery charge")) {
     return { from: "bot", text: `Pickup and delivery are free on orders above ${rs(i.threshold)}, every day — and on Sundays for any order size. Below that it's ${rs(i.fee)}. Pickup slots: ${i.slots.join(" or ")}.` };
@@ -75,7 +75,7 @@ function answer(q: string, i: Info): Msg {
     return { from: "bot", text: "Usually 24–48 hours. Dry cleaning, quilts and bulk orders can take up to 72 hours." };
   }
   if (has("package", "bundle", "monthly", "deal", "offer", "discount")) {
-    return { from: "bot", text: "Our packages:\n" + i.packages.map((p) => `• ${p.name} — ${rs(p.price)}`).join("\n"), link: { href: "/services#packages", label: "View packages" } };
+    return { from: "bot", text: "Our packages:\n" + i.packages.map((p) => `• ${p.name} — ${rs(p.price)}`).join("\n"), link: { href: "/pricing#packages", label: "View packages" } };
   }
   if (has("hospital", "company", "factory", "uniform", "banquet", "lawn", "masjid", "contract", "business", "bulk")) {
     return { from: "bot", text: "We take monthly contracts for hospitals, companies, lawns and masjids — fixed pickup days, per-piece rates and a monthly invoice.", link: { href: "/business#inquiry", label: "Request a quote" } };
@@ -84,7 +84,7 @@ function answer(q: string, i: Info): Msg {
     return { from: "bot", text: "Cash on delivery, JazzCash, Easypaisa or bank transfer. Businesses get a monthly invoice." };
   }
   if (has("book", "order", "pickup", "bulana", "mangwana")) {
-    return { from: "bot", text: "You can book online in a minute, or send us a WhatsApp.", link: { href: "/services", label: "Book a pickup" }, wa: "I want to book a laundry pickup." };
+    return { from: "bot", text: "You can book online in a minute, or send us a WhatsApp.", link: { href: "/bill-calculator", label: "Book a pickup" }, wa: "I want to book a laundry pickup." };
   }
   if (has("track", "status", "mera order", "my order")) {
     return { from: "bot", text: "Track it with your order ID and phone number.", link: { href: "/track", label: "Track order" } };
@@ -194,7 +194,7 @@ export function ChatBot({ info }: { info: Info }) {
   const { count } = useCart();
   // On phones, sit above the tab bar (and the cart bar when it shows); hide in cart/checkout flows.
   // Booking screens have + buttons on the right edge, so the chat button stays out of the way there.
-  const inFlow = [...FLOW_PATHS, "/services"].some((p) => path.startsWith(p));
+  const inFlow = [...FLOW_PATHS, "/bill-calculator"].some((p) => path.startsWith(p));
   const lifted = hasCartBar(path, count);
   const btnPos = inFlow ? "hidden md:grid" : `grid ${lifted ? "bottom-40" : "bottom-24"}`;
   const panelPos = lifted ? "bottom-56" : "bottom-40";

@@ -18,7 +18,7 @@ export function InfoPage({ title, intro, updated, children, cta = true }: {
         {cta && (
           <div className="mt-10 flex flex-col gap-3 rounded-2xl bg-white p-5 ring-1 ring-slate-200 sm:flex-row sm:items-center sm:justify-between">
             <div><p className="font-semibold text-brand-900">Ready for fresh clothes?</p><p className="text-sm text-slate-600">Free pickup &amp; delivery across Karachi.</p></div>
-            <Link href="/services" className="btn-primary">Book a pickup</Link>
+            <Link href="/bill-calculator" className="btn-primary">Book a pickup</Link>
           </div>
         )}
       </div>

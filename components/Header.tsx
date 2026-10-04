@@ -22,7 +22,7 @@ function Logo() {
 
 function pageTitle(path: string, t: Dict): string {
   const exact: Record<string, string> = {
-    "/orders": "My orders", "/services": t.nav.services, "/cart": t.cart, "/checkout": t.checkout, "/track": t.nav.track,
+    "/orders": "My orders", "/services": t.nav.services, "/pricing": "Pricing", "/bill-calculator": "Bill calculator", "/cart": t.cart, "/checkout": t.checkout, "/track": t.nav.track,
     "/business": t.nav.business, "/contact": t.nav.contact, "/about": "About us", "/login": "Sign in",
     "/account": "My account", "/blog": "Blog", "/privacy-policy": "Privacy policy", "/terms": "Terms",
     "/why-choose-us": "Why choose us", "/refund-policy": "Refund policy", "/complaints": "Complaints",
@@ -52,6 +52,8 @@ export function Header({ t, lang, phone, whatsapp, threshold }: { t: Dict; lang:
   const links = [
     { href: "/", label: t.nav.home },
     { href: "/services", label: t.nav.services },
+    { href: "/pricing", label: "Pricing" },
+    { href: "/bill-calculator", label: "Bill calculator" },
     { href: "/business", label: t.nav.business },
     { href: "/orders", label: "My orders" },
     { href: "/track", label: t.nav.track },
@@ -103,24 +105,24 @@ export function Header({ t, lang, phone, whatsapp, threshold }: { t: Dict; lang:
         {/* Desktop */}
         <div className="container-x hidden h-16 items-center gap-3 lg:flex">
           <Logo />
-          <nav className="ml-6 flex items-center gap-0.5">
-            {links.map((l) => (
+          <nav className="ml-4 flex items-center gap-0.5 xl:ml-6">
+            {links.filter((l) => l.href !== "/orders" && l.href !== "/track").map((l) => (
               <Link key={l.href} href={l.href}
-                className={`whitespace-nowrap rounded-lg px-3 py-2 text-sm font-medium transition ${path === l.href ? "bg-brand-50 text-brand-700" : "text-slate-600 hover:text-brand-900"}`}>
+                className={`whitespace-nowrap rounded-lg px-2 py-2 text-sm xl:px-3 font-medium transition ${path === l.href ? "bg-brand-50 text-brand-700" : "text-slate-600 hover:text-brand-900"}`}>
                 {l.label}
               </Link>
             ))}
           </nav>
           <div className="ml-auto flex items-center gap-2">
             <button onClick={toggleLang} className="whitespace-nowrap rounded-lg border border-slate-200 px-2.5 py-1.5 text-xs font-medium text-slate-600 hover:border-brand-500">
-              {lang === "en" ? "Roman Urdu" : "English"}
+              <span className="xl:hidden">{lang === "en" ? "Urdu" : "EN"}</span><span className="hidden xl:inline">{lang === "en" ? "Roman Urdu" : "English"}</span>
             </button>
-            <Link href="/login" className="flex items-center gap-1.5 whitespace-nowrap rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-brand-50"><IconUser className="h-5 w-5" />Sign in</Link>
+            <Link href="/login" aria-label="Sign in" className="flex items-center gap-1.5 whitespace-nowrap rounded-lg p-2 text-sm font-medium text-slate-700 hover:bg-brand-50"><IconUser className="h-5 w-5" /><span className="sr-only">Sign in</span></Link>
             <Link href="/cart" className="relative rounded-lg p-2 text-brand-900 hover:bg-brand-50" aria-label={`Cart, ${count} items`}>
               <IconCart className="h-6 w-6" />
               {count > 0 && <span className="absolute -right-0.5 -top-0.5 grid h-5 min-w-5 place-items-center rounded-full bg-brand-600 px-1 text-[11px] font-bold text-white">{count}</span>}
             </Link>
-            <Link href="/services" className="btn-primary">{t.orderNow}</Link>
+            <Link href="/bill-calculator" className="btn-primary">{t.orderNow}</Link>
           </div>
         </div>
       </header>

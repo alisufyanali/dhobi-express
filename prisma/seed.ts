@@ -43,8 +43,25 @@ async function main() {
     for (const f of await prisma.faq.findMany({ where: { answer: { contains: "Rs. 1,000" } } })) {
       await prisma.faq.update({ where: { id: f.id }, data: { answer: f.answer.replace(/Rs\. 1,000/g, "Rs. 2,000") } });
     }
-    await prisma.setting.update({ where: { id: "default" }, data: { catalogVersion: 2, freeDeliveryThreshold: 2000 } });
+    // v2 creates the current package list, so the v3 package update is already done
+    await prisma.setting.update({ where: { id: "default" }, data: { catalogVersion: 3, freeDeliveryThreshold: 2000 } });
     console.log("Catalog updated to v2; free delivery threshold set to Rs. 2,000.");
+  }
+
+  // v3: full package range (monthly wash & iron, iron only, shalwar kameez bundles). Old packages are switched off, not deleted.
+  if ((await prisma.setting.findUniqueOrThrow({ where: { id: "default" } })).catalogVersion < 3) {
+    const pk = CATEGORIES.find((c) => c.slug === "packages")!;
+    const cat = await prisma.category.findUnique({ where: { slug: "packages" } });
+    if (cat) {
+      await prisma.service.updateMany({ where: { categoryId: cat.id }, data: { active: false } });
+      await prisma.service.createMany({
+        data: pk.services.map(([name, nameUr, price, unit, description, featured], si) => ({
+          name, nameUr, price, unit, description: description || null, featured: !!featured, sortOrder: si, categoryId: cat.id,
+        })),
+      });
+    }
+    await prisma.setting.update({ where: { id: "default" }, data: { catalogVersion: 3 } });
+    console.log("Packages updated to v3.");
   }
 
   if ((await prisma.review.count()) === 0) {

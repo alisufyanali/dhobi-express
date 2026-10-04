@@ -57,3 +57,13 @@ export function itemLabel(name: string, segment: string | null | undefined, type
   const who = segment && segment !== "household" ? ` (${SEGMENT_LABEL[segment] ?? segment})` : "";
   return `${name}${who} — ${typeName}`;
 }
+
+/** Package tab, from the package name. */
+export type PackageGroup = "wash-iron" | "iron-only" | "bundles";
+export const PACKAGE_GROUPS: { id: PackageGroup; label: string }[] = [
+  { id: "wash-iron", label: "Wash & Iron" }, { id: "iron-only", label: "Iron only" }, { id: "bundles", label: "Bundles" },
+];
+export function packageGroup(name: string): PackageGroup {
+  if (/^monthly/i.test(name)) return /iron only/i.test(name) ? "iron-only" : "wash-iron";
+  return "bundles";
+}

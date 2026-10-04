@@ -63,7 +63,7 @@ export function CheckoutForm({ demo, areas, slots, today, settings }: Props) {
     return (
       <div className="container-x py-20 text-center">
         <h1 className="text-2xl font-bold">Your cart is empty</h1>
-        <Link href="/services" className="btn-primary mt-6">Browse services</Link>
+        <Link href="/bill-calculator" className="btn-primary mt-6">Browse services</Link>
       </div>
     );
   }

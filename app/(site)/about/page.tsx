@@ -26,7 +26,7 @@ export default async function About() {
         <li><strong>Washed separately.</strong> Your order is never mixed with anyone else&apos;s. Hospital and business loads are always kept apart from household laundry.</li>
         <li><strong>Checked before delivery.</strong> Each piece is matched against the tag list, so nothing goes missing.</li>
         <li><strong>On time.</strong> Usually 24–48 hours. You get a delivery date at pickup.</li>
-        <li><strong>Clear prices.</strong> Every rate is on our <Link href="/services">services page</Link>.</li>
+        <li><strong>Clear prices.</strong> Every rate is on our <Link href="/bill-calculator">services page</Link>.</li>
       </ul>
 
       <h2>Who we serve</h2>

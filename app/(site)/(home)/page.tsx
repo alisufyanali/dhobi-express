@@ -13,12 +13,12 @@ import { DeliveryRoad } from "@/components/DeliveryRoad";
 import { directionsUrl, hasShopLocation } from "@/lib/location";
 import { InstallApp } from "@/components/InstallApp";
 import { ActiveOrder } from "@/components/ActiveOrder";
-import { Packages } from "@/components/Packages";
+import { PackageTabs } from "@/components/PackageTabs";
 import { Stepper } from "@/components/Stepper";
 import { AutoRail } from "@/components/AutoRail";
 import { GarmentIcon, TypeArt } from "@/components/GarmentIcon";
 import {
-  IconArrow, IconBox, IconCheck, IconClock, IconDrop, IconIron, IconPin, IconShield, IconStar, IconTag, IconTruck, IconWhatsApp,
+  IconArrow, IconBox, IconClock, IconDrop, IconIron, IconPin, IconShield, IconStar, IconTag, IconTruck, IconWhatsApp,
 } from "@/components/Icons";
 import { AREA_PAGES } from "@/lib/areas";
 import { B2B_IMAGES, IMAGES, imageFor } from "@/lib/images";
@@ -42,17 +42,17 @@ export default async function Home() {
     {
       eyebrow: "Special deal", title: "10% off your", highlight: "first order", code: "WELCOME10",
       text: "Wash, press and dry clean with free pickup and delivery across Karachi.", image: IMAGES.hero, alt: "Freshly washed and folded shirts",
-      primary: { label: "Book now", href: "/services" }, secondary: { label: t.whatsapp, href: wa, external: true },
+      primary: { label: "Book now", href: "/bill-calculator" }, secondary: { label: t.whatsapp, href: wa, external: true },
     },
     {
       eyebrow: "Winter is coming", title: "Kambal & razai", highlight: "deep wash", tone: "deep",
       text: "Fully dried, no musty smell — ready before the cold sets in.", image: IMAGES.winter, alt: "Stack of clean folded blankets",
-      primary: { label: "Book kambal wash", href: "/services#wash-only/household" },
+      primary: { label: "Book kambal wash", href: "/bill-calculator#wash-only/household" },
     },
     {
       eyebrow: "Free pickup & delivery", title: `Every day above ${rs(s.freeDeliveryThreshold)}`, highlight: "· any size on Sunday",
       text: "Pickup slots 10am–1pm and 4pm–7pm.", image: IMAGES.machines, alt: "Row of washing machines",
-      primary: { label: "Schedule pickup", href: "/services" },
+      primary: { label: "Schedule pickup", href: "/bill-calculator" },
     },
     {
       eyebrow: "For institutions", title: "Laundry contracts", highlight: "for hospitals & factories", tone: "deep",
@@ -62,10 +62,10 @@ export default async function Home() {
   ];
 
   const offers = [
-    { k: "New customer", t: "10% off · WELCOME10", cta: "Order now", href: "/services", bg: "bg-amber-400", fg: "text-brand-900", sub: "text-brand-900/70" },
-    { k: "Every day", t: `Free delivery above ${rs(s.freeDeliveryThreshold)}`, cta: "Schedule pickup", href: "/services", bg: "bg-brand-500", fg: "text-white", sub: "text-white/80" },
-    { k: "Sunday special", t: "Free delivery, any size", cta: "Book Sunday", href: "/services", bg: "bg-emerald-500", fg: "text-white", sub: "text-white/80" },
-    { k: "Winter is coming", t: "Kambal & razai wash", cta: "See rates", href: "/services#wash-only/household", bg: "bg-brand-900", fg: "text-white", sub: "text-brand-100" },
+    { k: "New customer", t: "10% off · WELCOME10", cta: "Order now", href: "/bill-calculator", bg: "bg-amber-400", fg: "text-brand-900", sub: "text-brand-900/70" },
+    { k: "Every day", t: `Free delivery above ${rs(s.freeDeliveryThreshold)}`, cta: "Schedule pickup", href: "/bill-calculator", bg: "bg-brand-500", fg: "text-white", sub: "text-white/80" },
+    { k: "Sunday special", t: "Free delivery, any size", cta: "Book Sunday", href: "/bill-calculator", bg: "bg-emerald-500", fg: "text-white", sub: "text-white/80" },
+    { k: "Winter is coming", t: "Kambal & razai wash", cta: "See rates", href: "/bill-calculator#wash-only/household", bg: "bg-brand-900", fg: "text-white", sub: "text-brand-100" },
   ];
   const SERVICE_BLURB: Record<string, string> = {
     "wash-iron": "Washed, pressed and folded — ready to wear.",
@@ -84,14 +84,6 @@ export default async function Home() {
     return c && x ? [{ id: x.id, name: x.name, label: itemLabel(x.name, x.segment, c.name, c.slug), price: x.price, unit: x.unit, type: c.name, seg: x.segment }] : [];
   });
 
-  const why = [
-    { I: IconTruck, t: "Free pickup & delivery", d: `Above ${rs(s.freeDeliveryThreshold)} every day, any size on Sunday.` },
-    { I: IconClock, t: "Ready in 24–48 hours", d: "We give you a delivery date at pickup and keep it." },
-    { I: IconTag, t: "Never mixed up", d: "Every order is tagged and washed separately." },
-    { I: IconDrop, t: "Hygienic wash", d: "Household, hospital and business loads are kept apart." },
-    { I: IconShield, t: "Clear prices", d: "Rates are published. What you see is what you pay." },
-    { I: IconCheck, t: "Pay your way", d: "Cash on delivery, JazzCash, Easypaisa or monthly invoice." },
-  ];
 
   const segments = [
     { t: "Hospitals & clinics", d: "Bed sheets, gowns and linen, washed separately.", img: B2B_IMAGES.hospital },
@@ -125,7 +117,7 @@ export default async function Home() {
       <section className="container-x pt-4 md:hidden">
         <p className="text-sm text-slate-500">Assalam o Alaikum</p>
         <p className="text-xl font-bold text-brand-900">What should we wash today?</p>
-        <Link href="/services?focus=search" className="mt-3 flex items-center gap-3 rounded-2xl bg-white px-4 py-3.5 text-sm text-slate-400 ring-1 ring-slate-200 active:bg-slate-50">
+        <Link href="/bill-calculator?focus=search" className="mt-3 flex items-center gap-3 rounded-2xl bg-white px-4 py-3.5 text-sm text-slate-400 ring-1 ring-slate-200 active:bg-slate-50">
           <svg viewBox="0 0 24 24" className="h-5 w-5 flex-none text-slate-400" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
           Search shalwar kameez, razai, suit…
         </Link>
@@ -185,6 +177,14 @@ export default async function Home() {
                 </div>
               </Link>
             ))}
+            <Link href="/business" className="lift group w-[44%] flex-none snap-start overflow-hidden rounded-2xl bg-brand-900 text-white sm:w-[30%] md:w-[calc((100%-40px)/3)] lg:w-[calc((100%-50px)/3.4)]">
+              <div className="relative aspect-[4/3]"><TypeArt slug="corporate" /></div>
+              <div className="p-3 md:p-4">
+                <h3 className="text-sm font-bold md:text-lg">Corporate</h3>
+                <p className="mt-0.5 line-clamp-2 text-[11px] leading-snug text-white/75 md:text-sm">Hospitals, offices, banquets and masjids.</p>
+                <p className="mt-2 hidden text-sm font-semibold text-brand-100 md:block">Monthly contract →</p>
+              </div>
+            </Link>
           </AutoRail>
         </div>
       </section>
@@ -194,7 +194,7 @@ export default async function Home() {
         <section data-reveal className="container-x pt-6 md:pt-0 md:pb-16">
           <div className="flex items-end justify-between gap-4">
             <h2 className="h-section">Popular picks</h2>
-            <Link href="/services" className="text-sm font-semibold text-brand-600">All items</Link>
+            <Link href="/bill-calculator" className="text-sm font-semibold text-brand-600">All items</Link>
           </div>
           <ul className="mt-4 grid gap-2.5 md:mt-6 md:grid-cols-2 md:gap-4 lg:grid-cols-3">
             {popular.map((p) => (
@@ -236,7 +236,7 @@ export default async function Home() {
                   </li>
                 ))}
               </ul>
-              <Link href="/services#wash-only/household" className="mt-5 inline-flex text-sm font-semibold text-brand-600">All bedding rates →</Link>
+              <Link href="/bill-calculator#wash-only/household" className="mt-5 inline-flex text-sm font-semibold text-brand-600">All bedding rates →</Link>
             </div>
           </div>
         </section>
@@ -244,12 +244,18 @@ export default async function Home() {
 
       {/* Packages */}
       {packages.length > 0 && (
-        <section data-reveal className="container-x pb-10 md:pb-20">
-          <div className="flex items-end justify-between gap-4">
-            <div><p className="eyebrow">Packages</p><h2 className="h-section mt-1">Save with a bundle</h2></div>
-            <Link href="/services#packages" className="text-sm font-semibold text-brand-600">All packages →</Link>
+        <section data-reveal className="bg-brand-50 py-10 md:py-16">
+          <div className="container-x">
+            <div className="text-center">
+              <p className="eyebrow">Save every month</p>
+              <h2 className="h-section mt-1">Monthly packages</h2>
+            </div>
+            <div className="mt-5 md:mt-8"><PackageTabs items={packages} /></div>
+            <div className="mt-6 flex justify-center gap-3">
+              <Link href="/pricing" className="btn-ghost">Full price list</Link>
+              <Link href="/bill-calculator" className="btn-primary">Bill calculator</Link>
+            </div>
           </div>
-          <div className="mt-6"><Packages items={packages} label={t.addToCart} addedLabel={t.added} /></div>
         </section>
       )}
 
@@ -257,24 +263,6 @@ export default async function Home() {
         title={`Free pickup & delivery above ${rs(s.freeDeliveryThreshold)} — every day`}
         sub={`Pickup slots ${s.timeSlots.join(" and ")} · any order size on Sunday`}
       />
-
-      {/* Why choose us */}
-      <section data-reveal className="border-y border-brand-100 bg-brand-50">
-        <div className="container-x py-10 md:py-20">
-          <div className="flex items-end justify-between gap-4"><div className="max-w-2xl"><p className="eyebrow">Why choose us</p><h2 className="h-section mt-1">Laundry you don&apos;t have to think about</h2></div><Link href="/why-choose-us" className="flex-none text-sm font-semibold text-brand-600">Learn more</Link></div>
-          <ul className="mt-6 grid grid-cols-2 gap-3 md:mt-8 md:gap-4 lg:grid-cols-3">
-            {why.map(({ I, t: title, d }) => (
-              <li key={title} className="lift rounded-2xl bg-white p-4 ring-1 ring-brand-100 md:flex md:gap-4 md:p-5">
-                <span className="grid h-10 w-10 flex-none place-items-center rounded-xl bg-brand-600 text-white md:h-11 md:w-11"><I className="h-5 w-5" /></span>
-                <div className="mt-3 md:mt-0">
-                  <h3 className="text-sm font-semibold leading-snug text-brand-900 md:text-base">{title}</h3>
-                  <p className="mt-1 text-xs leading-relaxed text-slate-600 md:text-sm">{d}</p>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
 
       {/* How it works */}
       <section data-reveal className="bg-brand-600 text-white">
@@ -308,7 +296,7 @@ export default async function Home() {
             })}
           </ol>
           <div className="mt-8 flex justify-center gap-3">
-            <Link href="/services" className="btn bg-white text-brand-700 hover:bg-brand-50">Book a pickup</Link>
+            <Link href="/bill-calculator" className="btn bg-white text-brand-700 hover:bg-brand-50">Book a pickup</Link>
             <a href={wa} target="_blank" rel="noopener" className="btn border border-white/60 text-white hover:bg-white/10"><IconWhatsApp className="h-5 w-5" />WhatsApp</a>
           </div>
         </div>
@@ -321,9 +309,9 @@ export default async function Home() {
             <div className="max-w-2xl">
               <p className="eyebrow">For institutions</p>
               <h2 className="h-section mt-1">We take laundry contracts</h2>
-              <p className="mt-3 text-slate-600">Monthly contracts for hospitals, companies, lawns and masjids. Fixed pickup days, a per-piece rate and one invoice at the end of the month.</p>
+              <p className="mt-2 text-sm text-slate-600 md:text-base">Fixed pickup days · per-piece rate · one monthly invoice.</p>
             </div>
-            <Link href="/business#inquiry" className="btn-primary mt-5 hidden md:inline-flex">Request a quote <IconArrow className="h-4 w-4" /></Link>
+            <Link href="/business#inquiry" className="btn-primary mt-4 md:mt-0">Request a quote <IconArrow className="h-4 w-4" /></Link>
           </div>
           <div className="-mx-4 mt-6 flex snap-x scroll-px-4 gap-3 overflow-x-auto px-4 pb-2 md:mx-0 md:grid md:grid-cols-4 md:gap-5 md:overflow-visible md:px-0">
             {segments.map((g) => (
@@ -334,20 +322,6 @@ export default async function Home() {
                 <div className="p-4"><h3 className="font-semibold text-brand-900">{g.t}</h3><p className="mt-1 text-sm text-slate-600">{g.d}</p></div>
               </Link>
             ))}
-          </div>
-          <div className="mt-6 grid gap-6 rounded-2xl bg-brand-900 p-6 text-white md:grid-cols-[1.3fr_1fr] md:items-center md:p-8">
-            <div>
-              <h3 className="text-xl font-bold">Become a contract client</h3>
-              <ul className="mt-4 grid gap-2.5 text-sm text-white/85 sm:grid-cols-2">
-                {["Fixed weekly pickup schedule", "Per-piece rate, agreed upfront", "Monthly invoice with order details", "First batch at a trial rate"].map((x) => (
-                  <li key={x} className="flex gap-2"><IconCheck className="h-5 w-5 flex-none text-brand-500" />{x}</li>
-                ))}
-              </ul>
-            </div>
-            <div className="flex flex-col gap-3 sm:flex-row md:flex-col lg:flex-row lg:justify-end">
-              <Link href="/business#inquiry" className="btn bg-white text-brand-900 hover:bg-brand-50">Request a quote</Link>
-              <a href={waLink(s.whatsappNumber, "Assalam o Alaikum, I want a quote for a laundry contract.")} target="_blank" rel="noopener" className="btn bg-wa text-white"><IconWhatsApp className="h-5 w-5" />WhatsApp</a>
-            </div>
           </div>
         </div>
       </section>

@@ -73,7 +73,7 @@ export default async function OrderPage({ params, searchParams }: { params: Prom
 
       <div className="mt-6 flex flex-col gap-3 sm:flex-row">
         <a className="btn-wa" target="_blank" rel="noopener" href={waLink(s.whatsappNumber, `Assalam o Alaikum, about my order ${order.code}`)}>Ask about this order on WhatsApp</a>
-        <Link href="/services" className="btn-ghost">Place another order</Link>
+        <Link href="/bill-calculator" className="btn-ghost">Place another order</Link>
       </div>
     </div>
   );

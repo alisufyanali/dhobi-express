@@ -16,7 +16,7 @@ export default async function Terms() {
   return (
     <InfoPage title="Terms of service" updated="October 2026" cta={false} intro="By placing an order with Dhobi Express you agree to these terms.">
       <h2>Prices</h2>
-      <p>Per-piece prices are as listed on our <Link href="/services">services page</Link>. Per-kg items are weighed at pickup and the final bill uses the actual weight. Heavy, oversized or specially embellished items may be quoted at pickup before we accept them.</p>
+      <p>Per-piece prices are as listed on our <Link href="/bill-calculator">services page</Link>. Per-kg items are weighed at pickup and the final bill uses the actual weight. Heavy, oversized or specially embellished items may be quoted at pickup before we accept them.</p>
       <h2>Pickup &amp; delivery</h2>
       <p>Free when the order is above {rs(s.freeDeliveryThreshold)}, or when both pickup and delivery are on a Sunday. Otherwise a {rs(s.deliveryFee)} charge applies. Please be available during the slot you choose; a missed pickup may be rescheduled.</p>
       <h2>Turnaround</h2>

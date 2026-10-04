@@ -38,10 +38,12 @@ const ICONS: Record<string, React.ReactNode> = {
   iron: <><path d="M10 34c0-9 7-16 18-16h8a4 4 0 0 1 4 4v12z" fill={B} /><path d="M18 18c0-5 3-8 8-8h10" fill="none" stroke={D} strokeWidth="3" strokeLinecap="round" /><rect x="8" y="34" width="34" height="5" rx="2" fill={D} /><circle cx="30" cy="27" r="2" fill={W} /><path d="M12 43c2-1 4 1 6 0M22 43c2-1 4 1 6 0" stroke={L} strokeWidth="1.5" fill="none" /></>,
   washer: <><rect x="9" y="5" width="30" height="38" rx="4" fill={W} stroke={B} strokeWidth="2" /><path d="M9 13h30" stroke={B} strokeWidth="1.5" /><circle cx="15" cy="9" r="1.5" fill={B} /><circle cx="20" cy="9" r="1.5" fill={A} /><circle cx="24" cy="28" r="10" fill={L} stroke={B} strokeWidth="2" /><path d="M16 30q4-4 8 0t8 0" fill="none" stroke={B} strokeWidth="2" /></>,
   hanger: <><path d="M24 14a4 4 0 1 1 4-4" fill="none" stroke={S} strokeWidth="2" strokeLinecap="round" /><path d="M24 14v3L6 30h36L24 17" fill="none" stroke={S} strokeWidth="2" strokeLinejoin="round" /><path d="M13 30l3 12h16l3-12z" fill={B} /></>,
+  building: <><rect x="10" y="8" width="20" height="34" rx="2" fill={B} /><rect x="30" y="18" width="10" height="24" rx="2" fill={D} />{[13, 19, 25, 31].map((y) => <g key={y}><rect x="14" y={y} width="4" height="3" rx=".5" fill={W} /><rect x="22" y={y} width="4" height="3" rx=".5" fill={W} /></g>)}<rect x="33" y="23" width="4" height="3" rx=".5" fill={L} /><rect x="33" y="30" width="4" height="3" rx=".5" fill={L} /><rect x="17" y="36" width="6" height="6" fill={A} /></>,
   box: <><rect x="8" y="16" width="32" height="24" rx="3" fill={B} /><rect x="6" y="11" width="36" height="8" rx="2" fill={D} /><path d="M24 11v29" stroke={A} strokeWidth="3" /><path d="M24 11c-4-6-10-5-8 0M24 11c4-6 10-5 8 0" fill="none" stroke={A} strokeWidth="2" /></>,
 };
 
 const RULES: [RegExp, string][] = [
+  [/^iron$/, "iron"], [/^washer$/, "washer"],
   [/socks/, "socks"], [/vest|undergarment/, "vest"], [/waistcoat/, "waistcoat"], [/lab coat/, "labcoat"],
   [/t-shirt|polo/, "tshirt"], [/uniform/, "uniform"], [/sherwani/, "sherwani"], [/suit \(|formal suit/, "suit"],
   [/coat|blazer/, "blazer"], [/jacket/, "jacket"], [/track/, "tracksuit"], [/sweater|hoodie|cardigan/, "sweater"],
@@ -66,7 +68,7 @@ export function GarmentIcon({ name, className = "h-11 w-11" }: { name: string; c
   );
 }
 
-const TYPE_ART: Record<string, string> = { "wash-iron": "shirt", "iron-only": "iron", "wash-only": "washer", "dry-clean": "suit", "per-kg": "basket", packages: "box" };
+const TYPE_ART: Record<string, string> = { "wash-iron": "shirt", "iron-only": "iron", "wash-only": "washer", "dry-clean": "suit", "per-kg": "basket", packages: "box", corporate: "building", "per-kg-mixed": "basket" };
 
 /** Large illustration placed behind a service photo — what shows while the photo loads or if it can't load. */
 export function TypeArt({ slug }: { slug: string }) {

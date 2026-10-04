@@ -51,7 +51,7 @@ export default async function AreaPage({ params }: { params: Promise<{ area: str
             Otherwise a {rs(s.deliveryFee)} delivery charge applies. Pickup slots: {s.timeSlots.join(" or ")}.
           </p>
           <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-            <Link href="/services" className="btn-primary">Book a pickup in {a.name}</Link>
+            <Link href="/bill-calculator" className="btn-primary">Book a pickup in {a.name}</Link>
             <Link href="/business" className="btn-ghost">Business laundry</Link>
           </div>
         </div>

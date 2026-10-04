@@ -42,7 +42,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       <div className="mt-12 rounded-2xl bg-brand-50 p-6">
         <p className="font-semibold text-brand-900">Let us handle it</p>
         <p className="mt-1 text-sm text-slate-600">Free pickup and delivery across Karachi. Clean clothes back in 24–48 hours.</p>
-        <Link href="/services" className="btn-primary mt-4">Book a pickup</Link>
+        <Link href="/bill-calculator" className="btn-primary mt-4">Book a pickup</Link>
       </div>
     </article>
   );

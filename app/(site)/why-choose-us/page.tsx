@@ -55,7 +55,7 @@ export default async function WhyChooseUs() {
             <h1 className="text-2xl font-bold tracking-tight text-brand-900 md:text-5xl">Why Karachi chooses Dhobi Express</h1>
             <p className="mt-3 text-slate-600 md:text-lg">Laundry shouldn&apos;t depend on whether the tanker came or the light is on. We take it off your hands — properly.</p>
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-              <Link href="/services" className="btn-primary">Book a pickup</Link>
+              <Link href="/bill-calculator" className="btn-primary">Book a pickup</Link>
               <a href={waLink(s.whatsappNumber, "Assalam o Alaikum, I have a question about your laundry service.")} target="_blank" rel="noopener" className="btn-ghost"><IconWhatsApp className="h-5 w-5 text-wa" />Ask on WhatsApp</a>
             </div>
           </div>
@@ -136,7 +136,7 @@ export default async function WhyChooseUs() {
           </div>
           <div className="mt-5 flex flex-col gap-3 sm:flex-row md:mt-0 md:flex-none">
             <Link href="/refund-policy" className="btn bg-white text-brand-700 hover:bg-brand-50">Refund policy</Link>
-            <Link href="/services" className="btn border border-white/60 text-white hover:bg-white/10">Book a pickup</Link>
+            <Link href="/bill-calculator" className="btn border border-white/60 text-white hover:bg-white/10">Book a pickup</Link>
           </div>
         </div>
       </section>

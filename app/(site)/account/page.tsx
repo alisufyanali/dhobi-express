@@ -39,7 +39,7 @@ export default async function AccountPage() {
             </Link>
           </li>
         ))}
-        {!orders.length && <li className="p-6 text-center text-sm text-slate-500">No orders yet. <Link href="/services" className="font-semibold text-brand-600">Book your first pickup</Link></li>}
+        {!orders.length && <li className="p-6 text-center text-sm text-slate-500">No orders yet. <Link href="/bill-calculator" className="font-semibold text-brand-600">Book your first pickup</Link></li>}
       </ul>
     </div>
   );

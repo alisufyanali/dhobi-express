@@ -108,7 +108,7 @@ export function OrdersList() {
           <p className="mt-3 font-semibold text-brand-900">{tab === "active" ? "No active orders" : "No completed orders yet"}</p>
           <p className="mt-1 text-sm text-slate-500">Orders you place from this phone appear here.</p>
           <div className="mt-4 flex justify-center gap-2">
-            <Link href="/services" className="btn-primary">Book a pickup</Link>
+            <Link href="/bill-calculator" className="btn-primary">Book a pickup</Link>
             <Link href="/track" className="btn-ghost">Find an order</Link>
           </div>
         </div>
