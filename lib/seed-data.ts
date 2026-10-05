@@ -111,10 +111,12 @@ export const REVIEWS = [
   { name: "Sana M.", area: "North Karachi", rating: 4, text: "Razaiyan bilkul saaf aur khushbu wali wapas aayin." },
 ];
 
+export const AREAS_FAQ = "All of Central Karachi — every block of Federal B Area, Nazimabad, North Nazimabad, Naya Nazimabad, Liaquatabad, North Karachi and New Karachi — plus Gulshan-e-Iqbal.";
+
 export const FAQS = [
   { question: "Is pickup and delivery really free?", answer: "Yes — every Sunday (pickup and delivery both on Sunday), and on any day for orders above Rs. 2,000. Below that a small delivery charge applies." },
   { question: "How long does it take?", answer: "Usually 24–48 hours. Dry cleaning and quilts can take up to 72 hours." },
   { question: "Will my clothes get mixed with others?", answer: "No. Every order is tagged at pickup and washed separately." },
   { question: "How do I pay?", answer: "Cash on delivery, or JazzCash, Easypaisa and bank transfer. Businesses get a monthly invoice." },
-  { question: "Which areas do you cover?", answer: "Nazimabad, North Karachi, Gulshan-e-Iqbal, Malir, Ahsanabad, Gulzar-e-Hijri, Karimabad and FC Area. More areas soon." },
+  { question: "Which areas do you cover?", answer: "All of Central Karachi — every block of Federal B Area, Nazimabad, North Nazimabad, Naya Nazimabad, Liaquatabad, North Karachi and New Karachi — plus Gulshan-e-Iqbal." },
 ];

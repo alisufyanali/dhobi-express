@@ -3,7 +3,7 @@ export const SITE = {
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
   tagline: "Laundry pickup & delivery in Karachi",
   description:
-    "Wash, press, dry clean, curtains, bedsheets and quilts with free pickup and delivery in Nazimabad, North Karachi, Gulshan-e-Iqbal, Malir and more.",
+    "Wash, press, dry clean, curtains, bedsheets and quilts with free pickup and delivery in Federal B Area, Nazimabad, North Nazimabad, Gulshan-e-Iqbal and across Central Karachi.",
 };
 
 export const UNIT_LABEL = { PER_PIECE: "per piece", PER_KG: "per kg" } as const;

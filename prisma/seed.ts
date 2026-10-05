@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { AREA_PAGES } from "../lib/areas";
-import { CATEGORIES, FAQS, REVIEWS } from "../lib/seed-data";
+import { AREAS_FAQ, CATEGORIES, FAQS, REVIEWS } from "../lib/seed-data";
 import { STARTER_POSTS } from "../lib/posts-seed";
 
 const prisma = new PrismaClient();
@@ -62,6 +62,14 @@ async function main() {
     }
     await prisma.setting.update({ where: { id: "default" }, data: { catalogVersion: 3 } });
     console.log("Packages updated to v3.");
+  }
+
+  // v4: service areas are Central Karachi + Gulshan. Areas not in the list are switched off (past orders keep them).
+  if ((await prisma.setting.findUniqueOrThrow({ where: { id: "default" } })).catalogVersion < 4) {
+    await prisma.area.updateMany({ where: { slug: { notIn: AREA_PAGES.map((a) => a.slug) } }, data: { active: false } });
+    await prisma.faq.updateMany({ where: { question: "Which areas do you cover?" }, data: { answer: AREAS_FAQ } });
+    await prisma.setting.update({ where: { id: "default" }, data: { catalogVersion: 4 } });
+    console.log("Service areas updated (v4).");
   }
 
   if ((await prisma.review.count()) === 0) {
