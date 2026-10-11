@@ -1,6 +1,6 @@
 // Renders every post to out/posts/*.png  →  node posts.mjs [onlyFile]
 import { chromium } from "/opt/node22/lib/node_modules/playwright/index.mjs";
-import { mkdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { BASE_CSS, BUBBLES, C, DIR, FOOTER, LOGO } from "./shared.mjs";
 import { ART } from "./art.mjs";
@@ -46,6 +46,7 @@ const CSS = `${BASE_CSS}
   box-shadow:0 30px 60px rgba(0,30,70,.4), inset 0 -12px 30px rgba(26,140,234,.15), 0 0 0 14px rgba(255,255,255,.15);
   display:flex;align-items:center;justify-content:center}
 .plate .art{width:340px;height:340px}
+.plate .photo{width:100%;height:100%;border-radius:50%;object-fit:cover}
 .badge{position:absolute;left:50%;margin-left:140px;top:640px;width:180px;height:180px;border-radius:50%;background:${C.navy};
   border:6px solid ${C.yellow};display:flex;flex-direction:column;align-items:center;justify-content:center;transform:rotate(8deg);
   box-shadow:0 14px 30px rgba(0,20,50,.4)}
@@ -83,7 +84,8 @@ function center(p) {
       <div class="sub" style="top:905px">Online ya WhatsApp par book karein</div>`;
   if (p.center === "areas")
     return `<div class="areas"><div class="pin">${PIN}</div><div class="chips">${AREAS.map((a) => `<span class="chip">${a}</span>`).join("")}</div></div>`;
-  return `<div class="plate"><div class="art">${ART[p.art]}</div></div>
+  const ph = ["jpg", "jpeg", "png", "webp"].map((e) => join(DIR, "photos", `${p.file}.${e}`)).find(existsSync);
+  return `<div class="plate">${ph ? `<img class="photo" src="file://${ph}">` : `<div class="art">${ART[p.art]}</div>`}</div>
     ${p.badge ? `<div class="badge"><small>${p.badge[0]}</small><b>${p.badge[1]}</b><small>${p.badge[2]}</small></div>` : ""}
     ${p.sub ? `<div class="sub">${p.sub}</div>` : ""}`;
 }
