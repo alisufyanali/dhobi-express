@@ -1,7 +1,8 @@
 # Dhobi Express — Social Media Kit
 
 - `out/posts/` — 16 square posts (1080×1080) for Instagram / Facebook
-- `out/dhobi-express-reel.mp4` — 25s Reel / Story / TikTok video (1080×1920, no audio — add a trending sound in the app)
+- `out/dhobi-bhai-reel.mp4` — 25s character Reel with "Dhobi Bhai" (washing-machine mascot), original music + sound effects
+- `out/dhobi-express-reel.mp4` — 25s simple Reel without sound
 
 Every design: logo on top, content in the middle, website + email + WhatsApp number at the bottom.
 
@@ -12,10 +13,13 @@ Every design: logo on top, content in the middle, website + email + WhatsApp num
 
 ```bash
 node marketing/social/posts.mjs     # all posts  (or: posts.mjs 05  → just one)
-node marketing/social/video.mjs     # the reel   (needs ffmpeg)
+node marketing/social/reel.mjs      # character reel with sound (needs ffmpeg + python3 numpy)
+node marketing/social/video.mjs     # simple reel, no sound
 ```
 
-Needs Playwright with Chromium. Post text lives in the `POSTS` list in `posts.mjs`; illustrations are in `art.mjs`.
+Needs Playwright with Chromium. Post text lives in the `POSTS` list in `posts.mjs`; illustrations are in `art.mjs`; the mascot is in `mascot.mjs`.
+
+The reel's music and sound effects are synthesised by `audio.py` (original, royalty-free), timed to the scenes in `reel.mjs` — if you move a scene, move its sound in `EVENTS` too.
 
 ## Captions
 

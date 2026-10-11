@@ -1,0 +1,5 @@
+_frames/
+_*.html
+_*.mp4
+_*.wav
+out/*preview*.png
