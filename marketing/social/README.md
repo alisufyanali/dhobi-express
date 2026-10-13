@@ -3,6 +3,7 @@
 - `out/posts/` — 25 square posts (1080×1080) for Instagram / Facebook: 01–16 services & offers, 17–25 problem → solution
 - `out/dhobi-bhai-reel.mp4` — 25s character Reel with "Dhobi Bhai" (washing-machine mascot), original music + sound effects
 - `out/dhobi-express-showcase.mp4` — 30s Reel of the 16 photo posts (`photos/real-posts/01–16.jpg`), Dhobi Bhai dancing in the corner, music + SFX
+- `out/dhobi-express-problems.mp4` — 29s Reel of the 9 photo problem → solution posts (`photos/real-problem-posts/01–09.jpg`): problem spotlight + buzzer, then solution spotlight + ding
 - `out/dhobi-express-reel.mp4` — 25s simple Reel without sound
 
 Every design: logo on top, content in the middle, website + email + WhatsApp number at the bottom.
@@ -17,6 +18,7 @@ node marketing/social/posts.mjs     # posts 01–16 (or: posts.mjs 05  → just 
 node marketing/social/problems.mjs  # problem → solution posts 17–25
 node marketing/social/reel.mjs      # character reel with sound (needs ffmpeg + python3 numpy)
 node marketing/social/showcase.mjs  # showcase of the 16 photo posts (optional: a folder with 01.jpg … 16.jpg)
+node marketing/social/problems-reel.mjs  # problem → solution reel of the 9 photo posts (optional: folder with 01.jpg … 09.jpg)
 node marketing/social/video.mjs     # simple reel, no sound
 ```
 

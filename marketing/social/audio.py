@@ -2,6 +2,7 @@
 Usage: python3 audio.py out.wav [reel|showcase]
   reel      — timings match reel.mjs (default)
   showcase  — timings match showcase.mjs
+  problems  — timings match problems-reel.mjs
 """
 import sys
 import wave
@@ -10,7 +11,7 @@ import numpy as np
 
 SR = 44100
 TIMELINE = sys.argv[2] if len(sys.argv) > 2 else "reel"
-DUR = 30.0 if TIMELINE == "showcase" else 25.0
+DUR = {"showcase": 30.0, "problems": 29.0}.get(TIMELINE, 25.0)
 N = int(SR * DUR)
 BPM = 120
 BEAT = 60 / BPM
@@ -263,7 +264,31 @@ SHOWCASE_EVENTS = [
     (26.4, whoosh(.4), .6), (26.7, stamp(), .9), (26.7, popper(), .7), (26.7, sparkle(1.0), .6),
     (27.3, pop(), .7), (27.6, pop(), .7), (27.9, pop(), .7), (28.6, ding(), .6),
 ]
-EVENTS = SHOWCASE_EVENTS if TIMELINE == "showcase" else REEL_EVENTS
+
+
+def buzz():
+    out = np.zeros(int(SR * 0.42))
+    for at in (0, 0.2):
+        t = t_(0.16)
+        s = smooth(np.sign(np.sin(2 * np.pi * 150 * t)) + 0.5 * np.sign(np.sin(2 * np.pi * 157 * t)), 6) * 0.22
+        i = int(at * SR)
+        out[i:i + len(s)] += s * np.minimum(1, (0.16 - t) * 80)
+    return out
+
+
+# problems-reel.mjs: post k lands at 2.5 + 2.5k (9 posts), problem at +0.6, solution at +1.45, outro from 25
+PROB_T = [2.5 + 2.5 * k for k in range(9)]
+PROBLEM_EVENTS = [
+    (0.1, pop(), .8), (0.5, whoosh(), .5), (0.9, pop(), .6), (1.0, sparkle(), .4),
+    (1.5, fall_whistle(), .6), (2.0, thud(), 1.0), (2.0, boing(), .7),
+    *[(t - 0.12, whoosh(.32), .55) for t in PROB_T],
+    *[(t + 0.6, buzz(), .7) for t in PROB_T],
+    *[(t + 1.45, ding(), .45) for t in PROB_T],
+    *[(t + 1.45, sparkle(.6), .45) for t in PROB_T],
+    (24.9, whoosh(.4), .6), (25.2, stamp(), .9), (25.2, popper(), .7), (25.2, sparkle(1.0), .6),
+    (25.8, pop(), .7), (26.1, pop(), .7), (26.4, pop(), .7), (27.6, ding(), .6),
+]
+EVENTS = {"showcase": SHOWCASE_EVENTS, "problems": PROBLEM_EVENTS}.get(TIMELINE, REEL_EVENTS)
 for at, sig, g in EVENTS:
     add(sfx, at, sig, g)
 
