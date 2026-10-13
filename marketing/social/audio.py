@@ -1,5 +1,7 @@
-"""Original music + sound effects for reel.mjs (synthesised, royalty-free).
-Usage: python3 audio.py out.wav   — timings match the scene timeline in reel.mjs.
+"""Original music + sound effects (synthesised, royalty-free).
+Usage: python3 audio.py out.wav [reel|showcase]
+  reel      — timings match reel.mjs (default)
+  showcase  — timings match showcase.mjs
 """
 import sys
 import wave
@@ -7,7 +9,8 @@ import wave
 import numpy as np
 
 SR = 44100
-DUR = 25.0
+TIMELINE = sys.argv[2] if len(sys.argv) > 2 else "reel"
+DUR = 30.0 if TIMELINE == "showcase" else 25.0
 N = int(SR * DUR)
 BPM = 120
 BEAT = 60 / BPM
@@ -99,7 +102,7 @@ CHORDS = [(48, [60, 64, 67]), (43, [59, 62, 67]), (45, [60, 64, 69]), (41, [60, 
 HOOK = [72, 0, 76, 79, 0, 76, 74, 72, 74, 0, 74, 76, 0, 74, 71, 67,
         72, 0, 76, 79, 0, 81, 79, 76, 77, 0, 76, 74, 0, 72, 74, 72]
 DROP = 2.0
-END = 24.2
+END = DUR - 0.8
 bar = 4 * BEAT
 
 # intro: pad + building hats + riser
@@ -229,7 +232,7 @@ def tick():
     return np.sin(2 * np.pi * 2200 * t) * np.exp(-90 * t) * 0.6
 
 
-EVENTS = [
+REEL_EVENTS = [
     (0.15, pop(), .8), (0.6, whoosh(), .5), (1.0, sparkle(), .5),
     (1.5, fall_whistle(), .6), (2.0, thud(), 1.0), (2.0, boing(), .7), (2.2, pop(), .7),
     (3.5, stamp(), .6), (3.5, whoosh(.3), .4),
@@ -248,6 +251,19 @@ EVENTS = [
     (21.6, whoosh(.4), .5), (22.0, popper(), .6), (22.2, pop(), .7), (22.5, pop(), .7), (22.8, pop(), .7),
     (23.0, pop(), .6), (24.0, ding(), .6),
 ]
+# showcase.mjs: post k lands at 2.5 + 1.5k (16 posts), outro from 26.5
+POST_T = [2.5 + 1.5 * k for k in range(16)]
+SHOWCASE_EVENTS = [
+    (0.1, pop(), .8), (0.5, whoosh(), .5), (0.9, pop(), .6), (1.0, sparkle(), .4),
+    (1.5, fall_whistle(), .6), (2.0, thud(), 1.0), (2.0, boing(), .7),
+    *[(t - 0.12, whoosh(.32), .55) for t in POST_T],
+    *[(t + 0.25, pop(), .45) for t in POST_T],
+    (POST_T[4] + 0.2, popper(), .6), (POST_T[4] + 0.2, sparkle(), .5),
+    (POST_T[3] + 0.3, horn(), .5), (POST_T[1] + 0.3, ding(), .3), (POST_T[15] + 0.3, ding(), .4),
+    (26.4, whoosh(.4), .6), (26.7, stamp(), .9), (26.7, popper(), .7), (26.7, sparkle(1.0), .6),
+    (27.3, pop(), .7), (27.6, pop(), .7), (27.9, pop(), .7), (28.6, ding(), .6),
+]
+EVENTS = SHOWCASE_EVENTS if TIMELINE == "showcase" else REEL_EVENTS
 for at, sig, g in EVENTS:
     add(sfx, at, sig, g)
 
